@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:layout_margin="@dimen/post_margin">
+
+    <TextView
+        android:id="@+id/post_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Baking Buddy"
+        android:textSize="16sp"
+        android:textColor="@color/text_color"/>
+
+    <TextView
+        android:id="@+id/post_description"
+        android:paddingTop="8dp"
+        android:textSize="12sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="This is a description of whatever this user would like to do/accomplish. If the description is too longgg..."
+        android:textColor="@color/text_color"/>
+
+    <TextView
+        android:id="@+id/post_username"
+        android:paddingTop="4dp"
+        android:textSize="12sp"
+        android:paddingBottom="4dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="username"
+        android:textColor="@color/text_color"
+        android:layout_gravity="end"/>
+
+</LinearLayout>

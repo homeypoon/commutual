@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_color"
+    android:orientation="vertical"
+    android:paddingStart="@dimen/home_page_margin"
+    android:paddingLeft="@dimen/home_page_margin"
+    android:paddingTop="36dp"
+    android:paddingEnd="@dimen/home_page_margin"
+    android:paddingRight="@dimen/home_page_margin"
+    android:paddingBottom="@dimen/home_page_margin"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/upcoming_meet_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/meet_color"
+        android:padding="4dp"
+        android:paddingStart="16dp"
+        android:paddingLeft="16dp"
+        android:text="@string/upcoming_meets_header"
+        android:textColor="@color/white"
+        android:textSize="@dimen/header_font_size" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/upcoming_meet_message"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/upcoming_meets_height"
+            android:layout_alignParentTop="true"
+            android:background="@color/white"
+            android:gravity="center_horizontal"
+            android:paddingStart="16dp"
+            android:paddingTop="24dp"
+            android:text="@string/upcoming_meets_message"
+            android:textSize="@dimen/upcoming_meets_message" />
+
+        <Button
+            android:id="@+id/go_explore_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/upcoming_meet_message"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            android:width="200dp"
+            android:height="48dp"
+            android:backgroundTint="@color/explore_color"
+            android:text="Go Explore"
+            android:textColor="@color/white" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/recommended_for_you_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:background="@color/explore_color"
+        android:padding="4dp"
+        android:paddingStart="16dp"
+        android:paddingLeft="16dp"
+        android:text="@string/recommended_for_you_header"
+        android:textColor="@color/white"
+        android:textSize="@dimen/header_font_size" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+</LinearLayout>

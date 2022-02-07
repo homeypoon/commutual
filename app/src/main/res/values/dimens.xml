@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="home_page_margin">24dp</dimen>
+    <dimen name="header_font_size">28sp</dimen>
+    <dimen name="upcoming_meets_message">16sp</dimen>
+    <dimen name="upcoming_meets_height">120dp</dimen>
+    <dimen name="post_margin">8dp</dimen>
+</resources>

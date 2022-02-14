@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -14,12 +15,13 @@ import java.util.List;
 public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerViewAdapter.MyViewHolder> {
 
     private List<AccountabilityPost> postList;
-    private PostClickListener postClickListener;
+    private PostClickListener<AccountabilityPost> postClickListener;
 
     PostRecyclerViewAdapter(List<AccountabilityPost> mAccountabilityPostList) {
         this.postList = mAccountabilityPostList;
     }
 
+    @NonNull
     @Override
     public PostRecyclerViewAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.accountability_post, parent, false);
@@ -30,7 +32,7 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
     public void onBindViewHolder(PostRecyclerViewAdapter.MyViewHolder holder, int position) {
         final AccountabilityPost accountabilityPost = postList.get(holder.getAdapterPosition());
         holder.postName.setText(accountabilityPost.getPostName());
-        holder.postDescription.setText(accountabilityPost.getPostDescription());;
+        holder.postDescription.setText(accountabilityPost.getPostDescription());
         holder.username.setText(accountabilityPost.getUsername());
 
         holder.postLayout.setOnClickListener(new View.OnClickListener() {
@@ -46,7 +48,7 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
         return postList.size();
     }
 
-    public void setOnPostClickListener(PostClickListener postClickListener) {
+    public void setOnPostClickListener(PostClickListener<AccountabilityPost> postClickListener) {
         this.postClickListener = postClickListener;
     }
 

@@ -16,10 +16,7 @@ import java.util.List;
 
 public class ExplorePage extends AppCompatActivity {
 
-    private RecyclerView postRecyclerView;
-    private PostRecyclerViewAdapter postRecyclerViewAdapter;
     private List<AccountabilityPost> postList;
-    private DividerItemDecoration mDividerItemDecoration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,16 +24,16 @@ public class ExplorePage extends AppCompatActivity {
         setContentView(R.layout.explore_page);
 
         postList = new ArrayList<>();
-        postRecyclerView = (RecyclerView) findViewById(R.id.explore_recycler_view);
+        RecyclerView postRecyclerView = (RecyclerView) findViewById(R.id.explore_recycler_view);
 
-        postRecyclerViewAdapter = new PostRecyclerViewAdapter(postList);
+        PostRecyclerViewAdapter postRecyclerViewAdapter = new PostRecyclerViewAdapter(postList);
         postRecyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         postRecyclerView.setLayoutManager(layoutManager);
         postRecyclerView.setItemAnimator(new DefaultItemAnimator());
         postRecyclerView.setAdapter(postRecyclerViewAdapter);
 
-        mDividerItemDecoration = new DividerItemDecoration(postRecyclerView.getContext(),
+        DividerItemDecoration mDividerItemDecoration = new DividerItemDecoration(postRecyclerView.getContext(),
                 layoutManager.getOrientation());
         postRecyclerView.addItemDecoration(mDividerItemDecoration);
 

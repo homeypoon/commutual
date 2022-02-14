@@ -6,8 +6,5 @@
     <dimen name="upcoming_meets_height">120dp</dimen>
     <dimen name="post_margin">8dp</dimen>
     <dimen name="post_padding_vertical">8dp</dimen>
-    <dimen name="post_padding_horizontal">16dp</dimen>
-    <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
+        <dimen name="post_padding_horizontal">16dp</dimen>
 </resources>

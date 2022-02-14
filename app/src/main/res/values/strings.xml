@@ -5,8 +5,4 @@
     <string name="recommended_for_you_header">Recommended For You</string>
     <string name="explore_header">Explore</string>
     <string name="go_explore_button">Go Explore</string>
-    <string name="title_activity_bottom_navigation">MainActivity</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
 </resources>

@@ -10,9 +10,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Commutual">
         <activity
-            android:name=".BottomNavigationActivity"
-            android:label="@string/title_activity_bottom_navigation"></activity>
-        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

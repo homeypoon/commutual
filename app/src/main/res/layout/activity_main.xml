@@ -21,7 +21,9 @@
         android:background="@color/meet_color"
         android:padding="4dp"
         android:paddingStart="16dp"
+        android:paddingEnd="16dp"
         android:paddingLeft="16dp"
+        android:paddingRight="16dp"
         android:text="@string/upcoming_meets_header"
         android:textColor="@color/white"
         android:textSize="@dimen/header_font_size" />
@@ -38,6 +40,9 @@
             android:background="@color/white"
             android:gravity="center_horizontal"
             android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
             android:paddingTop="24dp"
             android:text="@string/upcoming_meets_message"
             android:textSize="@dimen/upcoming_meets_message" />
@@ -52,7 +57,7 @@
             android:width="200dp"
             android:height="48dp"
             android:backgroundTint="@color/explore_color"
-            android:text="Go Explore"
+            android:text="@string/go_explore_button"
             android:textColor="@color/white" />
 
     </RelativeLayout>
@@ -66,6 +71,8 @@
         android:padding="4dp"
         android:paddingStart="16dp"
         android:paddingLeft="16dp"
+        android:paddingEnd="16dp"
+        android:paddingRight="16dp"
         android:text="@string/recommended_for_you_header"
         android:textColor="@color/white"
         android:textSize="@dimen/header_font_size" />

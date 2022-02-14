@@ -10,9 +10,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Commutual">
         <activity
-            android:name=".ExplorePage"
-            android:exported="true" />
-        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
@@ -21,6 +18,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ExplorePage"
+            android:exported="true" />
     </application>
 
 </manifest>

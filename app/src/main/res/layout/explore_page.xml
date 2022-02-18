@@ -6,10 +6,9 @@
     android:orientation="vertical"
     android:paddingStart="@dimen/home_page_margin"
     android:paddingLeft="@dimen/home_page_margin"
-    android:paddingTop="36dp"
+    android:paddingTop="@dimen/home_page_margin"
     android:paddingEnd="@dimen/home_page_margin"
-    android:paddingRight="@dimen/home_page_margin"
-    android:paddingBottom="@dimen/home_page_margin">
+    android:paddingRight="@dimen/home_page_margin">
 
     <TextView
         android:id="@+id/upcoming_meet_header"
@@ -18,13 +17,16 @@
         android:background="@color/explore_color"
         android:padding="4dp"
         android:paddingStart="16dp"
+        android:paddingEnd="16dp"
         android:paddingLeft="16dp"
+        android:paddingRight="16dp"
         android:text="@string/explore_header"
         android:textColor="@color/white"
         android:textSize="@dimen/header_font_size" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/explore_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent" />
 
 </LinearLayout>

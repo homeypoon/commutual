@@ -4,4 +4,8 @@
     <string name="upcoming_meets_header">Upcoming Meets</string>
     <string name="recommended_for_you_header">Recommended For You</string>
     <string name="explore_header">Explore</string>
+    <string name="home">Home</string>
+    <string name="explore">Explore</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

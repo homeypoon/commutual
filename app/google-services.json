@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "803530435964",
+    "project_id": "commutual-170e0",
+    "storage_bucket": "commutual-170e0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:803530435964:android:0cb460dfc0b210a291c8f9",
+        "android_client_info": {
+          "package_name": "com.example.commutual"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "803530435964-dtqlc2g3j4k26vgle9p3puvme451or76.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.commutual",
+            "certificate_hash": "a5118286fd1fd5b1087a9f56dbd2efe6324b3021"
+          }
+        },
+        {
+          "client_id": "803530435964-2f8jic6a92qc82qmvqn5sin3ltf9jia3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD82k7CleayWT2YVtqocVxtAxke_zGeWaI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "803530435964-2f8jic6a92qc82qmvqn5sin3ltf9jia3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -67,8 +67,28 @@ public class ExploreFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
+
+
+    }
+
+    private void prepareItems() {
+        for (int i = 0; i < 20; i++) {
+            AccountabilityPost accountabilityPost = new AccountabilityPost("Post Name " + i, "Post Description " + i, "Username " + i);
+            postList.add(accountabilityPost);
+
+
+        }
+    }
+
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
         postList = new ArrayList<>();
-        RecyclerView postRecyclerView = (RecyclerView) getView().findViewById(R.id.explore_recycler_view);
+
+        View rootView = inflater.inflate(R.layout.fragment_explore, container, false);
+        RecyclerView postRecyclerView = (RecyclerView) rootView.findViewById(R.id.explore_recycler_view);
 
         PostRecyclerViewAdapter postRecyclerViewAdapter = new PostRecyclerViewAdapter(postList);
         postRecyclerView.setHasFixedSize(true);
@@ -90,23 +110,6 @@ public class ExploreFragment extends Fragment {
         });
 
         prepareItems();
-
-    }
-
-    private void prepareItems() {
-        for (int i = 0; i < 20; i++) {
-            AccountabilityPost accountabilityPost = new AccountabilityPost("Post Name " + i, "Post Description " + i, "Username " + i);
-            postList.add(accountabilityPost);
-
-
-        }
-    }
-
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_explore, container, false);
+        return rootView;
     }
 }

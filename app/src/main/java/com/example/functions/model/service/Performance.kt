@@ -14,17 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.example.functions
+package com.example.functions.model.service
 
-const val HOME_SCREEN = "HomeScreen"
-const val EDIT_POST_SCREEN = "EditPostScreen"
-const val SPLASH_SCREEN = "SplashScreen"
-const val SETTINGS_SCREEN = "SettingsScreen"
-const val LOGIN_SCREEN = "LoginScreen"
-const val SIGN_UP_SCREEN = "SignUpScreen"
-const val POSTS_SCREEN = "PostsScreen"
+import com.google.firebase.perf.ktx.trace
+import com.google.firebase.perf.metrics.Trace
 
-
-const val POST_ID = "postId"
-const val POST_DEFAULT_ID = "-1"
-const val POST_ID_ARG = "?$POST_ID={$POST_ID}"
+/**
+ * Trace a block with Firebase performance.
+ *
+ * Supports both suspend and regular methods.
+ */
+inline fun <T> trace(name: String, block: Trace.() -> T): T = Trace.create(name).trace(block)

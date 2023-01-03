@@ -1,9 +1,19 @@
 <resources>
     <!-- Common -->
     <string name="app_name">Functions</string>
-    
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="repeat_password">Repeat Password</string>
+    <string name="generic_error">Something went wrong. Please try again!</string>
+    <string name="try_again">Try again!</string>
+
     <!-- HomeScreen -->
     <string name="home">Home</string>
+
+    <!-- CreatePostScreen -->
+    <string name="create_post">Create Your Post</string>
+    <string name="post_title">Post Title</string>
+    <string name="post_description">Post Description</string>
 
     <!-- Button -->
     <string name="back_button">Back</string>

@@ -16,15 +16,17 @@ limitations under the License.
 
 package com.example.functions
 
-const val HOME_SCREEN = "HomeScreen"
-const val EDIT_POST_SCREEN = "EditPostScreen"
-const val SPLASH_SCREEN = "SplashScreen"
-const val SETTINGS_SCREEN = "SettingsScreen"
-const val LOGIN_SCREEN = "LoginScreen"
-const val SIGN_UP_SCREEN = "SignUpScreen"
-const val POSTS_SCREEN = "PostsScreen"
+import android.app.Application
+import android.content.Context
+import androidx.test.runner.AndroidJUnitRunner
+import dagger.hilt.android.testing.HiltTestApplication
 
-
-const val POST_ID = "postId"
-const val POST_DEFAULT_ID = "-1"
-const val POST_ID_ARG = "?$POST_ID={$POST_ID}"
+class FunctionsTestRunner : AndroidJUnitRunner() {
+  override fun newApplication(
+    cl: ClassLoader?,
+    className: String?,
+    context: Context?
+  ): Application {
+    return super.newApplication(cl, HiltTestApplication::class.java.name, context)
+  }
+}

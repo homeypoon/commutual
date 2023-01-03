@@ -14,17 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.example.functions
+package com.example.functions.model.service
 
-const val HOME_SCREEN = "HomeScreen"
-const val EDIT_POST_SCREEN = "EditPostScreen"
-const val SPLASH_SCREEN = "SplashScreen"
-const val SETTINGS_SCREEN = "SettingsScreen"
-const val LOGIN_SCREEN = "LoginScreen"
-const val SIGN_UP_SCREEN = "SignUpScreen"
-const val POSTS_SCREEN = "PostsScreen"
+import com.example.functions.model.Post
+import kotlinx.coroutines.flow.Flow
 
+interface StorageService {
+  val posts: Flow<List<Post>>
 
-const val POST_ID = "postId"
-const val POST_DEFAULT_ID = "-1"
-const val POST_ID_ARG = "?$POST_ID={$POST_ID}"
+  suspend fun getPost(postId: String): Post?
+
+  suspend fun save(post: Post): String
+  suspend fun update(post: Post)
+  suspend fun delete(postId: String)
+  suspend fun deleteAllForUser(userId: String)
+}

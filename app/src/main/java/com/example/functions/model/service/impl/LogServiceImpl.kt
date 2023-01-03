@@ -14,17 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.example.functions
+package com.example.functions.model.service.impl
 
-const val HOME_SCREEN = "HomeScreen"
-const val EDIT_POST_SCREEN = "EditPostScreen"
-const val SPLASH_SCREEN = "SplashScreen"
-const val SETTINGS_SCREEN = "SettingsScreen"
-const val LOGIN_SCREEN = "LoginScreen"
-const val SIGN_UP_SCREEN = "SignUpScreen"
-const val POSTS_SCREEN = "PostsScreen"
+import com.example.functions.model.service.LogService
+import com.google.firebase.crashlytics.ktx.crashlytics
+import com.google.firebase.ktx.Firebase
+import javax.inject.Inject
 
-
-const val POST_ID = "postId"
-const val POST_DEFAULT_ID = "-1"
-const val POST_ID_ARG = "?$POST_ID={$POST_ID}"
+class LogServiceImpl @Inject constructor() : LogService {
+  override fun logNonFatalCrash(throwable: Throwable) =
+    Firebase.crashlytics.recordException(throwable)
+}

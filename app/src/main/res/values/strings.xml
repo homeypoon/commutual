@@ -1,0 +1,10 @@
+<resources>
+    <!-- Common -->
+    <string name="app_name">Functions</string>
+    
+    <!-- HomeScreen -->
+    <string name="home">Home</string>
+
+    <!-- Button -->
+    <string name="back_button">Back</string>
+</resources>

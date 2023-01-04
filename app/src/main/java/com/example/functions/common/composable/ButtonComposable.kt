@@ -17,11 +17,17 @@ limitations under the License.
 package com.example.functions.common.composable
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.functions.R
 
 @Composable
 fun BasicTextButton(@StringRes text: Int, modifier: Modifier, action: () -> Unit) {
@@ -29,9 +35,9 @@ fun BasicTextButton(@StringRes text: Int, modifier: Modifier, action: () -> Unit
 }
 
 @Composable
-fun BasicButton(@StringRes text: Int, modifier: Modifier, action: () -> Unit) {
+fun BasicButton(@StringRes text: Int, modifier: Modifier, onClick: () -> Unit) {
   Button(
-    onClick = action,
+    onClick = onClick,
     modifier = modifier,
     colors =
       ButtonDefaults.buttonColors(
@@ -40,6 +46,23 @@ fun BasicButton(@StringRes text: Int, modifier: Modifier, action: () -> Unit) {
       )
   ) {
     Text(text = stringResource(text), fontSize = 16.sp)
+  }
+}
+
+@Composable
+fun BasicIconButton(
+  imageVector: ImageVector,
+  modifier: Modifier,
+  onIconClick: () -> Unit,
+  @StringRes contentDescription: Int) {
+  IconButton(
+    modifier = Modifier.size(24.dp),
+    onClick = onIconClick
+  ) {
+    Icon(
+      imageVector = imageVector,
+      contentDescription = stringResource(contentDescription)
+    )
   }
 }
 

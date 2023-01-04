@@ -29,6 +29,10 @@ fun Modifier.basicButton(): Modifier {
   return this.fillMaxWidth().padding(16.dp, 8.dp)
 }
 
+fun Modifier.basicIconButton(): Modifier {
+  return this.size(48.dp)
+}
+
 fun Modifier.card(): Modifier {
   return this.padding(16.dp, 0.dp, 16.dp, 8.dp)
 }

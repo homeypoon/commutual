@@ -14,16 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.example.functions.screens.profile
+package com.example.functions.ui.screens.profile
 
-import androidx.compose.runtime.mutableStateOf
-import com.example.functions.HOME_SCREEN
-import com.example.functions.PROFILE_SCREEN
-import com.example.functions.SETTINGS_SCREEN
+import com.example.functions.*
+import com.example.functions.model.Post
 import com.example.functions.model.service.ConfigurationService
 import com.example.functions.model.service.LogService
 import com.example.functions.model.service.StorageService
-import com.example.functions.screens.FunctionsViewModel
+import com.example.functions.ui.screens.FunctionsViewModel
 import com.google.android.gms.tasks.Task
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -35,10 +33,11 @@ class ProfileViewModel @Inject constructor(
   private val configurationService: ConfigurationService
 ) : FunctionsViewModel(logService) {
 
-  var navItems = listOf(
-    HOME_SCREEN,
-    PROFILE_SCREEN
-    )
+  val posts = storageService.posts
+
+  fun onPostClick(openScreen: (String) -> Unit, post: Post) {
+    openScreen("$PROFILE_POST_SCREEN?$POST_ID={${post.id}}")
+  }
 
 
 }

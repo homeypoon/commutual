@@ -18,6 +18,11 @@
     <!-- ProfileScreen -->
     <string name="profile">Profile</string>
 
+    <!-- ProfilePostScreen -->
+    <string name="my_post">My Post</string>
+    <string name="more">More</string>
+
+
     <!-- Button -->
     <string name="back_button">Back</string>
 </resources>

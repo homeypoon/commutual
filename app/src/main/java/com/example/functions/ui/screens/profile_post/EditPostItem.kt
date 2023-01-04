@@ -1,6 +1,5 @@
 package com.example.functions.screens.profile
 
-import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,9 +14,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.functions.common.composable.BottomSheetComposable
 import com.example.functions.model.Post
-import com.google.android.gms.tasks.Task
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.example.functions.screens.splash
+package com.example.functions.ui.screens.splash
 
 import android.util.Log
 import androidx.compose.foundation.background

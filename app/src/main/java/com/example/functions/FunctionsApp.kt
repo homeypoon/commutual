@@ -1,19 +1,14 @@
 package com.example.functions
 
 import android.content.res.Resources
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -23,12 +18,11 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.functions.common.composable.BottomNavigationComposable
 import com.example.functions.common.snackbar.SnackbarManager
-import com.example.functions.screens.edit_post.EditPostScreen
-import com.example.functions.screens.home.HomeScreen
+import com.example.functions.ui.screens.edit_post.EditPostScreen
+import com.example.functions.ui.screens.home.HomeScreen
 import com.example.functions.screens.profile.ProfilePostScreen
-import com.example.functions.screens.profile.ProfileScreen
-import com.example.functions.screens.splash.SplashScreen
-import com.example.functions.ui.theme.FunctionsTheme
+import com.example.functions.ui.screens.profile.ProfileScreen
+import com.example.functions.ui.screens.splash.SplashScreen
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
@@ -123,26 +117,29 @@ fun NavGraphBuilder.functionsGraph(appState: FunctionsAppState) {
             openScreen = { route -> appState.navigate(route) }
         )
     }
+
+    composable(
+        route = "$PROFILE_POST_SCREEN$POST_ID_ARG",
+        arguments = listOf(navArgument(POST_ID) { defaultValue = POST_DEFAULT_ID})
+    ) {
+        ProfilePostScreen(
+            openScreen = { route -> appState.navigate(route) },
+            postId = it.arguments?.getString(POST_ID) ?: POST_DEFAULT_ID
+        )
+    }
+
     composable(
         route = "$EDIT_POST_SCREEN$POST_ID_ARG",
         arguments = listOf(navArgument(POST_ID) { defaultValue = POST_DEFAULT_ID })
     ) {
         EditPostScreen(
-            openScreen = { route -> appState.clearAndNavigate(route) },
-//            popUpScreen = { appState.popUp()},
+            popUpScreen = { appState.popUp()},
             postId = it.arguments?.getString(POST_ID) ?: POST_DEFAULT_ID
         )
     }
 
-
-
     composable(PROFILE_SCREEN) {
         ProfileScreen(
-            openScreen = { route -> appState.navigate(route) })
-    }
-
-    composable(PROFILE_POST_SCREEN) {
-        ProfilePostScreen(
             openScreen = { route -> appState.navigate(route) })
     }
 

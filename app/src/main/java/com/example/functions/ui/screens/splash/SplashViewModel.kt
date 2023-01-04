@@ -14,16 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.example.functions.screens.splash
+package com.example.functions.ui.screens.splash
 
 import androidx.compose.runtime.mutableStateOf
-import com.example.functions.HOME_SCREEN
 import com.example.functions.PROFILE_SCREEN
 import com.example.functions.model.service.AccountService
 import com.example.functions.model.service.ConfigurationService
 import com.example.functions.model.service.LogService
 import com.example.functions.SPLASH_SCREEN
-import com.example.functions.screens.FunctionsViewModel
+import com.example.functions.ui.screens.FunctionsViewModel
 import com.google.firebase.auth.FirebaseAuthException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject

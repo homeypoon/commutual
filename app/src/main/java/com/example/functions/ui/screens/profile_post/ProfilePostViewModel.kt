@@ -14,18 +14,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.example.functions.screens.profile_post
+package com.example.functions.ui.screens.profile_post
 
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.runtime.mutableStateOf
 import com.example.functions.EDIT_POST_SCREEN
+import com.example.functions.POST_DEFAULT_ID
 import com.example.functions.POST_ID
 import com.example.functions.SETTINGS_SCREEN
+import com.example.functions.common.ext.idFromParameter
 import com.example.functions.model.Post
 import com.example.functions.model.service.ConfigurationService
 import com.example.functions.model.service.LogService
 import com.example.functions.model.service.StorageService
-import com.example.functions.screens.FunctionsViewModel
+import com.example.functions.ui.screens.FunctionsViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -35,27 +41,27 @@ class ProfilePostViewModel @Inject constructor(
   private val configurationService: ConfigurationService
 ) : FunctionsViewModel(logService) {
 
-  val options = mutableStateOf<List<String>>(listOf())
+  val post = mutableStateOf(Post())
 
-  val tasks = storageService.posts
-
-  fun loadTaskOptions() {
-    val hasEditOption = configurationService.isShowPostEditButtonConfig
-    options.value = EditPostActionOption.getOptions(hasEditOption)
-  }
-
-//  fun onAddClick(openScreen: (String) -> Unit) = openScreen(EDIT_TASK_SCREEN)
-
-  fun onSettingsClick(openScreen: (String) -> Unit) = openScreen(SETTINGS_SCREEN)
-
-  fun onTaskActionClick(openScreen: (String) -> Unit, post: Post, action: String) {
-    when (EditPostActionOption.getByTitle(action)) {
-      EditPostActionOption.EditPost -> openScreen("$EDIT_POST_SCREEN?$POST_ID={${post.id}}")
-      EditPostActionOption.DeletePost -> onDeleteTaskClick(post)
+  fun initialize(postId: String) {
+    launchCatching {
+      if (postId != POST_DEFAULT_ID) {
+        post.value = storageService.getPost(postId.idFromParameter()) ?: Post()
+      }
     }
   }
 
-  private fun onDeleteTaskClick(post: Post) {
-    launchCatching { storageService.delete(post.id) }
+  @OptIn(ExperimentalMaterialApi::class)
+  fun onIconClick(coroutineScope: CoroutineScope, bottomSheetState: ModalBottomSheetState) {
+    coroutineScope.launch {
+      if (bottomSheetState.isVisible) bottomSheetState.hide()
+      else bottomSheetState.show()
+    }
   }
+
+  fun onPostClick(openScreen: (String) -> Unit, post: Post) {
+    openScreen("$EDIT_POST_SCREEN?$POST_ID={${post.id}}")
+  }
+
+
 }

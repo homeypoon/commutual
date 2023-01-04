@@ -1,4 +1,4 @@
-package com.example.functions.screens.edit_post
+package com.example.functions.ui.screens.edit_post
 
 import androidx.compose.runtime.mutableStateOf
 import com.example.functions.HOME_SCREEN
@@ -7,7 +7,7 @@ import com.example.functions.common.ext.idFromParameter
 import com.example.functions.model.Post
 import com.example.functions.model.service.LogService
 import com.example.functions.model.service.StorageService
-import com.example.functions.screens.FunctionsViewModel
+import com.example.functions.ui.screens.FunctionsViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -35,7 +35,7 @@ class EditPostViewModel @Inject constructor(
         post.value = post.value.copy(description = newValue)
     }
 
-    fun onDoneClick(openScreen: (String) -> Unit) {
+    fun onDoneClick(popUpScreen: () -> Unit) {
         launchCatching {
             val editedPost = post.value
             if (editedPost.id.isBlank()) {
@@ -43,7 +43,7 @@ class EditPostViewModel @Inject constructor(
             } else {
                 storageService.update(editedPost)
             }
-            openScreen(HOME_SCREEN)
+            popUpScreen()
         }
     }
 }

@@ -1,7 +1,5 @@
-package com.example.functions.screens.home
+package com.example.functions.ui.screens.home
 
-import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import com.example.functions.EDIT_POST_SCREEN
 import dagger.hilt.android.lifecycle.HiltViewModel

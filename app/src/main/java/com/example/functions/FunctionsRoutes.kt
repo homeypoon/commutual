@@ -20,6 +20,10 @@ const val HOME_SCREEN = "HomeScreen"
 const val EDIT_POST_SCREEN = "EditPostScreen"
 const val SPLASH_SCREEN = "SplashScreen"
 const val SETTINGS_SCREEN = "SettingsScreen"
+const val PROFILE_SCREEN = "ProfileScreen"
+const val PROFILE_POST_SCREEN = "ProfilePostScreen"
+
+
 const val LOGIN_SCREEN = "LoginScreen"
 const val SIGN_UP_SCREEN = "SignUpScreen"
 const val POSTS_SCREEN = "PostsScreen"

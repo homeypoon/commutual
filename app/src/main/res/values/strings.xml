@@ -15,6 +15,9 @@
     <string name="post_title">Post Title</string>
     <string name="post_description">Post Description</string>
 
+    <!-- ProfileScreen -->
+    <string name="profile">Profile</string>
+
     <!-- Button -->
     <string name="back_button">Back</string>
 </resources>

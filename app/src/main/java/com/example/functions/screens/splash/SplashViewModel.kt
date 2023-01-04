@@ -18,6 +18,7 @@ package com.example.functions.screens.splash
 
 import androidx.compose.runtime.mutableStateOf
 import com.example.functions.HOME_SCREEN
+import com.example.functions.PROFILE_SCREEN
 import com.example.functions.model.service.AccountService
 import com.example.functions.model.service.ConfigurationService
 import com.example.functions.model.service.LogService
@@ -42,8 +43,8 @@ class SplashViewModel @Inject constructor(
   fun onAppStart(openAndPopUp: (String, String) -> Unit) {
     showError.value = false
     if (accountService.hasUser) {
-      openAndPopUp(HOME_SCREEN, SPLASH_SCREEN)
-    }
+//      openAndPopUp(HOME_SCREEN, SPLASH_SCREEN)
+      openAndPopUp(PROFILE_SCREEN, SPLASH_SCREEN)    }
     else createAnonymousAccount(openAndPopUp)
   }
 
@@ -55,7 +56,9 @@ class SplashViewModel @Inject constructor(
         showError.value = true
         throw ex
       }
-      openAndPopUp(HOME_SCREEN, SPLASH_SCREEN)
+//      openAndPopUp(HOME_SCREEN, SPLASH_SCREEN)
+      openAndPopUp(PROFILE_SCREEN, SPLASH_SCREEN)
+
     }
   }
 }

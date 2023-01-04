@@ -14,41 +14,33 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.example.functions.screens.profile
+package com.example.functions.ui.screens.profile_post
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.functions.R
-import com.example.functions.common.composable.ActionToolbar
 import com.example.functions.common.composable.BasicIconButton
 import com.example.functions.common.composable.BasicToolbar
-import com.example.functions.common.composable.BottomSheetComposable
 import com.example.functions.common.ext.basicIconButton
-import com.example.functions.common.ext.smallSpacer
-import com.example.functions.common.ext.toolbarActions
-import com.example.functions.ui.screens.profile_post.ProfilePostViewModel
-import kotlinx.coroutines.launch
-import com.example.functions.R.drawable as AppIcon
+import com.example.functions.ui.screens.item.BottomSheetOptionItem
 import com.example.functions.R.string as AppText
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 @ExperimentalMaterialApi
 fun ProfilePostScreen(
+    popUpScreen: () -> Unit,
     openScreen: (String) -> Unit,
     postId: String,
     modifier: Modifier = Modifier,
@@ -60,10 +52,30 @@ fun ProfilePostScreen(
         rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
 
+    val bottomSheetOptions = listOf(
+        PostBottomSheetOption.Edit,
+        PostBottomSheetOption.Delete
+    )
+
     ModalBottomSheetLayout(
         sheetState = bottomSheetState,
         sheetContent = {
-            BottomSheetComposable()
+            LazyColumn {
+                items(bottomSheetOptions) {
+                    Surface(modifier = Modifier.clickable {
+                        when (it) {
+                            PostBottomSheetOption.Edit -> viewModel.onEditPostClick(
+                                openScreen, post, coroutineScope, bottomSheetState
+                            )
+                            PostBottomSheetOption.Delete -> viewModel.onDeletePostClick(
+                                popUpScreen, post, coroutineScope, bottomSheetState
+                            )
+                        }
+                    }) {
+                        BottomSheetOptionItem(it)
+                    }
+                }
+            }
         }
     ) {
 

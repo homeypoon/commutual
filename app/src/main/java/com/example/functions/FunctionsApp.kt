@@ -20,8 +20,8 @@ import com.example.functions.common.composable.BottomNavigationComposable
 import com.example.functions.common.snackbar.SnackbarManager
 import com.example.functions.ui.screens.edit_post.EditPostScreen
 import com.example.functions.ui.screens.home.HomeScreen
-import com.example.functions.screens.profile.ProfilePostScreen
 import com.example.functions.ui.screens.profile.ProfileScreen
+import com.example.functions.ui.screens.profile_post.ProfilePostScreen
 import com.example.functions.ui.screens.splash.SplashScreen
 import kotlinx.coroutines.CoroutineScope
 
@@ -123,6 +123,7 @@ fun NavGraphBuilder.functionsGraph(appState: FunctionsAppState) {
         arguments = listOf(navArgument(POST_ID) { defaultValue = POST_DEFAULT_ID})
     ) {
         ProfilePostScreen(
+            popUpScreen = { appState.popUp()},
             openScreen = { route -> appState.navigate(route) },
             postId = it.arguments?.getString(POST_ID) ?: POST_DEFAULT_ID
         )

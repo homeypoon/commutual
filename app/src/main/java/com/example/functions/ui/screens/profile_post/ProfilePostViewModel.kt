@@ -22,7 +22,6 @@ import androidx.compose.runtime.mutableStateOf
 import com.example.functions.EDIT_POST_SCREEN
 import com.example.functions.POST_DEFAULT_ID
 import com.example.functions.POST_ID
-import com.example.functions.SETTINGS_SCREEN
 import com.example.functions.common.ext.idFromParameter
 import com.example.functions.model.Post
 import com.example.functions.model.service.ConfigurationService
@@ -34,34 +33,58 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@OptIn(ExperimentalMaterialApi::class)
 @HiltViewModel
 class ProfilePostViewModel @Inject constructor(
-  logService: LogService,
-  private val storageService: StorageService,
-  private val configurationService: ConfigurationService
+    logService: LogService,
+    private val storageService: StorageService,
+    private val configurationService: ConfigurationService
 ) : FunctionsViewModel(logService) {
 
-  val post = mutableStateOf(Post())
+    val post = mutableStateOf(Post())
 
-  fun initialize(postId: String) {
-    launchCatching {
-      if (postId != POST_DEFAULT_ID) {
-        post.value = storageService.getPost(postId.idFromParameter()) ?: Post()
-      }
+    fun initialize(postId: String) {
+        launchCatching {
+            if (postId != POST_DEFAULT_ID) {
+                post.value = storageService.getPost(postId.idFromParameter()) ?: Post()
+            }
+        }
     }
-  }
 
-  @OptIn(ExperimentalMaterialApi::class)
-  fun onIconClick(coroutineScope: CoroutineScope, bottomSheetState: ModalBottomSheetState) {
-    coroutineScope.launch {
-      if (bottomSheetState.isVisible) bottomSheetState.hide()
-      else bottomSheetState.show()
+    fun onIconClick(coroutineScope: CoroutineScope, bottomSheetState: ModalBottomSheetState) {
+        coroutineScope.launch {
+            if (!bottomSheetState.isVisible)
+                bottomSheetState.show()
+        }
     }
-  }
 
-  fun onPostClick(openScreen: (String) -> Unit, post: Post) {
-    openScreen("$EDIT_POST_SCREEN?$POST_ID={${post.id}}")
-  }
+    fun onEditPostClick(
+        openScreen: (String) -> Unit,
+        post: Post,
+        coroutineScope: CoroutineScope,
+        bottomSheetState: ModalBottomSheetState
+    ) {
+        openScreen("$EDIT_POST_SCREEN?$POST_ID={${post.id}}")
+        coroutineScope.launch {
+            if (bottomSheetState.isVisible)
+                bottomSheetState.hide()
+        }
+    }
+
+    fun onDeletePostClick(
+        popUpScreen: () -> Unit,
+        post: Post,
+        coroutineScope: CoroutineScope,
+        bottomSheetState: ModalBottomSheetState
+    ) {
+        launchCatching { storageService.delete(post.id) }
+        coroutineScope.launch {
+            if (bottomSheetState.isVisible)
+                bottomSheetState.hide()
+        }
+        popUpScreen()
+
+    }
 
 
 }

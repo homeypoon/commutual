@@ -96,7 +96,7 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
     trace(UPDATE_POST_TRACE) {
       currentUserCollection().document(auth.currentUserId).set(user).await() }
 
-  override suspend fun hasUsername(): Boolean =
+  override suspend fun hasProfile(): Boolean =
     trace(UPDATE_POST_TRACE) {
       val userRef = currentUserCollection().document(auth.currentUserId).get().await()
       return userRef.exists()

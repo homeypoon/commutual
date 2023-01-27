@@ -46,7 +46,7 @@ class SplashViewModel @Inject constructor(
         showError.value = false
         if (accountService.hasUser) {
             launchCatching {
-                if (storageService.hasUsername()) {
+                if (storageService.hasProfile()) {
                     openAndPopUp(HOME_SCREEN, SPLASH_SCREEN)
                 } else {
                     openAndPopUp(HOME_SCREEN, SPLASH_SCREEN)

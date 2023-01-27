@@ -43,7 +43,7 @@ class EditPostViewModel @Inject constructor(
 
         launchCatching {
             val editedPost = post.value
-            if (editedPost.id.isBlank()) {
+            if (editedPost.postId.isBlank()) {
                 storageService.savePost(editedPost)
             } else {
                 storageService.updatePost(editedPost)

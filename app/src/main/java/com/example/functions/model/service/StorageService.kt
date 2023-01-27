@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface StorageService {
   val posts: Flow<List<Post>>
+  val userPosts: Flow<List<Post>>
 
   suspend fun getPost(postId: String): Post?
 

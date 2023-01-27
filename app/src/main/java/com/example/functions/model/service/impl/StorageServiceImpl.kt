@@ -42,43 +42,58 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
   @OptIn(ExperimentalCoroutinesApi::class)
   override val posts: Flow<List<Post>>
     get() =
-      auth.currentUser.flatMapLatest { user ->
-        currentUserCollection(user.id).snapshots().map { snapshot -> snapshot.toObjects() }
+      auth.currentUser.flatMapLatest {
+        currentPostCollection().snapshots().map { snapshot -> snapshot.toObjects() }
       }
 
+  @OptIn(ExperimentalCoroutinesApi::class)
+  override val userPosts: Flow<List<Post>>
+    get() =
+      auth.currentUser.flatMapLatest { user ->
+        currentPostCollection().whereEqualTo(USER_ID, user.id).snapshots().map { snapshot -> snapshot.toObjects() }
+      }
+
+//
+//  override val users: Flow<List<User>>
+//    get() =
+//      auth.currentUser.flatMapLatest { user ->
+//        currentUserCollection(user.id).snapshots().map { snapshot -> snapshot.toObjects() }
+//      }
+
   override suspend fun getPost(postId: String): Post? =
-    currentUserCollection(auth.currentUserId).document(postId).get().await().toObject()
+    currentPostCollection().document(postId).get().await().toObject()
 
   override suspend fun savePost(post: Post): String =
-    trace(SAVE_POST_TRACE) { currentUserCollection(auth.currentUserId).add(post).await().id }
+    trace(SAVE_POST_TRACE) { currentPostCollection().add(post).await().id }
 
   override suspend fun updatePost(post: Post): Unit =
     trace(UPDATE_POST_TRACE) {
-      currentUserCollection(auth.currentUserId).document(post.id).set(post).await()
+      currentPostCollection().document(post.postId).set(post).await()
     }
 
   override suspend fun deletePost(postId: String) {
-    currentUserCollection(auth.currentUserId).document(postId).delete().await()
+    currentPostCollection().document(postId).delete().await()
   }
 
   // TODO: It's not recommended to delete on the client:
   // https://firebase.google.com/docs/firestore/manage-data/delete-data#kotlin+ktx_2
   override suspend fun deleteAllForUser(userId: String) {
-    val matchingPosts = currentUserCollection(userId).get().await()
+    val matchingPosts = currentPostCollection().get().await()
     matchingPosts.map { it.reference.delete().asDeferred() }.awaitAll()
   }
 
   private fun currentUserCollection(uid: String): CollectionReference =
     firestore.collection(USER_COLLECTION).document(uid).collection(POST_COLLECTION)
 
-  private fun currentPostCollection(uid: String): CollectionReference =
-    firestore.collection(POST_COLLECTION).document(uid).collection(POST_COLLECTION)
+  private fun currentPostCollection(): CollectionReference =
+    firestore.collection(POST_COLLECTION)
 
   companion object {
     private const val USER_COLLECTION = "users"
     private const val POST_COLLECTION = "posts"
     private const val SAVE_POST_TRACE = "savePost"
     private const val UPDATE_POST_TRACE = "updatePost"
+    private const val USER_ID = "userID"
   }
 
 }

@@ -37,7 +37,7 @@ class ProfileViewModel @Inject constructor(
   val posts = storageService.posts
 
   fun onPostClick(openScreen: (String) -> Unit, post: Post) {
-    openScreen("$PROFILE_POST_SCREEN?$POST_ID={${post.id}}")
+    openScreen("$PROFILE_POST_SCREEN?$POST_ID={${post.postId}}")
   }
 
   fun onSettingsClick(openScreen: (String) -> Unit) {

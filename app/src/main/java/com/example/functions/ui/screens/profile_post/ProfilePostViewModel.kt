@@ -42,6 +42,7 @@ class ProfilePostViewModel @Inject constructor(
 ) : FunctionsViewModel(logService) {
 
     val post = mutableStateOf(Post())
+    val posts = storageService.posts
 
     fun initialize(postId: String) {
         launchCatching {
@@ -64,7 +65,7 @@ class ProfilePostViewModel @Inject constructor(
         coroutineScope: CoroutineScope,
         bottomSheetState: ModalBottomSheetState
     ) {
-        openScreen("$EDIT_POST_SCREEN?$POST_ID={${post.id}}")
+        openScreen("$EDIT_POST_SCREEN?$POST_ID={${post.postId}}")
         coroutineScope.launch {
             if (bottomSheetState.isVisible)
                 bottomSheetState.hide()
@@ -77,7 +78,7 @@ class ProfilePostViewModel @Inject constructor(
         coroutineScope: CoroutineScope,
         bottomSheetState: ModalBottomSheetState
     ) {
-        launchCatching { storageService.deletePost(post.id) }
+        launchCatching { storageService.deletePost(post.postId) }
         coroutineScope.launch {
             if (bottomSheetState.isVisible)
                 bottomSheetState.hide()

@@ -14,6 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
+
+@file:OptIn(ExperimentalLifecycleComposeApi::class)
+
 package com.example.functions.ui.screens.profile_post
 
 import androidx.compose.foundation.clickable
@@ -31,6 +34,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import com.example.functions.common.composable.BasicIconButton
 import com.example.functions.common.composable.BasicToolbar
 import com.example.functions.common.ext.basicIconButton

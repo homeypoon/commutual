@@ -40,7 +40,7 @@ fun ExploreScreen(
     val posts = viewModel.posts.collectAsStateWithLifecycle(emptyList())
 
     LazyColumn {
-        items(posts.value, key = { it.id }) { postItem ->
+        items(posts.value, key = { it.postId }) { postItem ->
             Surface(modifier = Modifier.clickable {
                 viewModel.onPostClick(openScreen, postItem)
             }) {

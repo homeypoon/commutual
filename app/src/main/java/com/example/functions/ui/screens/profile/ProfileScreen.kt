@@ -45,6 +45,7 @@ fun ProfileScreen(
 ) {
 
     val posts = viewModel.posts.collectAsStateWithLifecycle(emptyList())
+//    val posts = viewModel.posts.collectAsStateWithLifecycle(emptyList())
 
     Column(modifier = Modifier.fillMaxWidth().fillMaxHeight()) {
         ActionToolbar(title = AppText.profile,
@@ -54,7 +55,7 @@ fun ProfileScreen(
 
 
         LazyColumn {
-            items(posts.value, key = { it.id }) { postItem ->
+            items(posts.value, key = { it.postId }) { postItem ->
                 Surface(modifier = Modifier.clickable {
                     viewModel.onPostClick(openScreen, postItem)
                 }) {

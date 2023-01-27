@@ -1,12 +1,11 @@
 package com.example.functions.model
 
 import com.google.firebase.firestore.DocumentId
-import com.google.firebase.firestore.FieldValue
 
 data class Post(
-    @DocumentId val id: String = "",
+    @DocumentId val postId: String = "",
     val userId: String = "",
     val title: String = "",
     val description: String = "",
-    val timestamp: FieldValue = FieldValue.serverTimestamp()
+//    val timestamp: Any = FieldValue.serverTimestamp()
 )

@@ -29,6 +29,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
@@ -53,7 +54,7 @@ fun ProfileScreen(
     LaunchedEffect(Unit) { viewModel.initialize() }
 
     val userPosts = viewModel.userPosts.collectAsStateWithLifecycle(emptyList())
-    val user = viewModel.user
+    val user by viewModel.user
     val scrollState = rememberScrollState()
 
 
@@ -67,8 +68,8 @@ fun ProfileScreen(
             modifier = modifier)
 
         Column(Modifier.fillMaxWidth()) {
-            Text(text = user.value.username)
-            Text(text = user.value.bio)
+            Text(text = user.username)
+            Text(text = user.bio)
             BasicButton(
                 AppText.edit_profile,
                 Modifier.basicButton()

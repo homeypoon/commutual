@@ -22,6 +22,8 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
@@ -42,13 +44,19 @@ fun ExploreScreen(
     viewModel: ExploreViewModel = hiltViewModel()
 ) {
 
+    val scrollState = rememberScrollState()
+
     Column(modifier = Modifier
         .fillMaxWidth()
-        .fillMaxHeight()) {
+        .fillMaxHeight().verticalScroll(scrollState)) {
         BasicToolbar(title = R.string.explore)
 
         val posts = viewModel.posts.collectAsStateWithLifecycle(emptyList())
-        LazyColumn {
+        LazyColumn(
+            Modifier
+                .fillMaxWidth()
+                .weight(1f, true)
+        ) {
             items(posts.value, key = { it.postId }) { postItem ->
                 Surface(modifier = Modifier.clickable {
                     viewModel.onPostClick(openScreen, postItem)

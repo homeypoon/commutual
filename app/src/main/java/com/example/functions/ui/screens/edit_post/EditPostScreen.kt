@@ -28,6 +28,7 @@ fun EditPostScreen(
     viewModel: EditPostViewModel = hiltViewModel()
 ) {
     val post by viewModel.post
+    val scrollState = rememberScrollState()
 
     LaunchedEffect(Unit) { viewModel.initialize(postId) }
 
@@ -35,7 +36,7 @@ fun EditPostScreen(
         modifier = modifier
             .fillMaxWidth()
             .fillMaxHeight()
-            .verticalScroll(rememberScrollState()),
+            .verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         ActionToolbar(

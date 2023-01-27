@@ -16,10 +16,13 @@ limitations under the License.
 
 package com.example.functions.ui.screens.post_details
 
+import androidx.compose.runtime.mutableStateOf
 import com.example.functions.POST_DEFAULT_ID
 import com.example.functions.POST_ID
 import com.example.functions.PROFILE_POST_SCREEN
+import com.example.functions.common.ext.idFromParameter
 import com.example.functions.model.Post
+import com.example.functions.model.User
 import com.example.functions.model.service.LogService
 import com.example.functions.model.service.StorageService
 import com.example.functions.ui.screens.FunctionsViewModel
@@ -32,15 +35,20 @@ class PostDetailsViewModel @Inject constructor(
   private val storageService: StorageService,
 ) : FunctionsViewModel(logService) {
 
-  val posts = storageService.posts
-
+  val post = mutableStateOf(Post())
+  val user = mutableStateOf(User())
 
   fun initialize(postId: String) {
     launchCatching {
       if (postId != POST_DEFAULT_ID) {
-//        posts.value = storageService.getPost(postId.idFromParameter()) ?: Post()
+        post.value = storageService.getPost(postId.idFromParameter()) ?: Post()
+//        user.value = storageService.getUser(post.value.user)
       }
     }
+  }
+
+  fun getUserInfo(postId:String) {
+
   }
 
   fun onPostClick(openScreen: (String) -> Unit, post: Post) {

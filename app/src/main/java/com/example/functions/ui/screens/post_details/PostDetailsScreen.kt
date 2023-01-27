@@ -15,22 +15,21 @@ limitations under the License.
  */
 
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.functions.R
 import com.example.functions.common.composable.BasicToolbar
-import com.example.functions.ui.screens.item.PostItem
 import com.example.functions.ui.screens.post_details.PostDetailsViewModel
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
@@ -38,29 +37,26 @@ import com.example.functions.ui.screens.post_details.PostDetailsViewModel
 @ExperimentalMaterialApi
 fun PostDetailsScreen(
     openScreen: (String) -> Unit,
+    postId: String,
     modifier: Modifier = Modifier,
     viewModel: PostDetailsViewModel = hiltViewModel()
 ) {
 
+    val post by viewModel.post
+    val scrollState = rememberScrollState()
+
+    LaunchedEffect(Unit) { viewModel.initialize(postId) }
 
     Column(modifier = Modifier
         .fillMaxWidth()
-        .fillMaxHeight()) {
+        .fillMaxHeight()
+        .verticalScroll(scrollState)
+    ) {
         BasicToolbar(title = R.string.explore)
 
-        val posts = viewModel.posts.collectAsStateWithLifecycle(emptyList())
-        LazyColumn {
-            items(posts.value, key = { it.postId }) { postItem ->
-                Surface(modifier = Modifier.clickable {
-                    viewModel.onPostClick(openScreen, postItem)
-                }) {
-                    PostItem(
-                        post = postItem
-                    )
-                }
-            }
-        }
-
+        Text(text = post.user.userId)
+        Text(text = post.user.username)
+        Text(text = post.description)
 
     }
 }

@@ -1,6 +1,7 @@
 package com.example.functions
 
 import LoginScreen
+import PostDetailsScreen
 import android.content.res.Resources
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
@@ -148,10 +149,10 @@ fun NavGraphBuilder.functionsGraph(appState: FunctionsAppState) {
         route = "$POST_DETAILS_SCREEN$POST_ID_ARG",
         arguments = listOf(navArgument(POST_ID) { defaultValue = POST_DEFAULT_ID })
     ) {
-//        PostDetailsScreen(
-//            popUpScreen = { appState.popUp()},
-//            postId = it.arguments?.getString(POST_ID) ?: POST_DEFAULT_ID
-//        )
+        PostDetailsScreen(
+            openScreen = { route -> appState.navigate(route) },
+            postId = it.arguments?.getString(POST_ID) ?: POST_DEFAULT_ID
+        )
     }
 
     composable(EDIT_PROFILE_SCREEN) {

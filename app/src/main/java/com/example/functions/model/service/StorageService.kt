@@ -24,8 +24,11 @@ interface StorageService {
 
   suspend fun getPost(postId: String): Post?
 
-  suspend fun save(post: Post): String
-  suspend fun update(post: Post)
-  suspend fun delete(postId: String)
+  // Post
+  suspend fun savePost(post: Post): String
+  suspend fun updatePost(post: Post)
+  suspend fun deletePost(postId: String)
+
+
   suspend fun deleteAllForUser(userId: String)
 }

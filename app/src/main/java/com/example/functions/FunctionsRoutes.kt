@@ -17,6 +17,8 @@ limitations under the License.
 package com.example.functions
 
 const val HOME_SCREEN = "HomeScreen"
+const val EXPLORE_SCREEN = "ExploreScreen"
+
 const val EDIT_POST_SCREEN = "EditPostScreen"
 const val SPLASH_SCREEN = "SplashScreen"
 const val SETTINGS_SCREEN = "SettingsScreen"

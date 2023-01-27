@@ -14,21 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.example.functions.model.service
+package com.example.functions.screens.login
 
-import com.example.functions.model.User
-import kotlinx.coroutines.flow.Flow
-
-interface AccountService {
-  val currentUserId: String
-  val hasUser: Boolean
-
-  val currentUser: Flow<User>
-
-  suspend fun sendRecoveryEmail(email: String)
-  suspend fun createAnonymousAccount()
-  suspend fun createAccount(email: String, password: String)
-  suspend fun signIn(email: String, password: String)
-  suspend fun deleteAccount()
-  suspend fun signOut()
-}
+data class LoginUiState(
+    val email: String = "",
+    val password: String = ""
+)

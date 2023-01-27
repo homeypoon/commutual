@@ -14,12 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.example.functions.ui.screens.profile
+package com.example.functions.ui.screens.explore
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.ExperimentalMaterialApi
@@ -29,42 +26,28 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.functions.R
-import com.example.functions.common.composable.ActionToolbar
 import com.example.functions.ui.screens.item.PostItem
-import com.example.functions.R.string as AppText
-
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 @ExperimentalMaterialApi
-fun ProfileScreen(
+fun ExploreScreen(
     openScreen: (String) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: ProfileViewModel = hiltViewModel()
+    viewModel: ExploreViewModel = hiltViewModel()
 ) {
 
     val posts = viewModel.posts.collectAsStateWithLifecycle(emptyList())
 
-    Column(modifier = Modifier.fillMaxWidth().fillMaxHeight()) {
-        ActionToolbar(title = AppText.profile,
-            endActionIcon = R.drawable.ic_settings,
-            endAction = { viewModel.onSettingsClick(openScreen) },
-            modifier = modifier)
-
-
-        LazyColumn {
-            items(posts.value, key = { it.id }) { postItem ->
-                Surface(modifier = Modifier.clickable {
-                    viewModel.onPostClick(openScreen, postItem)
-                }) {
-                    PostItem(
-                        post = postItem
-                    )
-                }
-
+    LazyColumn {
+        items(posts.value, key = { it.id }) { postItem ->
+            Surface(modifier = Modifier.clickable {
+                viewModel.onPostClick(openScreen, postItem)
+            }) {
+                PostItem(
+                    post = postItem
+                )
             }
         }
     }
-
 }

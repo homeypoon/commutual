@@ -14,6 +14,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.functions.EXPLORE_SCREEN
 import com.example.functions.HOME_SCREEN
 import com.example.functions.PROFILE_SCREEN
 import com.example.functions.R
@@ -25,6 +26,7 @@ fun BottomNavigationComposable(
 ) {
     val navItems = listOf(
         Screen.Home,
+        Screen.Explore,
         Screen.Profile
     )
 
@@ -66,5 +68,6 @@ fun BottomNavigationComposable(
 
 sealed class Screen(val route: String, @StringRes val resourceId: Int, @DrawableRes val iconId: Int) {
     object Home : Screen(HOME_SCREEN, R.string.home, R.drawable.ic_home)
+    object Explore: Screen(EXPLORE_SCREEN, R.string.explore, R.drawable.ic_explore)
     object Profile : Screen(PROFILE_SCREEN, R.string.profile, R.drawable.ic_profile)
 }

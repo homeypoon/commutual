@@ -14,13 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.example.functions.ui.screens.profile
+package com.example.functions.ui.screens.explore
 
 import com.example.functions.POST_ID
 import com.example.functions.PROFILE_POST_SCREEN
-import com.example.functions.SETTINGS_SCREEN
 import com.example.functions.model.Post
-import com.example.functions.model.service.ConfigurationService
 import com.example.functions.model.service.LogService
 import com.example.functions.model.service.StorageService
 import com.example.functions.ui.screens.FunctionsViewModel
@@ -28,20 +26,15 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class ProfileViewModel @Inject constructor(
+class ExploreViewModel @Inject constructor(
   logService: LogService,
   private val storageService: StorageService,
-  private val configurationService: ConfigurationService
 ) : FunctionsViewModel(logService) {
 
   val posts = storageService.posts
 
   fun onPostClick(openScreen: (String) -> Unit, post: Post) {
     openScreen("$PROFILE_POST_SCREEN?$POST_ID={${post.id}}")
-  }
-
-  fun onSettingsClick(openScreen: (String) -> Unit) {
-    openScreen(SETTINGS_SCREEN)
   }
 
 }

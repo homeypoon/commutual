@@ -4,11 +4,29 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="repeat_password">Repeat Password</string>
+    <string name="email_error">Email is invalid!</string>
     <string name="generic_error">Something went wrong. Please try again!</string>
     <string name="try_again">Try again!</string>
 
+    <!-- LoginScreen -->
+    <string name="log_in">Log In</string>
+    <string name="register">Register</string>
+    <string name="dont_have_account">Don\'t have an account?</string>
+    <string name="forgot_password">Forgot password? Click to get recovery email</string>
+    <string name="recovery_email_sent">Check your inbox for the recovery email!</string>
+    <string name="empty_password_error">Please enter your password</string>
+
+    <!-- SignUpScreen -->
+    <string name="create_account">Create account</string>
+    <string name="already_have_account">Already have an account?</string>
+    <string name="password_error">Your password should have at least six digits and include one digit, one lower case letter and one upper case letter.</string>
+    <string name="password_match_error">Passwords do not match.</string>
+
     <!-- HomeScreen -->
     <string name="home">Home</string>
+
+    <!-- ExploreScreen -->
+    <string name="explore">Explore</string>
 
     <!-- CreatePostScreen -->
     <string name="create_post">Create Your Post</string>
@@ -22,6 +40,14 @@
     <string name="my_post">My Post</string>
     <string name="more">More</string>
 
+    <!-- SettingsScreen -->
+    <string name="settings">Settings</string>
+    <string name="log_out">Log Out</string>
+    <string name="log_out_title">Log Out?</string>
+    <string name="log_out_message">Are you sure you would like to log out?</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="delete_account_message">You will lose all your data. There is no way of reviving it. Are you sure you want to delete your account?</string>
 
     <!-- Button -->
     <string name="back_button">Back</string>

@@ -77,7 +77,7 @@ class ProfilePostViewModel @Inject constructor(
         coroutineScope: CoroutineScope,
         bottomSheetState: ModalBottomSheetState
     ) {
-        launchCatching { storageService.delete(post.id) }
+        launchCatching { storageService.deletePost(post.id) }
         coroutineScope.launch {
             if (bottomSheetState.isVisible)
                 bottomSheetState.hide()

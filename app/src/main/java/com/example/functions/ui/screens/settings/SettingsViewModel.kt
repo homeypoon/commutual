@@ -14,37 +14,37 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.example.functions.ui.screens.splash
+package com.example.functions.ui.screens.profile
 
-import androidx.compose.runtime.mutableStateOf
-import com.example.functions.HOME_SCREEN
-import com.example.functions.LOGIN_SCREEN
 import com.example.functions.SPLASH_SCREEN
 import com.example.functions.model.service.AccountService
-import com.example.functions.model.service.ConfigurationService
 import com.example.functions.model.service.LogService
+import com.example.functions.model.service.StorageService
 import com.example.functions.ui.screens.FunctionsViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class SplashViewModel @Inject constructor(
-  configurationService: ConfigurationService,
-  private val accountService: AccountService,
-  logService: LogService
+class SettingsViewModel @Inject constructor(
+    logService: LogService,
+    private val accountService: AccountService,
+    private val storageService: StorageService
 ) : FunctionsViewModel(logService) {
-  val showError = mutableStateOf(false)
 
-  init {
-    launchCatching { configurationService.fetchConfiguration() }
-  }
 
-  fun onAppStart(openAndPopUp: (String, String) -> Unit) {
-    showError.value = false
-    if (accountService.hasUser)
-//      openAndPopUp(HOME_SCREEN, SPLASH_SCREEN)
-      openAndPopUp(HOME_SCREEN, SPLASH_SCREEN)
-    else openAndPopUp(LOGIN_SCREEN, SPLASH_SCREEN)
-  }
+    fun onSignOutClick(restartApp: (String) -> Unit) {
+        launchCatching {
+            accountService.signOut()
+            restartApp(SPLASH_SCREEN)
+        }
+    }
+
+    fun onDeleteMyAccountClick(restartApp: (String) -> Unit) {
+        launchCatching {
+            storageService.deleteAllForUser(accountService.currentUserId)
+            accountService.deleteAccount()
+            restartApp(SPLASH_SCREEN)
+        }
+    }
 
 }

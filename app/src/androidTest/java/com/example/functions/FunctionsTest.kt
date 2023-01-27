@@ -47,7 +47,7 @@ class FunctionsTest {
 
   @Test
   fun test() = runTest {
-    val newId = storage.save(Post(title = "Testing"))
+    val newId = storage.savePost(Post(title = "Testing"))
     val result = storage.posts.first()
     assertThat(result).containsExactly(Post(id = newId, title = "Testing"))
   }

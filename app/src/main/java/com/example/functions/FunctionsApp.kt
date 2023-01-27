@@ -1,5 +1,6 @@
 package com.example.functions
 
+import LoginScreen
 import android.content.res.Resources
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
@@ -19,10 +20,13 @@ import androidx.navigation.navArgument
 import com.example.functions.common.composable.BottomNavigationComposable
 import com.example.functions.common.snackbar.SnackbarManager
 import com.example.functions.ui.screens.edit_post.EditPostScreen
+import com.example.functions.ui.screens.explore.ExploreScreen
 import com.example.functions.ui.screens.home.HomeScreen
 import com.example.functions.ui.screens.profile.ProfileScreen
+import com.example.functions.ui.screens.profile.SettingsScreen
 import com.example.functions.ui.screens.profile_post.ProfilePostScreen
 import com.example.functions.ui.screens.splash.SplashScreen
+import com.example.makeitso.screens.sign_up.SignUpScreen
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
@@ -139,9 +143,29 @@ fun NavGraphBuilder.functionsGraph(appState: FunctionsAppState) {
         )
     }
 
+    composable(LOGIN_SCREEN) {
+        LoginScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })
+    }
+
+    composable(SIGN_UP_SCREEN) {
+        SignUpScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })
+    }
+
+    composable(EXPLORE_SCREEN) {
+        ExploreScreen(
+            openScreen = { route -> appState.navigate(route) })
+    }
+
     composable(PROFILE_SCREEN) {
         ProfileScreen(
             openScreen = { route -> appState.navigate(route) })
+    }
+
+    composable(SETTINGS_SCREEN) {
+        SettingsScreen(
+            restartApp = { route -> appState.clearAndNavigate(route) },
+            openScreen = { route -> appState.navigate(route) }
+        )
     }
 
 }

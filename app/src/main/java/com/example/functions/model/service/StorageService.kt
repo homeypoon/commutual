@@ -24,6 +24,8 @@ interface StorageService {
   val posts: Flow<List<Post>>
   val userPosts: Flow<List<Post>>
 
+  suspend fun hasUsername(): Boolean
+
   suspend fun getPost(postId: String): Post?
   suspend fun getUser(userId: String): User?
 

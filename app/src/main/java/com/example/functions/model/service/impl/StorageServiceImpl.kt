@@ -40,6 +40,7 @@ class StorageServiceImpl
 constructor(private val firestore: FirebaseFirestore, private val auth: AccountService) :
   StorageService {
 
+
   @OptIn(ExperimentalCoroutinesApi::class)
   override val posts: Flow<List<Post>>
     get() =
@@ -73,6 +74,7 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
       currentPostCollection().document(post.postId).set(post).await()
     }
 
+
   override suspend fun deletePost(postId: String) {
     currentUserCollection().document(postId).delete().await()
   }
@@ -94,6 +96,17 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
     trace(UPDATE_POST_TRACE) {
       currentUserCollection().document(auth.currentUserId).set(user).await() }
 
+  override suspend fun hasUsername(): Boolean =
+    trace(UPDATE_POST_TRACE) {
+      val userRef = currentUserCollection().document(auth.currentUserId).get().await()
+      return userRef.exists()
+
+//      val userRef = currentUserCollection().document(auth.currentUserId).get().await()
+//
+//      return !(userRef.getString(USERNAME).isNullOrBlank())
+
+    }
+
   // TODO: It's not recommended to delete on the client:
   // https://firebase.google.com/docs/firestore/manage-data/delete-data#kotlin+ktx_2
   override suspend fun deleteAllForUser(userId: String) {
@@ -113,6 +126,7 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
     private const val SAVE_POST_TRACE = "savePost"
     private const val UPDATE_POST_TRACE = "updatePost"
     private const val USER_ID = "userId"
+    private const val USERNAME = "username"
   }
 
 }

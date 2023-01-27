@@ -43,6 +43,7 @@ fun PostDetailsScreen(
 ) {
 
     val post by viewModel.post
+    val user by viewModel.user
     val scrollState = rememberScrollState()
 
     LaunchedEffect(Unit) { viewModel.initialize(postId) }
@@ -54,8 +55,9 @@ fun PostDetailsScreen(
     ) {
         BasicToolbar(title = R.string.explore)
 
-        Text(text = post.user.userId)
-        Text(text = post.user.username)
+        Text(text = user.userId)
+        Text(text = user.username)
+        Text(text = post.title)
         Text(text = post.description)
 
     }

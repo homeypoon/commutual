@@ -31,9 +31,10 @@ class AccountServiceImpl @Inject constructor(private val auth: FirebaseAuth) : A
   override val currentUserId: String
     get() = auth.currentUser?.uid.orEmpty()
 
-  // Get whether user has current user
+  // Get whether FireStore has current user
   override val hasUser: Boolean
     get() = auth.currentUser != null
+
 
   override val currentUser: Flow<User>
     get() = callbackFlow {

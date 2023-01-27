@@ -23,6 +23,7 @@ import com.example.functions.PROFILE_POST_SCREEN
 import com.example.functions.common.ext.idFromParameter
 import com.example.functions.model.Post
 import com.example.functions.model.User
+import com.example.functions.model.service.AccountService
 import com.example.functions.model.service.LogService
 import com.example.functions.model.service.StorageService
 import com.example.functions.ui.screens.FunctionsViewModel
@@ -33,6 +34,7 @@ import javax.inject.Inject
 class PostDetailsViewModel @Inject constructor(
   logService: LogService,
   private val storageService: StorageService,
+  private val accountService: AccountService
 ) : FunctionsViewModel(logService) {
 
   val post = mutableStateOf(Post())
@@ -42,7 +44,13 @@ class PostDetailsViewModel @Inject constructor(
     launchCatching {
       if (postId != POST_DEFAULT_ID) {
         post.value = storageService.getPost(postId.idFromParameter()) ?: Post()
-//        user.value = storageService.getUser(post.value.user)
+
+        val postUser = storageService.getUser(post.value.userId)
+        if (postUser != null) {
+          user.value = postUser
+        } else {
+          // Handle the case where there is no user
+        }
       }
     }
   }

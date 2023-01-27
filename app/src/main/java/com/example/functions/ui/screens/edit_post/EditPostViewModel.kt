@@ -38,22 +38,8 @@ class EditPostViewModel @Inject constructor(
 
     fun onDoneClick(popUpScreen: () -> Unit, postId: String) {
 
-        launchCatching {
-            val user = storageService.getUser(accountService.currentUserId)
-            if (user != null) {
-                post.value = post.value.copy(postId = postId, user = user)
-            } else {
-                // Handle the case where there is no user
-            }
-        }
-
-//
-//        post.value = post.value.copy(
-//            userId = accountService.currentUserId)
-//        post.value = post.value.copy(
-//            postId = postId,
-//            user = storageService.getUser()
-//        )
+        post.value = post.value.copy(
+            userId = accountService.currentUserId)
 
         launchCatching {
             val editedPost = post.value
@@ -64,5 +50,19 @@ class EditPostViewModel @Inject constructor(
             }
             popUpScreen()
         }
+//
+//        post.value = post.value.copy(
+//            userId = accountService.currentUserId)
+//        post.value = post.value.copy(postId = postId)
+//
+//        launchCatching {
+//            val editedPost = post.value
+//            if (editedPost.postId.isBlank()) {
+//                storageService.savePost(editedPost)
+//            } else {
+//                storageService.updatePost(editedPost)
+//            }
+//            popUpScreen()
+//        }
     }
 }

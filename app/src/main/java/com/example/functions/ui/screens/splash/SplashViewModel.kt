@@ -17,34 +17,44 @@ limitations under the License.
 package com.example.functions.ui.screens.splash
 
 import androidx.compose.runtime.mutableStateOf
+import com.example.functions.EDIT_PROFILE_SCREEN
 import com.example.functions.HOME_SCREEN
 import com.example.functions.LOGIN_SCREEN
 import com.example.functions.SPLASH_SCREEN
 import com.example.functions.model.service.AccountService
 import com.example.functions.model.service.ConfigurationService
 import com.example.functions.model.service.LogService
+import com.example.functions.model.service.StorageService
 import com.example.functions.ui.screens.FunctionsViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
-  configurationService: ConfigurationService,
-  private val accountService: AccountService,
-  logService: LogService
+    configurationService: ConfigurationService,
+    private val accountService: AccountService,
+    logService: LogService,
+    private val storageService: StorageService,
 ) : FunctionsViewModel(logService) {
-  val showError = mutableStateOf(false)
+    val showError = mutableStateOf(false)
 
-  init {
-    launchCatching { configurationService.fetchConfiguration() }
-  }
+    init {
+        launchCatching { configurationService.fetchConfiguration() }
+    }
 
-  fun onAppStart(openAndPopUp: (String, String) -> Unit) {
-    showError.value = false
-    if (accountService.hasUser)
-//      openAndPopUp(HOME_SCREEN, SPLASH_SCREEN)
-      openAndPopUp(HOME_SCREEN, SPLASH_SCREEN)
-    else openAndPopUp(LOGIN_SCREEN, SPLASH_SCREEN)
-  }
+    fun onAppStart(openAndPopUp: (String, String) -> Unit, openScreen: (String) -> Unit, popUpScreen: () -> Unit,) {
+        showError.value = false
+        if (accountService.hasUser) {
+            launchCatching {
+                if (storageService.hasUsername()) {
+                    openAndPopUp(HOME_SCREEN, SPLASH_SCREEN)
+                } else {
+                    openAndPopUp(HOME_SCREEN, SPLASH_SCREEN)
+                    openScreen(EDIT_PROFILE_SCREEN)
+
+                }
+            }
+        } else openAndPopUp(LOGIN_SCREEN, SPLASH_SCREEN)
+    }
 
 }

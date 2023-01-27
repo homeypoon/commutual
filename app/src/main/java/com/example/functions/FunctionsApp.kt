@@ -114,6 +114,8 @@ fun resources(): Resources {
 fun NavGraphBuilder.functionsGraph(appState: FunctionsAppState) {
     composable(SPLASH_SCREEN) {
         SplashScreen(
+            openScreen = { route -> appState.navigate(route) },
+            popUpScreen = { appState.popUp()},
             openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) }
         )
     }

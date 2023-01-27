@@ -1,5 +1,7 @@
 package com.example.functions.model
 
 data class User(
-    val id: String = ""
+    val userId: String = "",
+    val username: String = "",
+    val bio: String = ""
 )

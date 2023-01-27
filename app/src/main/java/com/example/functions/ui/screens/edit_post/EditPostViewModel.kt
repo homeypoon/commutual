@@ -36,7 +36,7 @@ class EditPostViewModel @Inject constructor(
         post.value = post.value.copy(description = newValue)
     }
 
-    fun onDoneClick(popUpScreen: () -> Unit) {
+    fun onDoneClick(popUpScreen: () -> Unit, postId: String) {
 
         post.value = post.value.copy(
             userId = accountService.currentUserId)

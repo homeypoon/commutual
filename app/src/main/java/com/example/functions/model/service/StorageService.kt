@@ -17,6 +17,7 @@ limitations under the License.
 package com.example.functions.model.service
 
 import com.example.functions.model.Post
+import com.example.functions.model.User
 import kotlinx.coroutines.flow.Flow
 
 interface StorageService {
@@ -24,12 +25,17 @@ interface StorageService {
   val userPosts: Flow<List<Post>>
 
   suspend fun getPost(postId: String): Post?
+  suspend fun getUser(userId: String): User?
 
   // Post
   suspend fun savePost(post: Post): String
   suspend fun updatePost(post: Post)
   suspend fun deletePost(postId: String)
 
+//  suspend fun saveUser(user: User): String
+  suspend fun saveUser(userId: String, user: User): Unit
+
+  suspend fun updateUser(user: User)
 
   suspend fun deleteAllForUser(userId: String)
 }

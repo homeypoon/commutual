@@ -1,4 +1,4 @@
-package com.example.functions.ui.screens.edit_post
+package com.example.functions.ui.edit_profile
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -21,15 +21,14 @@ import com.example.functions.R.drawable as AppIcon
 import com.example.functions.R.string as AppText
 
 @Composable
-fun EditPostScreen(
+fun EditProfileScreen(
     popUpScreen: () -> Unit,
-    postId: String,
     modifier: Modifier = Modifier,
-    viewModel: EditPostViewModel = hiltViewModel()
+    viewModel: EditProfileViewModel = hiltViewModel()
 ) {
-    val post by viewModel.post
+    val user by viewModel.user
 
-    LaunchedEffect(Unit) { viewModel.initialize(postId) }
+    LaunchedEffect(Unit) { viewModel.initialize() }
 
     Column(
         modifier = modifier
@@ -39,17 +38,17 @@ fun EditPostScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         ActionToolbar(
-            title = AppText.create_post,
+            title = AppText.edit_profile,
             modifier = Modifier.toolbarActions(),
             endActionIcon = AppIcon.ic_check,
-            endAction = { viewModel.onDoneClick(popUpScreen, postId)}
+            endAction = { viewModel.onDoneClick(popUpScreen)}
         )
 
         Spacer(modifier = Modifier.spacer())
 
         val fieldModifier = Modifier.fieldModifier()
 
-        BasicField(AppText.post_title, post.title, viewModel::onTitleChange, fieldModifier)
-        BasicField(AppText.post_description, post.description, viewModel::onDescriptionChange, fieldModifier)
+        BasicField(AppText.username, user.username, viewModel::onNameChange, fieldModifier)
+        BasicField(AppText.user_bio, user.bio, viewModel::onBioChange, fieldModifier)
     }
 }

@@ -17,6 +17,9 @@ limitations under the License.
 package com.example.functions.ui.screens.explore
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.ExperimentalMaterialApi
@@ -26,6 +29,8 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.functions.R
+import com.example.functions.common.composable.BasicToolbar
 import com.example.functions.ui.screens.item.PostItem
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
@@ -37,17 +42,24 @@ fun ExploreScreen(
     viewModel: ExploreViewModel = hiltViewModel()
 ) {
 
-    val posts = viewModel.posts.collectAsStateWithLifecycle(emptyList())
+    Column(modifier = Modifier
+        .fillMaxWidth()
+        .fillMaxHeight()) {
+        BasicToolbar(title = R.string.explore)
 
-    LazyColumn {
-        items(posts.value, key = { it.postId }) { postItem ->
-            Surface(modifier = Modifier.clickable {
-                viewModel.onPostClick(openScreen, postItem)
-            }) {
-                PostItem(
-                    post = postItem
-                )
+        val posts = viewModel.posts.collectAsStateWithLifecycle(emptyList())
+        LazyColumn {
+            items(posts.value, key = { it.postId }) { postItem ->
+                Surface(modifier = Modifier.clickable {
+                    viewModel.onPostClick(openScreen, postItem)
+                }) {
+                    PostItem(
+                        post = postItem
+                    )
+                }
             }
         }
+
+
     }
 }

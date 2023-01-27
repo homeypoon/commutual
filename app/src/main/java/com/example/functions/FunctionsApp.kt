@@ -19,6 +19,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.functions.common.composable.BottomNavigationComposable
 import com.example.functions.common.snackbar.SnackbarManager
+import com.example.functions.ui.edit_profile.EditProfileScreen
 import com.example.functions.ui.screens.edit_post.EditPostScreen
 import com.example.functions.ui.screens.explore.ExploreScreen
 import com.example.functions.ui.screens.home.HomeScreen
@@ -141,6 +142,20 @@ fun NavGraphBuilder.functionsGraph(appState: FunctionsAppState) {
             popUpScreen = { appState.popUp()},
             postId = it.arguments?.getString(POST_ID) ?: POST_DEFAULT_ID
         )
+    }
+
+    composable(
+        route = "$POST_DETAILS_SCREEN$POST_ID_ARG",
+        arguments = listOf(navArgument(POST_ID) { defaultValue = POST_DEFAULT_ID })
+    ) {
+//        PostDetailsScreen(
+//            popUpScreen = { appState.popUp()},
+//            postId = it.arguments?.getString(POST_ID) ?: POST_DEFAULT_ID
+//        )
+    }
+
+    composable(EDIT_PROFILE_SCREEN) {
+        EditProfileScreen( popUpScreen = { appState.popUp()})
     }
 
     composable(LOGIN_SCREEN) {

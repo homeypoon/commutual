@@ -14,17 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.example.functions.ui.screens.profile
+package com.example.functions.ui.screens.post_details
 
-import androidx.compose.runtime.mutableStateOf
-import com.example.functions.EDIT_PROFILE_SCREEN
+import com.example.functions.POST_DEFAULT_ID
 import com.example.functions.POST_ID
 import com.example.functions.PROFILE_POST_SCREEN
-import com.example.functions.SETTINGS_SCREEN
 import com.example.functions.model.Post
-import com.example.functions.model.User
-import com.example.functions.model.service.AccountService
-import com.example.functions.model.service.ConfigurationService
 import com.example.functions.model.service.LogService
 import com.example.functions.model.service.StorageService
 import com.example.functions.ui.screens.FunctionsViewModel
@@ -32,34 +27,24 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class ProfileViewModel @Inject constructor(
+class PostDetailsViewModel @Inject constructor(
   logService: LogService,
   private val storageService: StorageService,
-  private val accountService: AccountService,
-  private val configurationService: ConfigurationService
 ) : FunctionsViewModel(logService) {
 
-  val userPosts = storageService.userPosts
-  val user = mutableStateOf(User())
-
-  fun onEditProfileClick(openScreen: (String) -> Unit) {
-    openScreen(EDIT_PROFILE_SCREEN)
-  }
+  val posts = storageService.posts
 
 
-  fun initialize() {
+  fun initialize(postId: String) {
     launchCatching {
-        user.value = storageService.getUser(accountService.currentUserId) ?: User()
+      if (postId != POST_DEFAULT_ID) {
+//        posts.value = storageService.getPost(postId.idFromParameter()) ?: Post()
+      }
     }
   }
 
-
   fun onPostClick(openScreen: (String) -> Unit, post: Post) {
     openScreen("$PROFILE_POST_SCREEN?$POST_ID={${post.postId}}")
-  }
-
-  fun onSettingsClick(openScreen: (String) -> Unit) {
-    openScreen(SETTINGS_SCREEN)
   }
 
 }

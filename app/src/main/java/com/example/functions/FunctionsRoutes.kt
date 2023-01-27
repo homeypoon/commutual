@@ -23,6 +23,11 @@ const val EDIT_POST_SCREEN = "EditPostScreen"
 const val SPLASH_SCREEN = "SplashScreen"
 const val SETTINGS_SCREEN = "SettingsScreen"
 const val PROFILE_SCREEN = "ProfileScreen"
+const val EDIT_PROFILE_SCREEN = "EditProfileScreen"
+
+const val POST_DETAILS_SCREEN = "PostDetailsScreen"
+
+
 const val PROFILE_POST_SCREEN = "ProfilePostScreen"
 
 

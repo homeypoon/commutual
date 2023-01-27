@@ -16,8 +16,8 @@ limitations under the License.
 
 package com.example.functions.ui.screens.explore
 
+import com.example.functions.POST_DETAILS_SCREEN
 import com.example.functions.POST_ID
-import com.example.functions.PROFILE_POST_SCREEN
 import com.example.functions.model.Post
 import com.example.functions.model.service.LogService
 import com.example.functions.model.service.StorageService
@@ -34,7 +34,7 @@ class ExploreViewModel @Inject constructor(
   val posts = storageService.posts
 
   fun onPostClick(openScreen: (String) -> Unit, post: Post) {
-    openScreen("$PROFILE_POST_SCREEN?$POST_ID={${post.postId}}")
+    openScreen("$POST_DETAILS_SCREEN?$POST_ID={${post.postId}}")
   }
 
 }

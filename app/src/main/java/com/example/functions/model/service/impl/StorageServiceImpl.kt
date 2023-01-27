@@ -17,6 +17,7 @@ limitations under the License.
 package com.example.functions.model.service.impl
 
 import com.example.functions.model.Post
+import com.example.functions.model.User
 import com.example.functions.model.service.AccountService
 import com.example.functions.model.service.StorageService
 import com.example.functions.model.service.trace
@@ -57,13 +58,13 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
 //  override val users: Flow<List<User>>
 //    get() =
 //      auth.currentUser.flatMapLatest { user ->
-//        currentUserCollection(user.id).snapshots().map { snapshot -> snapshot.toObjects() }
+//        currentUserCollection(user.userId).snapshots().map { snapshot -> snapshot.toObjects() }
 //      }
 
   override suspend fun getPost(postId: String): Post? =
     currentPostCollection().document(postId).get().await().toObject()
 
-  // save post and generate an id for the post documentz
+  // save user and generate an postId for the user document
   override suspend fun savePost(post: Post): String =
     trace(SAVE_POST_TRACE) { currentPostCollection().add(post).await().id }
 
@@ -73,8 +74,25 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
     }
 
   override suspend fun deletePost(postId: String) {
-    currentPostCollection().document(postId).delete().await()
+    currentUserCollection().document(postId).delete().await()
   }
+
+  override suspend fun getUser(userId: String): User? =
+    currentUserCollection().document(userId).get().await().toObject()
+//    override suspend fun getUser(): User? =
+//      currentUserCollection().document(auth.currentUserId).get().await().toObject()
+
+//  // save user and generate an userId for the user document
+//  override suspend fun saveUser(user: User): String =
+//    trace(SAVE_POST_TRACE) { currentUserCollection().add(user).await().id }
+
+  // save user and generate an userId for the user document
+  override suspend fun saveUser(userId: String, user: User): Unit =
+    trace(SAVE_POST_TRACE) { currentUserCollection().document(userId).set(user).await() }
+
+  override suspend fun updateUser(user: User): Unit =
+    trace(UPDATE_POST_TRACE) {
+      currentUserCollection().document(auth.currentUserId).set(user).await() }
 
   // TODO: It's not recommended to delete on the client:
   // https://firebase.google.com/docs/firestore/manage-data/delete-data#kotlin+ktx_2
@@ -83,8 +101,8 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
     matchingPosts.map { it.reference.delete().asDeferred() }.awaitAll()
   }
 
-  private fun currentUserCollection(uid: String): CollectionReference =
-    firestore.collection(USER_COLLECTION).document(uid).collection(POST_COLLECTION)
+  private fun currentUserCollection(): CollectionReference =
+    firestore.collection(USER_COLLECTION)
 
   private fun currentPostCollection(): CollectionReference =
     firestore.collection(POST_COLLECTION)

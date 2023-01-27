@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.example.functions.ui.screens.profile
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -22,66 +21,36 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.functions.R
-import com.example.functions.common.composable.ActionToolbar
-import com.example.functions.common.composable.BasicButton
-import com.example.functions.common.ext.basicButton
+import com.example.functions.common.composable.BasicToolbar
 import com.example.functions.ui.screens.item.PostItem
-import com.example.functions.R.string as AppText
-
+import com.example.functions.ui.screens.post_details.PostDetailsViewModel
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 @ExperimentalMaterialApi
-fun ProfileScreen(
+fun PostDetailsScreen(
     openScreen: (String) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: ProfileViewModel = hiltViewModel()
+    viewModel: PostDetailsViewModel = hiltViewModel()
 ) {
-
-    LaunchedEffect(Unit) { viewModel.initialize() }
-
-    val userPosts = viewModel.userPosts.collectAsStateWithLifecycle(emptyList())
-    val user = viewModel.user
-    val scrollState = rememberScrollState()
 
 
     Column(modifier = Modifier
         .fillMaxWidth()
-        .fillMaxHeight()
-        .verticalScroll(scrollState)) {
-        ActionToolbar(title = AppText.profile,
-            endActionIcon = R.drawable.ic_settings,
-            endAction = { viewModel.onSettingsClick(openScreen) },
-            modifier = modifier)
+        .fillMaxHeight()) {
+        BasicToolbar(title = R.string.explore)
 
-        Column(Modifier.fillMaxWidth()) {
-            Text(text = user.value.username)
-            Text(text = user.value.bio)
-            BasicButton(
-                AppText.edit_profile,
-                Modifier.basicButton()
-            ) { viewModel.onEditProfileClick(openScreen) }
-        }
-
-
-        LazyColumn(
-            Modifier
-                .fillMaxWidth()
-                .weight(1f, true)
-        ) {
-            items(userPosts.value, key = { it.postId }) { postItem ->
+        val posts = viewModel.posts.collectAsStateWithLifecycle(emptyList())
+        LazyColumn {
+            items(posts.value, key = { it.postId }) { postItem ->
                 Surface(modifier = Modifier.clickable {
                     viewModel.onPostClick(openScreen, postItem)
                 }) {
@@ -89,9 +58,9 @@ fun ProfileScreen(
                         post = postItem
                     )
                 }
-
             }
         }
-    }
 
+
+    }
 }

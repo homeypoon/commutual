@@ -54,7 +54,7 @@ fun ProfilePostScreen(
 
     val post by viewModel.post
 //    val posts = viewModel.posts.collectAsStateWithLifecycle(emptyList())
-//    val post by posts
+//    val user by posts
 
     val bottomSheetState =
         rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)

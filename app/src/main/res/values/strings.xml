@@ -36,9 +36,16 @@
     <!-- ProfileScreen -->
     <string name="profile">Profile</string>
 
+    <!-- EditProfileScreen -->
+    <string name="edit_profile">Edit Profile</string>
+    <string name="create_profile">Create Your Profile</string>
+    <string name="username">Username</string>
+    <string name="user_bio">Bio</string>
+
     <!-- ProfilePostScreen -->
     <string name="my_post">My Post</string>
     <string name="more">More</string>
+
 
     <!-- SettingsScreen -->
     <string name="settings">Settings</string>

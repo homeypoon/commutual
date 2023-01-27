@@ -34,7 +34,7 @@ class ProfileViewModel @Inject constructor(
   private val configurationService: ConfigurationService
 ) : FunctionsViewModel(logService) {
 
-  val posts = storageService.posts
+  val userPosts = storageService.userPosts
 
   fun onPostClick(openScreen: (String) -> Unit, post: Post) {
     openScreen("$PROFILE_POST_SCREEN?$POST_ID={${post.postId}}")

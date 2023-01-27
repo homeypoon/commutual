@@ -22,7 +22,6 @@ import com.google.common.truth.Truth.assertThat
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import javax.inject.Inject
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
@@ -30,6 +29,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import javax.inject.Inject
 
 @HiltAndroidTest
 class FunctionsTest {
@@ -49,6 +49,6 @@ class FunctionsTest {
   fun test() = runTest {
     val newId = storage.savePost(Post(title = "Testing"))
     val result = storage.posts.first()
-    assertThat(result).containsExactly(Post(id = newId, title = "Testing"))
+    assertThat(result).containsExactly(Post(postId = newId, title = "Testing"))
   }
 }

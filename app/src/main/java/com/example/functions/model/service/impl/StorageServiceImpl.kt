@@ -49,8 +49,8 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
   @OptIn(ExperimentalCoroutinesApi::class)
   override val userPosts: Flow<List<Post>>
     get() =
-      auth.currentUser.flatMapLatest { user ->
-        currentPostCollection().whereEqualTo(USER_ID, user.id).snapshots().map { snapshot -> snapshot.toObjects() }
+      auth.currentUser.flatMapLatest {
+        currentPostCollection().whereEqualTo(USER_ID, auth.currentUserId).snapshots().map { snapshot -> snapshot.toObjects() }
       }
 
 //
@@ -63,6 +63,7 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
   override suspend fun getPost(postId: String): Post? =
     currentPostCollection().document(postId).get().await().toObject()
 
+  // save post and generate an id for the post documentz
   override suspend fun savePost(post: Post): String =
     trace(SAVE_POST_TRACE) { currentPostCollection().add(post).await().id }
 
@@ -93,7 +94,7 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
     private const val POST_COLLECTION = "posts"
     private const val SAVE_POST_TRACE = "savePost"
     private const val UPDATE_POST_TRACE = "updatePost"
-    private const val USER_ID = "userID"
+    private const val USER_ID = "userId"
   }
 
 }

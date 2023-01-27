@@ -41,6 +41,7 @@ import com.example.functions.common.ext.basicIconButton
 import com.example.functions.ui.screens.item.BottomSheetOptionItem
 import com.example.functions.R.string as AppText
 
+@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 @ExperimentalMaterialApi
 fun ProfilePostScreen(
@@ -52,6 +53,9 @@ fun ProfilePostScreen(
 ) {
 
     val post by viewModel.post
+//    val posts = viewModel.posts.collectAsStateWithLifecycle(emptyList())
+//    val post by posts
+
     val bottomSheetState =
         rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
@@ -104,7 +108,6 @@ fun ProfilePostScreen(
         }
 
     }
-
 
 
     LaunchedEffect(Unit) { viewModel.initialize(postId) }

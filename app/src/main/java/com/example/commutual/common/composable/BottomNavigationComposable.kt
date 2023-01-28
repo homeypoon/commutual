@@ -42,7 +42,7 @@ fun BottomNavigationComposable(
             navItems.forEach { screen ->
                 BottomNavigationItem(
                     icon = { Icon(painter = painterResource(screen.iconId), contentDescription = stringResource(screen.resourceId)) },
-                    label = { Text(screen.route) },
+                    label = { Text(stringResource(id = screen.resourceId)) },
                     selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                     onClick = {
                         navController.navigate(screen.route) {

@@ -13,7 +13,10 @@ class CommutualActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            CommutualApp()
+            CommutualTheme{
+                CommutualApp()
+            }
+
         }
     }
 }

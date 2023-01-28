@@ -32,10 +32,7 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.input.*
 import com.example.commutual.R.drawable as AppIcon
 import com.example.commutual.R.string as AppText
 
@@ -44,14 +41,53 @@ fun BasicField(
     @StringRes text: Int,
     value: String,
     onNewValue: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    imeAction: ImeAction,
+    capitalization: KeyboardCapitalization,
+    focusManager: FocusManager
 ) {
     OutlinedTextField(
         singleLine = true,
         modifier = modifier,
         value = value,
         onValueChange = { onNewValue(it) },
-        placeholder = { Text(stringResource(text)) }
+        placeholder = { Text(stringResource(text)) },
+        keyboardOptions = KeyboardOptions.Default.copy(
+            keyboardType = KeyboardType.Text,
+            imeAction = imeAction,
+            autoCorrect = true,
+            capitalization = capitalization,
+        ),
+        keyboardActions = KeyboardActions(
+            onNext = { focusManager.moveFocus(FocusDirection.Down) }
+        )
+    )
+}
+
+@Composable
+fun EndField(
+    @StringRes text: Int,
+    value: String,
+    onNewValue: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    capitalization: KeyboardCapitalization,
+    focusManager: FocusManager
+) {
+    OutlinedTextField(
+        singleLine = true,
+        modifier = modifier,
+        value = value,
+        onValueChange = { onNewValue(it) },
+        placeholder = { Text(stringResource(text)) },
+        keyboardOptions = KeyboardOptions.Default.copy(
+            keyboardType = KeyboardType.Text,
+            imeAction = ImeAction.Done,
+            autoCorrect = true,
+            capitalization = capitalization,
+        ),
+        keyboardActions = KeyboardActions(
+            onDone = { focusManager.clearFocus() }
+        )
     )
 }
 
@@ -60,7 +96,8 @@ fun EmailField(
     value: String,
     onNewValue: (String) -> Unit,
     modifier: Modifier = Modifier,
-    focusManager: FocusManager
+    focusManager: FocusManager,
+    imeAction: ImeAction
 ) {
     OutlinedTextField(
         singleLine = true,
@@ -71,11 +108,12 @@ fun EmailField(
         leadingIcon = { Icon(imageVector = Icons.Default.Email, contentDescription = "Email") },
         keyboardOptions = KeyboardOptions.Default.copy(
             keyboardType = KeyboardType.Number,
-            imeAction = ImeAction.Next
+            imeAction = imeAction
         ),
         keyboardActions = KeyboardActions(
             onNext = { focusManager.moveFocus(FocusDirection.Down) }
-        )
+        ),
+
     )
 }
 

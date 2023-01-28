@@ -17,15 +17,11 @@ limitations under the License.
 package com.example.commutual.ui.screens.splash
 
 import androidx.compose.runtime.mutableStateOf
-import com.example.commutual.EDIT_PROFILE_SCREEN
-import com.example.commutual.HOME_SCREEN
-import com.example.commutual.LOGIN_SCREEN
-import com.example.commutual.SPLASH_SCREEN
+import com.example.commutual.*
 import com.example.commutual.model.service.AccountService
 import com.example.commutual.model.service.ConfigurationService
 import com.example.commutual.model.service.LogService
 import com.example.commutual.model.service.StorageService
-import com.example.commutual.ui.screens.CommutualViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

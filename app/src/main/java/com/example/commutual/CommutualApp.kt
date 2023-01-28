@@ -20,8 +20,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.commutual.common.composable.BottomNavigationComposable
 import com.example.commutual.common.snackbar.SnackbarManager
-import com.example.commutual.ui.edit_profile.EditProfileScreen
 import com.example.commutual.ui.screens.edit_post.EditPostScreen
+import com.example.commutual.ui.screens.edit_profile.EditProfileScreen
 import com.example.commutual.ui.screens.explore.ExploreScreen
 import com.example.commutual.ui.screens.home.HomeScreen
 import com.example.commutual.ui.screens.profile.ProfileScreen

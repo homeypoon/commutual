@@ -20,12 +20,13 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import com.example.commutual.R
@@ -55,10 +56,15 @@ fun PostDetailsScreen(
     ) {
         BasicToolbar(title = R.string.explore)
 
-        Text(text = user.userId)
-        Text(text = user.username)
-        Text(text = post.title)
-        Text(text = post.description)
+        CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+            Text(text = user.username,
+                fontSize = 12.sp)
+        }
+
+        Text(text = post.title,
+            fontSize = 18.sp, style = MaterialTheme.typography.h2)
+        Text(text = post.description,
+            fontSize = 18.sp, style = MaterialTheme.typography.body1)
 
     }
 }

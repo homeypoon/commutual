@@ -103,8 +103,8 @@ fun ProfilePostScreen(
                 contentDescription = AppText.more
             )
 
-            Text(text = post.title)
-            Text(text = post.description)
+            Text(text = post.title, style = MaterialTheme.typography.h2)
+            Text(text = post.description, style = MaterialTheme.typography.body1)
         }
 
     }

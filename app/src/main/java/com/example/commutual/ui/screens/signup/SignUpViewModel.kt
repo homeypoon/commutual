@@ -26,7 +26,7 @@ import com.example.commutual.common.ext.passwordMatches
 import com.example.commutual.common.snackbar.SnackbarManager
 import com.example.commutual.model.service.AccountService
 import com.example.commutual.model.service.LogService
-import com.example.commutual.ui.screens.CommutualViewModel
+import com.example.commutual.CommutualViewModel
 import com.example.commutual.ui.screens.signup.SignUpUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject

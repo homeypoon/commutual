@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.commutual.common.composable.*
 import com.example.commutual.common.ext.accountText
@@ -53,7 +54,7 @@ fun SignUpScreen(
     verticalArrangement = Arrangement.Center,
     horizontalAlignment = Alignment.CenterHorizontally
   ) {
-    EmailField(uiState.email, viewModel::onEmailChange, fieldModifier, focusManager)
+    EmailField(uiState.email, viewModel::onEmailChange, fieldModifier, focusManager, ImeAction.Next)
     PasswordField(uiState.password, viewModel::onPasswordChange, fieldModifier, focusManager, ImeAction.Next)
     RepeatPasswordField(uiState.repeatPassword, viewModel::onRepeatPasswordChange, fieldModifier, focusManager, ImeAction.Done)
 
@@ -64,7 +65,10 @@ fun SignUpScreen(
     Row(
       verticalAlignment = Alignment.CenterVertically
     ) {
-      Text(stringResource(AppText.already_have_account), Modifier.accountText(), maxLines = 1)
+      Text(stringResource(AppText.already_have_account),
+        Modifier.accountText(), maxLines = 1,
+        fontSize = 16.sp
+      )
       BasicTextButton(AppText.log_in, Modifier.textButton()) {
         viewModel.onLoginClick(openAndPopUp)
       }

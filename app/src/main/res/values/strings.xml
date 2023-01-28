@@ -10,7 +10,7 @@
     <string name="generic_error">Something went wrong. Please try again!</string>
     <string name="try_again">Try again!</string>
 
-    <!-- LoginScreen -->
+    <!-- Login Screen -->
     <string name="log_in">Log In</string>
     <string name="register">Register</string>
     <string name="dont_have_account">Don\'t have an account?</string>
@@ -18,38 +18,42 @@
     <string name="recovery_email_sent">Check your inbox for the recovery email!</string>
     <string name="empty_password_error">Please enter your password</string>
 
-    <!-- SignUpScreen -->
-    <string name="create_account">Create account</string>
+    <!-- Sign Up Screen -->
+    <string name="create_account">Create Account</string>
     <string name="already_have_account">Already have an account?</string>
     <string name="password_error">Your password should have at least six digits and include one digit, one lower case letter and one upper case letter.</string>
     <string name="password_match_error">Passwords do not match.</string>
 
-    <!-- HomeScreen -->
+    <!-- Home Screen -->
     <string name="home">Home</string>
 
-    <!-- ExploreScreen -->
+    <!-- Explore Screen -->
     <string name="explore">Explore</string>
 
-    <!-- CreatePostScreen -->
+    <!-- PostDetails -->
+    <string name="post">Post</string>
+
+
+    <!-- Create Post Screen -->
     <string name="create_post">Create Your Post</string>
     <string name="post_title">Post Title</string>
     <string name="post_description">Post Description</string>
 
-    <!-- ProfileScreen -->
+    <!-- Profile Screen -->
     <string name="profile">Profile</string>
 
-    <!-- EditProfileScreen -->
+    <!-- Edit Profile Screen -->
     <string name="edit_profile">Edit Profile</string>
     <string name="create_profile">Create Your Profile</string>
     <string name="username">Username</string>
     <string name="user_bio">Bio</string>
 
-    <!-- ProfilePostScreen -->
+    <!-- Profile Post Screen -->
     <string name="my_post">My Post</string>
     <string name="more">More</string>
 
 
-    <!-- SettingsScreen -->
+    <!-- Settings Screen -->
     <string name="settings">Settings</string>
     <string name="log_out">Log Out</string>
     <string name="log_out_title">Log Out?</string>

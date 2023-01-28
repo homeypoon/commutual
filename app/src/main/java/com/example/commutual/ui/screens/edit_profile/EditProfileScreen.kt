@@ -1,4 +1,4 @@
-package com.example.commutual.ui.edit_profile
+package com.example.commutual.ui.screens.edit_profile
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -11,9 +11,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.commutual.common.composable.ActionToolbar
 import com.example.commutual.common.composable.BasicField
+import com.example.commutual.common.composable.EndField
 import com.example.commutual.common.ext.fieldModifier
 import com.example.commutual.common.ext.spacer
 import com.example.commutual.common.ext.toolbarActions
@@ -27,6 +31,7 @@ fun EditProfileScreen(
     viewModel: EditProfileViewModel = hiltViewModel()
 ) {
     val user by viewModel.user
+    val focusManager = LocalFocusManager.current
 
     LaunchedEffect(Unit) { viewModel.initialize() }
 
@@ -41,14 +46,29 @@ fun EditProfileScreen(
             title = AppText.edit_profile,
             modifier = Modifier.toolbarActions(),
             endActionIcon = AppIcon.ic_check,
-            endAction = { viewModel.onDoneClick(popUpScreen)}
+            endAction = { viewModel.onDoneClick(popUpScreen) }
         )
 
         Spacer(modifier = Modifier.spacer())
 
         val fieldModifier = Modifier.fieldModifier()
 
-        BasicField(AppText.username, user.username, viewModel::onNameChange, fieldModifier)
-        BasicField(AppText.user_bio, user.bio, viewModel::onBioChange, fieldModifier)
+        BasicField(
+            AppText.username,
+            user.username,
+            viewModel::onNameChange,
+            fieldModifier,
+            ImeAction.Next,
+            KeyboardCapitalization.Words,
+            focusManager
+        )
+        EndField(
+            AppText.user_bio,
+            user.bio,
+            viewModel::onBioChange,
+            fieldModifier,
+            KeyboardCapitalization.Sentences,
+            focusManager
+        )
     }
 }

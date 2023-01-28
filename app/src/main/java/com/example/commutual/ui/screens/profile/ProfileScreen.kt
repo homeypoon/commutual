@@ -19,11 +19,10 @@ package com.example.commutual.ui.screens.profile
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -58,30 +57,31 @@ fun ProfileScreen(
     val scrollState = rememberScrollState()
 
 
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .fillMaxHeight()
-        .verticalScroll(scrollState)) {
-        ActionToolbar(title = AppText.profile,
+    Column(
+        modifier = Modifier
+            .fillMaxHeight()
+    ) {
+        ActionToolbar(
+            title = AppText.profile,
             endActionIcon = R.drawable.ic_settings,
             endAction = { viewModel.onSettingsClick(openScreen) },
-            modifier = modifier)
-
-        Column(Modifier.fillMaxWidth()) {
-            Text(text = user.username)
-            Text(text = user.bio)
-            BasicButton(
-                AppText.edit_profile,
-                Modifier.basicButton()
-            ) { viewModel.onEditProfileClick(openScreen) }
-        }
+            modifier = modifier
+        )
 
 
         LazyColumn(
             Modifier
-                .fillMaxWidth()
-                .weight(1f, true)
+                .weight(1f)
+                .wrapContentHeight()
         ) {
+            item {
+                Text(text = user.username)
+                Text(text = user.bio)
+                BasicButton(
+                    AppText.edit_profile,
+                    Modifier.basicButton()
+                ) { viewModel.onEditProfileClick(openScreen) }
+            }
             items(userPosts.value, key = { it.postId }) { postItem ->
                 Surface(modifier = Modifier.clickable {
                     viewModel.onPostClick(openScreen, postItem)
@@ -94,5 +94,5 @@ fun ProfileScreen(
             }
         }
     }
-
 }
+

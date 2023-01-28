@@ -17,6 +17,8 @@ limitations under the License.
 package com.example.commutual.common.composable
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.focusable
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
@@ -33,6 +35,7 @@ import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.*
+import androidx.compose.ui.unit.dp
 import com.example.commutual.R.drawable as AppIcon
 import com.example.commutual.R.string as AppText
 
@@ -65,7 +68,7 @@ fun BasicField(
 }
 
 @Composable
-fun EndField(
+fun DescriptionField(
     @StringRes text: Int,
     value: String,
     onNewValue: (String) -> Unit,
@@ -74,9 +77,58 @@ fun EndField(
     focusManager: FocusManager
 ) {
     OutlinedTextField(
-        singleLine = true,
-        modifier = modifier,
+        modifier = modifier.height(160.dp),
         value = value,
+        maxLines = 6,
+        onValueChange = { onNewValue(it) },
+        placeholder = { Text(stringResource(text)) },
+        keyboardOptions = KeyboardOptions.Default.copy(
+            keyboardType = KeyboardType.Text,
+            autoCorrect = true,
+            capitalization = capitalization,
+        )
+
+    )
+}
+
+@Composable
+fun RequestMessageField(
+    @StringRes text: Int,
+    value: String,
+    onNewValue: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    capitalization: KeyboardCapitalization,
+    focusManager: FocusManager
+) {
+    OutlinedTextField(
+        modifier = modifier.height(180.dp),
+        value = value,
+        maxLines = 8,
+        onValueChange = { onNewValue(it) },
+        placeholder = { Text(stringResource(text)) },
+        keyboardOptions = KeyboardOptions.Default.copy(
+            keyboardType = KeyboardType.Text,
+            autoCorrect = true,
+            capitalization = capitalization,
+        )
+
+    )
+}
+
+@Composable
+fun EndField(
+    @StringRes text: Int,
+    value: String,
+    onNewValue: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    capitalization: KeyboardCapitalization,
+    focusManager: FocusManager,
+    maxLines: Int = 1,
+) {
+    OutlinedTextField(
+        modifier = modifier.focusable(true),
+        value = value,
+        maxLines = maxLines,
         onValueChange = { onNewValue(it) },
         placeholder = { Text(stringResource(text)) },
         keyboardOptions = KeyboardOptions.Default.copy(
@@ -88,6 +140,7 @@ fun EndField(
         keyboardActions = KeyboardActions(
             onDone = { focusManager.clearFocus() }
         )
+
     )
 }
 

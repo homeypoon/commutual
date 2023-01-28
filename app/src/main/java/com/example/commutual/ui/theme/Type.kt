@@ -37,6 +37,12 @@ val Typography = Typography(
         fontWeight = FontWeight.Medium,
         fontSize = 24.sp
     ),
+    // dialog title,
+    h4 = TextStyle(
+        fontFamily = RobotoSlab,
+        fontWeight = FontWeight.Medium,
+        fontSize = 20.sp
+    ),
     // body text, description, bio
     body1 = TextStyle(
         fontFamily = OpenSans,

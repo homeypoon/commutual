@@ -17,13 +17,17 @@ limitations under the License.
 package com.example.commutual.ui.screens.profile
 
 import androidx.compose.runtime.mutableStateOf
-import com.example.commutual.*
+import com.example.commutual.EDIT_PROFILE_SCREEN
+import com.example.commutual.POST_ID
+import com.example.commutual.PROFILE_POST_SCREEN
+import com.example.commutual.SETTINGS_SCREEN
 import com.example.commutual.model.Post
 import com.example.commutual.model.User
 import com.example.commutual.model.service.AccountService
 import com.example.commutual.model.service.ConfigurationService
 import com.example.commutual.model.service.LogService
 import com.example.commutual.model.service.StorageService
+import com.example.commutual.ui.screens.CommutualViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

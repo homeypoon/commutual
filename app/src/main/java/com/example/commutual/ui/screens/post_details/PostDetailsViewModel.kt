@@ -17,6 +17,7 @@ limitations under the License.
 package com.example.commutual.ui.screens.post_details
 
 import androidx.compose.runtime.mutableStateOf
+import com.example.commutual.HOME_SCREEN
 import com.example.commutual.POST_DEFAULT_ID
 import com.example.commutual.POST_ID
 import com.example.commutual.PROFILE_POST_SCREEN
@@ -26,7 +27,7 @@ import com.example.commutual.model.User
 import com.example.commutual.model.service.AccountService
 import com.example.commutual.model.service.LogService
 import com.example.commutual.model.service.StorageService
-import com.example.commutual.CommutualViewModel
+import com.example.commutual.ui.screens.CommutualViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -39,6 +40,12 @@ class PostDetailsViewModel @Inject constructor(
 
   val post = mutableStateOf(Post())
   val user = mutableStateOf(User())
+
+  var uiState = mutableStateOf(PostDetailsUiState())
+    private set
+
+  private val requestMessage
+    get() = uiState.value.requestMessage
 
   fun initialize(postId: String) {
     launchCatching {
@@ -55,9 +62,20 @@ class PostDetailsViewModel @Inject constructor(
     }
   }
 
-  fun getUserInfo(postId:String) {
-
+  fun resetRequestMessage() {
+    uiState.value = uiState.value.copy(requestMessage = "")
   }
+
+  fun onRequestMessageChange(newValue: String) {
+    uiState.value = uiState.value.copy(requestMessage = newValue)
+  }
+
+
+  fun onRequestMatchClick(openScreen: (String) -> Unit) {
+      // Open chat
+      openScreen(HOME_SCREEN)
+  }
+
 
   fun onPostClick(openScreen: (String) -> Unit, post: Post) {
     openScreen("$PROFILE_POST_SCREEN?$POST_ID={${post.postId}}")

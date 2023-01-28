@@ -100,11 +100,6 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
     trace(UPDATE_POST_TRACE) {
       val userRef = currentUserCollection().document(auth.currentUserId).get().await()
       return userRef.exists()
-
-//      val userRef = currentUserCollection().document(auth.currentUserId).get().await()
-//
-//      return !(userRef.getString(USERNAME).isNullOrBlank())
-
     }
 
   // TODO: It's not recommended to delete on the client:

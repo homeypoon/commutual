@@ -1,9 +1,6 @@
 package com.example.commutual.ui.screens.edit_post
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -17,7 +14,7 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.commutual.common.composable.ActionToolbar
 import com.example.commutual.common.composable.BasicField
-import com.example.commutual.common.composable.EndField
+import com.example.commutual.common.composable.DescriptionField
 import com.example.commutual.common.ext.fieldModifier
 import com.example.commutual.common.ext.spacer
 import com.example.commutual.common.ext.toolbarActions
@@ -48,7 +45,7 @@ fun EditPostScreen(
             title = AppText.create_post,
             modifier = Modifier.toolbarActions(),
             endActionIcon = AppIcon.ic_check,
-            endAction = { viewModel.onDoneClick(popUpScreen, postId) }
+            endAction = { viewModel.onDoneClick(popUpScreen, focusManager) }
         )
 
         Spacer(modifier = Modifier.spacer())
@@ -62,11 +59,12 @@ fun EditPostScreen(
             KeyboardCapitalization.Words,
             focusManager
         )
-        EndField(
+        DescriptionField(
             AppText.post_description,
             post.description,
             viewModel::onDescriptionChange,
-            fieldModifier,
+            fieldModifier
+                .wrapContentHeight(),
             KeyboardCapitalization.Sentences,
             focusManager
         )

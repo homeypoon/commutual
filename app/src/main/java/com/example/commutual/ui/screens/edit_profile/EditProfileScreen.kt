@@ -17,7 +17,7 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.commutual.common.composable.ActionToolbar
 import com.example.commutual.common.composable.BasicField
-import com.example.commutual.common.composable.EndField
+import com.example.commutual.common.composable.DescriptionField
 import com.example.commutual.common.ext.fieldModifier
 import com.example.commutual.common.ext.spacer
 import com.example.commutual.common.ext.toolbarActions
@@ -46,7 +46,7 @@ fun EditProfileScreen(
             title = AppText.edit_profile,
             modifier = Modifier.toolbarActions(),
             endActionIcon = AppIcon.ic_check,
-            endAction = { viewModel.onDoneClick(popUpScreen) }
+            endAction = { viewModel.onDoneClick(popUpScreen, focusManager) }
         )
 
         Spacer(modifier = Modifier.spacer())
@@ -62,7 +62,7 @@ fun EditProfileScreen(
             KeyboardCapitalization.Words,
             focusManager
         )
-        EndField(
+        DescriptionField(
             AppText.user_bio,
             user.bio,
             viewModel::onBioChange,

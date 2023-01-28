@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.example.commutual.screens.login
+package com.example.commutual.ui.screens.login
 
 data class LoginUiState(
     val email: String = "",

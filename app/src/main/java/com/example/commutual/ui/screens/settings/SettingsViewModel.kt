@@ -20,7 +20,7 @@ import com.example.commutual.SPLASH_SCREEN
 import com.example.commutual.model.service.AccountService
 import com.example.commutual.model.service.LogService
 import com.example.commutual.model.service.StorageService
-import com.example.commutual.CommutualViewModel
+import com.example.commutual.ui.screens.CommutualViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

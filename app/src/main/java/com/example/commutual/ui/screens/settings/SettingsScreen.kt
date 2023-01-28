@@ -49,17 +49,20 @@ fun SettingsScreen(
 ) {
 
     Column(
-        modifier = modifier.fillMaxWidth().fillMaxHeight().verticalScroll(rememberScrollState()),
+        modifier = modifier
+            .fillMaxWidth()
+            .fillMaxHeight()
+            .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         BasicToolbar(AppText.settings)
 
 
         Spacer(modifier = Modifier.spacer())
-            SignOutCard { viewModel.onSignOutClick(restartApp) }
-            DeleteMyAccountCard { viewModel.onDeleteMyAccountClick(restartApp) }
-        }
+        SignOutCard { viewModel.onSignOutClick(restartApp) }
+        DeleteMyAccountCard { viewModel.onDeleteMyAccountClick(restartApp) }
     }
+}
 
 @ExperimentalMaterialApi
 @Composable

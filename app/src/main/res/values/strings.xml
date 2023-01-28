@@ -32,12 +32,16 @@
 
     <!-- PostDetails -->
     <string name="post">Post</string>
-
+    <string name="request_match">Request Match</string>
+    <string name="request_match_message">Request Match Message</string>
+    <string name="message_sent">Request Message Sent</string>
 
     <!-- Create Post Screen -->
     <string name="create_post">Create Your Post</string>
     <string name="post_title">Post Title</string>
     <string name="post_description">Post Description</string>
+    <string name="empty_title_error">Please enter a title for your post!</string>
+    <string name="empty_description_error">Please enter a description for your post!</string>
 
     <!-- Profile Screen -->
     <string name="profile">Profile</string>
@@ -47,6 +51,9 @@
     <string name="create_profile">Create Your Profile</string>
     <string name="username">Username</string>
     <string name="user_bio">Bio</string>
+    <string name="empty_username_error">Please pick a username!</string>
+    <string name="duplicate_username_error">Your chosen username is already in use! Please pick a new one!</string>
+
 
     <!-- Profile Post Screen -->
     <string name="my_post">My Post</string>

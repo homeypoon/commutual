@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "517676809896",
-    "project_id": "functions-4881a",
-    "storage_bucket": "functions-4881a.appspot.com"
+    "project_number": "431541333589",
+    "project_id": "commutual-ed5ae",
+    "storage_bucket": "commutual-ed5ae.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:517676809896:android:1236fe3e2dcc4b09d48c9d",
+        "mobilesdk_app_id": "1:431541333589:android:30873518bb08b0d857aedc",
         "android_client_info": {
-          "package_name": "com.example.functions"
+          "package_name": "com.example.commutual"
         }
       },
       "oauth_client": [
         {
-          "client_id": "517676809896-9hlrpqc6a8bcj1vn105v19jij6uibah9.apps.googleusercontent.com",
+          "client_id": "431541333589-ttjolj0q9etbrs9n2modee7b973udrq0.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyC8x-cJ1-qiMxSYkGMNLfDatH4g9eBe8lc"
+          "current_key": "AIzaSyCuHgf7fK9iMEsvz2UgefOwIM5Y8j27yYk"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "517676809896-9hlrpqc6a8bcj1vn105v19jij6uibah9.apps.googleusercontent.com",
+              "client_id": "431541333589-ttjolj0q9etbrs9n2modee7b973udrq0.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

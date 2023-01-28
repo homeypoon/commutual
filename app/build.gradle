@@ -5,6 +5,8 @@ plugins {
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
     id 'com.google.firebase.firebase-perf'
+    id 'kotlin-android-extensions'
+//    apply plugin: 'kotlin-android-extensions'
     id 'dagger.hilt.android.plugin'
     id "com.ncorti.ktfmt.gradle" version "0.10.0"
 }
@@ -13,14 +15,14 @@ android {
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.functions"
+        applicationId "com.example.commutual"
 
         minSdk 21
         targetSdk 33
         versionCode 1
         versionName "1.0"
 
-        testInstrumentationRunner "com.example.functions.FunctionsTestRunner"
+        testInstrumentationRunner "com.example.commutual.CommutualTestRunner"
 //        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary true

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.functions">
+    package="com.example.commutual">
 
     <application
         android:allowBackup="true"
@@ -11,14 +11,14 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Functions"
-        android:name=".FunctionsApplication"
+        android:theme="@style/Theme.Commutual"
+        android:name=".CommutualApplication"
         tools:targetApi="31">
         <activity
-            android:name=".FunctionsActivity"
+            android:name=".CommutualActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Functions">
+            android:theme="@style/Theme.Commutual">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

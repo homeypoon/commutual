@@ -1,20 +1,23 @@
 package com.example.commutual.ui.screens.edit_profile
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.commutual.R
 import com.example.commutual.common.composable.ActionToolbar
 import com.example.commutual.common.composable.BasicField
 import com.example.commutual.common.composable.DescriptionField
@@ -24,6 +27,7 @@ import com.example.commutual.common.ext.toolbarActions
 import com.example.commutual.R.drawable as AppIcon
 import com.example.commutual.R.string as AppText
 
+@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun EditProfileScreen(
     popUpScreen: () -> Unit,
@@ -32,8 +36,16 @@ fun EditProfileScreen(
 ) {
     val user by viewModel.user
     val focusManager = LocalFocusManager.current
+//    var isTextExpanded by rememberSaveable { mutableStateOf(false) }
+//    val selectedItems = remember { mutableStateListOf<String>() }
+//    val categoryList = viewModel.categoryList
+
 
     LaunchedEffect(Unit) { viewModel.initialize() }
+
+    var uns by rememberSaveable{ mutableStateOf("") } // Use 'by' to treat this state as a regular variable
+
+
 
     Column(
         modifier = modifier
@@ -70,5 +82,19 @@ fun EditProfileScreen(
             KeyboardCapitalization.Sentences,
             focusManager
         )
+
+
     }
+}
+
+// Additional feature: Add icon for categories
+sealed class CategoryChips(val name: String, @StringRes val categoryResourceId: Int) {
+    object Academics : CategoryChips("Academics", R.string.academics)
+    object Art: CategoryChips("Art",R.string.art)
+    object Coding : CategoryChips("Coding",R.string.coding)
+    object HealthAndWellness : CategoryChips("HealthAndWellness",R.string.health_and_wellness)
+    object Music: CategoryChips("Music",R.string.music)
+    object Routine : CategoryChips("Routine",R.string.routine)
+    object Sports: CategoryChips("Sports",R.string.sports)
+    object Work : CategoryChips("Work",R.string.work)
 }

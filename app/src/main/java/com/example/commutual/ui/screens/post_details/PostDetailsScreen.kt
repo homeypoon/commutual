@@ -1,4 +1,4 @@
-/*
+package com.example.commutual.ui.screens.post_details/*
 Copyright 2022 Google LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,7 +31,6 @@ import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import com.example.commutual.R
 import com.example.commutual.common.composable.*
 import com.example.commutual.common.ext.basicButton
-import com.example.commutual.ui.screens.post_details.PostDetailsViewModel
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
@@ -84,7 +83,7 @@ fun PostDetailsScreen(
 
 @ExperimentalMaterialApi
 @Composable
-//private fun RequestMatchButton(onRequestMessageChange: (String) -> Unit, viewModel: PostDetailsViewModel) {
+//private fun com.example.commutual.ui.screens.post_details.RequestMatchButton(onRequestMessageChange: (String) -> Unit, viewModel: PostDetailsViewModel) {
 
 private fun RequestMatchButton(openScreen: (String) -> Unit, viewModel: PostDetailsViewModel) {
     var showRequestMatchCard by remember { mutableStateOf(false) }

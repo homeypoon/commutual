@@ -1,7 +1,5 @@
 package com.example.commutual
 
-import LoginScreen
-import PostDetailsScreen
 import android.content.res.Resources
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
@@ -24,11 +22,13 @@ import com.example.commutual.ui.screens.edit_post.EditPostScreen
 import com.example.commutual.ui.screens.edit_profile.EditProfileScreen
 import com.example.commutual.ui.screens.explore.ExploreScreen
 import com.example.commutual.ui.screens.home.HomeScreen
+import com.example.commutual.ui.screens.login.LoginScreen
+import com.example.commutual.ui.screens.post_details.PostDetailsScreen
 import com.example.commutual.ui.screens.profile.ProfileScreen
 import com.example.commutual.ui.screens.profile.SettingsScreen
 import com.example.commutual.ui.screens.profile_post.ProfilePostScreen
+import com.example.commutual.ui.screens.signup.SignUpScreen
 import com.example.commutual.ui.screens.splash.SplashScreen
-import com.example.makeitso.screens.sign_up.SignUpScreen
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
@@ -166,7 +166,8 @@ fun NavGraphBuilder.commutualGraph(appState: CommutualAppState) {
     }
 
     composable(SIGN_UP_SCREEN) {
-        SignUpScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })
+        SignUpScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) },
+            openScreen = { route -> appState.navigate(route) })
     }
 
     composable(EXPLORE_SCREEN) {

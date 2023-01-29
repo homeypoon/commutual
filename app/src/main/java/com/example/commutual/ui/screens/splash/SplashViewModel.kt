@@ -51,7 +51,6 @@ class SplashViewModel @Inject constructor(
                 } else {
                     openAndPopUp(HOME_SCREEN, SPLASH_SCREEN)
                     openScreen(EDIT_PROFILE_SCREEN)
-
                 }
             }
         } else openAndPopUp(LOGIN_SCREEN, SPLASH_SCREEN)

@@ -22,7 +22,7 @@ class EditPostViewModel @Inject constructor(
 
     ) : CommutualViewModel(logService = logService) {
     val post = mutableStateOf(Post())
-    var uiState = mutableStateOf(EditPostUiState())
+    private var uiState = mutableStateOf(EditPostUiState())
         private set
 
     private val title

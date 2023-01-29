@@ -24,6 +24,9 @@ interface StorageService {
   val posts: Flow<List<Post>>
   val userPosts: Flow<List<Post>>
 
+  // return list of filtered posts based on interest
+  suspend fun filteredPosts(interest: String): Flow<List<Post>>
+
   suspend fun hasProfile(): Boolean
 
   suspend fun getPost(postId: String): Post?

@@ -1,4 +1,4 @@
-/*
+package com.example.commutual.ui.screens.login/*
 Copyright 2022 Google LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.example.makeitso.screens.login
 
 import androidx.compose.runtime.mutableStateOf
 import com.example.commutual.HOME_SCREEN
@@ -24,7 +23,6 @@ import com.example.commutual.common.snackbar.SnackbarManager
 import com.example.commutual.model.service.AccountService
 import com.example.commutual.model.service.LogService
 import com.example.commutual.ui.screens.CommutualViewModel
-import com.example.commutual.ui.screens.login.LoginUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import com.example.commutual.R.string as AppText

@@ -34,6 +34,7 @@ import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import com.example.commutual.common.composable.*
 import com.example.commutual.common.ext.card
 import com.example.commutual.common.ext.spacer
+import com.example.commutual.ui.screens.settings.SettingsViewModel
 import com.example.commutual.R.drawable as AppIcon
 import com.example.commutual.R.string as AppText
 

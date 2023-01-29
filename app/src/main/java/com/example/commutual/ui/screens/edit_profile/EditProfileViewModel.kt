@@ -19,8 +19,21 @@ class EditProfileViewModel @Inject constructor(
     private val accountService: AccountService
 
     ) : CommutualViewModel(logService = logService) {
+
+    val categoryList = listOf(
+        CategoryChips.Academics,
+        CategoryChips.Art,
+        CategoryChips.Coding,
+        CategoryChips.HealthAndWellness,
+        CategoryChips.Music,
+        CategoryChips.Routine,
+        CategoryChips.Sports,
+        CategoryChips.Work
+    )
+
+
     val user = mutableStateOf(User())
-    var uiState = mutableStateOf(EditProfileUiState())
+    private var uiState = mutableStateOf(EditProfileUiState())
         private set
 
     private val username
@@ -61,6 +74,7 @@ class EditProfileViewModel @Inject constructor(
             } else {
                 storageService.updateUser(editedUser)
             }
+            uiState.value = uiState.value.copy(username = "")
             popUpScreen()
         }
     }

@@ -26,6 +26,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Surface
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -35,7 +36,7 @@ import com.example.commutual.R
 import com.example.commutual.common.composable.BasicToolbar
 import com.example.commutual.ui.screens.item.PostItem
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
+@OptIn(ExperimentalLifecycleComposeApi::class, ExperimentalMaterial3Api::class)
 @Composable
 @ExperimentalMaterialApi
 fun ExploreScreen(
@@ -67,6 +68,7 @@ fun ExploreScreen(
                 }
             }
         }
+
 
 
     }

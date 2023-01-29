@@ -25,14 +25,14 @@ const val SETTINGS_SCREEN = "SettingsScreen"
 const val PROFILE_SCREEN = "ProfileScreen"
 const val EDIT_PROFILE_SCREEN = "EditProfileScreen"
 
-const val POST_DETAILS_SCREEN = "PostDetailsScreen"
+const val POST_DETAILS_SCREEN = "com.example.commutual.ui.screens.post_details.PostDetailsScreen"
 
 
 const val PROFILE_POST_SCREEN = "ProfilePostScreen"
 
 
-const val LOGIN_SCREEN = "LoginScreen"
-const val SIGN_UP_SCREEN = "SignUpScreen"
+const val LOGIN_SCREEN = "com.example.commutual.ui.screens.login.LoginScreen"
+const val SIGN_UP_SCREEN = "com.example.commutual.ui.screens.signup.SignUpScreen"
 const val POSTS_SCREEN = "PostsScreen"
 
 

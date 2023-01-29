@@ -23,7 +23,9 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -54,8 +56,6 @@ fun ProfileScreen(
 
     val userPosts = viewModel.userPosts.collectAsStateWithLifecycle(emptyList())
     val user by viewModel.user
-    val scrollState = rememberScrollState()
-
 
     Column(
         modifier = Modifier
@@ -67,32 +67,38 @@ fun ProfileScreen(
             endAction = { viewModel.onSettingsClick(openScreen) },
             modifier = modifier
         )
-
-
-        LazyColumn(
-            Modifier
+        Column(
+            modifier = Modifier
                 .weight(1f)
-                .wrapContentHeight()
+                .verticalScroll(rememberScrollState())
         ) {
-            item {
-                Text(text = user.username)
-                Text(text = user.bio)
-                BasicButton(
-                    AppText.edit_profile,
-                    Modifier.basicButton()
-                ) { viewModel.onEditProfileClick(openScreen) }
-            }
-            items(userPosts.value, key = { it.postId }) { postItem ->
-                Surface(modifier = Modifier.clickable {
-                    viewModel.onPostClick(openScreen, postItem)
-                }) {
-                    PostItem(
-                        post = postItem
-                    )
-                }
 
+            Text(text = user.username, style = MaterialTheme.typography.h2)
+            Text(text = user.bio, style = MaterialTheme.typography.body1)
+            BasicButton(
+                AppText.edit_profile,
+                Modifier.basicButton()
+            ) { viewModel.onEditProfileClick(openScreen) }
+
+            LazyColumn(
+                Modifier
+                    .weight(1f)
+                    .wrapContentHeight()
+            ) {
+
+                items(userPosts.value, key = { it.postId }) { postItem ->
+                    Surface(modifier = Modifier.clickable {
+                        viewModel.onPostClick(openScreen, postItem)
+                    }) {
+                        PostItem(
+                            post = postItem
+                        )
+                    }
+
+                }
             }
         }
+
+
     }
 }
-

@@ -38,90 +38,97 @@ import javax.inject.Inject
 class StorageServiceImpl
 @Inject
 constructor(private val firestore: FirebaseFirestore, private val auth: AccountService) :
-  StorageService {
+    StorageService {
 
 
-  @OptIn(ExperimentalCoroutinesApi::class)
-  override val posts: Flow<List<Post>>
-    get() =
-      auth.currentUser.flatMapLatest {
-        currentPostCollection().snapshots().map { snapshot -> snapshot.toObjects() }
-      }
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override val posts: Flow<List<Post>>
+        get() =
+            auth.currentUser.flatMapLatest {
+                currentPostCollection().snapshots().map { snapshot -> snapshot.toObjects() }
+            }
 
-  @OptIn(ExperimentalCoroutinesApi::class)
-  override val userPosts: Flow<List<Post>>
-    get() =
-      auth.currentUser.flatMapLatest {
-        currentPostCollection().whereEqualTo(USER_ID, auth.currentUserId).snapshots().map { snapshot -> snapshot.toObjects() }
-      }
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override val userPosts: Flow<List<Post>>
+        get() =
+            auth.currentUser.flatMapLatest {
+                currentPostCollection().whereEqualTo(USER_ID, auth.currentUserId).snapshots()
+                    .map { snapshot -> snapshot.toObjects() }
+            }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override suspend fun filteredPosts(interest: String): Flow<List<Post>> {
+        return auth.currentUser.flatMapLatest {
+            currentPostCollection().whereArrayContains("interests", interest)
+                .snapshots().map { snapshot -> snapshot.toObjects() }
+        }
+    }
+
+
+    override suspend fun getPost(postId: String): Post? =
+        currentPostCollection().document(postId).get().await().toObject()
+
+    // save user and generate an postId for the user document
+    override suspend fun savePost(post: Post): String =
+        trace(SAVE_POST_TRACE) { currentPostCollection().add(post).await().id }
+
+    override suspend fun updatePost(post: Post): Unit =
+        trace(UPDATE_POST_TRACE) {
+            currentPostCollection().document(post.postId).set(post).await()
+        }
+
+
+    override suspend fun deletePost(postId: String) {
+        currentUserCollection().document(postId).delete().await()
+    }
+
+    override suspend fun getUser(userId: String): User? =
+        currentUserCollection().document(userId).get().await().toObject()
+
+    // save user and generate an userId for the user document
+    override suspend fun saveUser(userId: String, user: User): Unit =
+        trace(SAVE_POST_TRACE) { currentUserCollection().document(userId).set(user).await() }
+
+    override suspend fun updateUser(user: User): Unit =
+        trace(UPDATE_POST_TRACE) {
+            currentUserCollection().document(auth.currentUserId).set(user).await()
+        }
+
+//  override suspend fun getUser(userId: String): User? {
+//    val documents = currentUserCollection().whereArrayContains("interests", "interest").get().await()
+//    for (document in documents) {
 //
-//  override val users: Flow<List<User>>
-//    get() =
-//      auth.currentUser.flatMapLatest { user ->
-//        currentUserCollection(user.userId).snapshots().map { snapshot -> snapshot.toObjects() }
-//      }
+//    }
+//  }
 
-  override suspend fun getPost(postId: String): Post? =
-    currentPostCollection().document(postId).get().await().toObject()
 
-  // save user and generate an postId for the user document
-  override suspend fun savePost(post: Post): String =
-    trace(SAVE_POST_TRACE) { currentPostCollection().add(post).await().id }
+    override suspend fun hasProfile(): Boolean =
+        trace(UPDATE_POST_TRACE) {
+            val userRef = currentUserCollection().document(auth.currentUserId).get().await()
+            return userRef.exists()
+        }
 
-  override suspend fun updatePost(post: Post): Unit =
-    trace(UPDATE_POST_TRACE) {
-      currentPostCollection().document(post.postId).set(post).await()
+
+    // TODO: It's not recommended to delete on the client:
+    // https://firebase.google.com/docs/firestore/manage-data/delete-data#kotlin+ktx_2
+    override suspend fun deleteAllForUser(userId: String) {
+        val matchingPosts = currentPostCollection().get().await()
+        matchingPosts.map { it.reference.delete().asDeferred() }.awaitAll()
     }
 
+    private fun currentUserCollection(): CollectionReference =
+        firestore.collection(USER_COLLECTION)
 
-  override suspend fun deletePost(postId: String) {
-    currentUserCollection().document(postId).delete().await()
-  }
+    private fun currentPostCollection(): CollectionReference =
+        firestore.collection(POST_COLLECTION)
 
-  override suspend fun getUser(userId: String): User? =
-    currentUserCollection().document(userId).get().await().toObject()
-//    override suspend fun getUser(): User? =
-//      currentUserCollection().document(auth.currentUserId).get().await().toObject()
-
-//  // save user and generate an userId for the user document
-//  override suspend fun saveUser(user: User): String =
-//    trace(SAVE_POST_TRACE) { currentUserCollection().add(user).await().id }
-
-  // save user and generate an userId for the user document
-  override suspend fun saveUser(userId: String, user: User): Unit =
-    trace(SAVE_POST_TRACE) { currentUserCollection().document(userId).set(user).await() }
-
-  override suspend fun updateUser(user: User): Unit =
-    trace(UPDATE_POST_TRACE) {
-      currentUserCollection().document(auth.currentUserId).set(user).await() }
-
-  override suspend fun hasProfile(): Boolean =
-    trace(UPDATE_POST_TRACE) {
-      val userRef = currentUserCollection().document(auth.currentUserId).get().await()
-      return userRef.exists()
+    companion object {
+        private const val USER_COLLECTION = "users"
+        private const val POST_COLLECTION = "posts"
+        private const val SAVE_POST_TRACE = "savePost"
+        private const val UPDATE_POST_TRACE = "updatePost"
+        private const val USER_ID = "userId"
+        private const val USERNAME = "username"
     }
-
-  // TODO: It's not recommended to delete on the client:
-  // https://firebase.google.com/docs/firestore/manage-data/delete-data#kotlin+ktx_2
-  override suspend fun deleteAllForUser(userId: String) {
-    val matchingPosts = currentPostCollection().get().await()
-    matchingPosts.map { it.reference.delete().asDeferred() }.awaitAll()
-  }
-
-  private fun currentUserCollection(): CollectionReference =
-    firestore.collection(USER_COLLECTION)
-
-  private fun currentPostCollection(): CollectionReference =
-    firestore.collection(POST_COLLECTION)
-
-  companion object {
-    private const val USER_COLLECTION = "users"
-    private const val POST_COLLECTION = "posts"
-    private const val SAVE_POST_TRACE = "savePost"
-    private const val UPDATE_POST_TRACE = "updatePost"
-    private const val USER_ID = "userId"
-    private const val USERNAME = "username"
-  }
 
 }

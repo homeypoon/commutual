@@ -14,10 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.example.makeitso.screens.sign_up
+package com.example.commutual.ui.screens.signup
 
 import androidx.compose.runtime.mutableStateOf
-import com.example.commutual.ui.screens.CommutualViewModel
+import com.example.commutual.EDIT_PROFILE_SCREEN
 import com.example.commutual.HOME_SCREEN
 import com.example.commutual.LOGIN_SCREEN
 import com.example.commutual.SIGN_UP_SCREEN
@@ -27,7 +27,7 @@ import com.example.commutual.common.ext.passwordMatches
 import com.example.commutual.common.snackbar.SnackbarManager
 import com.example.commutual.model.service.AccountService
 import com.example.commutual.model.service.LogService
-import com.example.commutual.ui.screens.signup.SignUpUiState
+import com.example.commutual.ui.screens.CommutualViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import com.example.commutual.R.string as AppText
@@ -61,7 +61,7 @@ class SignUpViewModel @Inject constructor(
     openAndPopUp(LOGIN_SCREEN, LOGIN_SCREEN)
   }
 
-  fun onSignUpClick(openAndPopUp: (String, String) -> Unit) {
+  fun onSignUpClick(openAndPopUp: (String, String) -> Unit, openScreen: (String) -> Unit) {
     if (!email.isValidEmail()) {
       SnackbarManager.showMessage(AppText.email_error)
       return
@@ -80,6 +80,7 @@ class SignUpViewModel @Inject constructor(
     launchCatching {
       accountService.createAccount(email, password)
       openAndPopUp(HOME_SCREEN, SIGN_UP_SCREEN)
+      openScreen(EDIT_PROFILE_SCREEN)
     }
   }
 }

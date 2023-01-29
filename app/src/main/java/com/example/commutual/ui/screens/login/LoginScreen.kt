@@ -1,4 +1,4 @@
-/*
+package com.example.commutual.ui.screens.login/*
 Copyright 2022 Google LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,7 +33,6 @@ import com.example.commutual.common.ext.accountText
 import com.example.commutual.common.ext.basicButton
 import com.example.commutual.common.ext.fieldModifier
 import com.example.commutual.common.ext.textButton
-import com.example.makeitso.screens.login.LoginViewModel
 import com.example.commutual.R.string as AppText
 
 @Composable

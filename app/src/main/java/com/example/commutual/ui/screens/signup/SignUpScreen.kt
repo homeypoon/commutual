@@ -1,3 +1,5 @@
+package com.example.commutual.ui.screens.signup
+
 /*
 Copyright 2022 Google LLC
 
@@ -14,7 +16,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.example.makeitso.screens.sign_up
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -40,12 +41,12 @@ import com.example.commutual.R.string as AppText
 fun SignUpScreen(
   openAndPopUp: (String, String) -> Unit,
   modifier: Modifier = Modifier,
+  openScreen: (String) -> Unit,
   viewModel: SignUpViewModel = hiltViewModel()
 ) {
   val uiState by viewModel.uiState
   val fieldModifier = Modifier.fieldModifier()
   val focusManager = LocalFocusManager.current
-
 
   BasicToolbar(AppText.create_account)
 
@@ -59,7 +60,7 @@ fun SignUpScreen(
     RepeatPasswordField(uiState.repeatPassword, viewModel::onRepeatPasswordChange, fieldModifier, focusManager, ImeAction.Done)
 
     BasicButton(AppText.create_account, Modifier.basicButton()) {
-      viewModel.onSignUpClick(openAndPopUp)
+      viewModel.onSignUpClick(openAndPopUp, openScreen)
     }
 
     Row(

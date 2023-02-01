@@ -3,6 +3,7 @@ package com.example.commutual.ui.screens.item
 import androidx.compose.material.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import com.example.commutual.model.Post
 
@@ -12,8 +13,20 @@ fun PostItem(
     post: Post,
 ) {
     ListItem(
-        headlineText = { Text(post.title) },
-        supportingText = { Text(post.description) }
+        headlineText = {
+            Text(
+                post.title,
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+        },
+        supportingText = {
+            Text(
+                post.description,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+        }
     )
 //    Divider()
 //    Card(

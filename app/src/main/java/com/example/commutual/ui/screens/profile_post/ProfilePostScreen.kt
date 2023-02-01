@@ -28,6 +28,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -103,8 +104,8 @@ fun ProfilePostScreen(
                 contentDescription = AppText.more
             )
 
-            Text(text = post.title, style = MaterialTheme.typography.h2)
-            Text(text = post.description, style = MaterialTheme.typography.body1)
+            Text(text = post.title, style = MaterialTheme.typography.titleMedium)
+            Text(text = post.description, style = MaterialTheme.typography.bodyMedium)
         }
 
     }

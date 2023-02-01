@@ -4,10 +4,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -25,11 +25,11 @@ fun HomeScreen(
     floatingActionButton = {
         FloatingActionButton(
             onClick = { viewModel.onAddClick(openScreen) },
-            backgroundColor = MaterialTheme.colors.primary,
-            contentColor = MaterialTheme.colors.onPrimary,
+            backgroundColor = MaterialTheme.colorScheme.tertiary,
             modifier = modifier.padding(16.dp)
         ) {
-            Icon(Icons.Filled.Add, "Add")
+            Icon(Icons.Filled.Add, "Add",
+                tint = MaterialTheme.colorScheme.onTertiary)
         }
     }
     ) { padding ->

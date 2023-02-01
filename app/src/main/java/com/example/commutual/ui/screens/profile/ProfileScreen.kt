@@ -22,12 +22,10 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -60,6 +58,7 @@ fun ProfileScreen(
     Column(
         modifier = Modifier
             .fillMaxHeight()
+            .wrapContentHeight()
     ) {
         ActionToolbar(
             title = AppText.profile,
@@ -67,25 +66,25 @@ fun ProfileScreen(
             endAction = { viewModel.onSettingsClick(openScreen) },
             modifier = modifier
         )
-        Column(
-            modifier = Modifier
-                .weight(1f)
-                .verticalScroll(rememberScrollState())
-        ) {
-
-            Text(text = user.username, style = MaterialTheme.typography.h2)
-            Text(text = user.bio, style = MaterialTheme.typography.body1)
-            BasicButton(
-                AppText.edit_profile,
-                Modifier.basicButton()
-            ) { viewModel.onEditProfileClick(openScreen) }
+//        Column(
+//            modifier = Modifier
+//                .weight(1f)
+//                .verticalScroll(rememberScrollState())
+//        ) {
 
             LazyColumn(
                 Modifier
                     .weight(1f)
-                    .wrapContentHeight()
+//                    .wrapContentHeight()
             ) {
-
+                item {
+                    Text(text = user.username, style = MaterialTheme.typography.headlineLarge)
+                    Text(text = user.bio, style = MaterialTheme.typography.bodyMedium)
+                    BasicButton(
+                        AppText.edit_profile,
+                        Modifier.basicButton()
+                    ) { viewModel.onEditProfileClick(openScreen) }
+                }
                 items(userPosts.value, key = { it.postId }) { postItem ->
                     Surface(modifier = Modifier.clickable {
                         viewModel.onPostClick(openScreen, postItem)
@@ -96,7 +95,7 @@ fun ProfileScreen(
                     }
 
                 }
-            }
+//            }
         }
 
 

@@ -22,11 +22,16 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.*
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -40,7 +45,7 @@ fun WarningCardEditor(
   modifier: Modifier,
   onEditClick: () -> Unit
 ) {
-  CardEditor(title, icon, content, onEditClick, MaterialTheme.colors.primary, modifier)
+  CardEditor(title, icon, content, onEditClick, modifier)
 }
 
 @ExperimentalMaterialApi
@@ -52,9 +57,10 @@ fun RegularCardEditor(
   modifier: Modifier,
   onEditClick: () -> Unit
 ) {
-  CardEditor(title, icon, content, onEditClick, MaterialTheme.colors.onSurface, modifier)
+  CardEditor(title, icon, content, onEditClick, modifier)
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @ExperimentalMaterialApi
 @Composable
 private fun CardEditor(
@@ -62,25 +68,28 @@ private fun CardEditor(
   @DrawableRes icon: Int,
   content: String,
   onEditClick: () -> Unit,
-  highlightColor: Color,
   modifier: Modifier
 ) {
   Card(
-    backgroundColor = MaterialTheme.colors.onPrimary,
     modifier = modifier,
-    onClick = onEditClick
+    onClick = onEditClick,
+    colors = CardDefaults.cardColors(
+      contentColor =  MaterialTheme.colorScheme.surface,
+      containerColor = MaterialTheme.colorScheme.surface
+    ),
   ) {
     Row(
       verticalAlignment = Alignment.CenterVertically,
       modifier = Modifier.fillMaxWidth().padding(16.dp)
     ) {
-      Column(modifier = Modifier.weight(1f)) { Text(stringResource(title), color = highlightColor) }
+      Column(modifier = Modifier.weight(1f)) {
+        Text(stringResource(title), color = MaterialTheme.colorScheme.onSurface) }
 
       if (content.isNotBlank()) {
         Text(text = content, modifier = Modifier.padding(16.dp, 0.dp))
       }
 
-      Icon(painter = painterResource(icon), contentDescription = "Icon", tint = highlightColor)
+      Icon(painter = painterResource(icon), contentDescription = "Icon", tint = MaterialTheme.colorScheme.onSurface)
     }
   }
 }

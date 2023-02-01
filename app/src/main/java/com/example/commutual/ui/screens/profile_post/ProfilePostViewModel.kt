@@ -42,7 +42,6 @@ class ProfilePostViewModel @Inject constructor(
 ) : CommutualViewModel(logService) {
 
     val post = mutableStateOf(Post())
-    val posts = storageService.posts
 
     fun initialize(postId: String) {
         launchCatching {

@@ -14,11 +14,18 @@ fun BottomSheetOptionItem(
 
     Column {
         ListItem(
-            headlineText = { Text(text = option.title) },
+            headlineText = {
+                Text(
+                    text = option.title,
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            },
             leadingContent = {
                 Icon(
                     painter = painterResource(option.iconId),
-                    contentDescription = option.title
+                    contentDescription = option.title,
+                    tint = MaterialTheme.colorScheme.onSurface
                 )
             }
         )

@@ -79,7 +79,7 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
 
 
     override suspend fun deletePost(postId: String) {
-        currentUserCollection().document(postId).delete().await()
+        currentPostCollection().document(postId).delete().await()
     }
 
     override suspend fun getUser(userId: String): User? =

@@ -53,8 +53,8 @@ class EditPostViewModel @Inject constructor(
 
     fun onDoneClick(popUpScreen: () -> Unit, focusManager: FocusManager) {
 
-        post.value = post.value.copy(
-            userId = accountService.currentUserId)
+        // Close keyboard
+        focusManager.clearFocus()
 
         if (title.isBlank()) {
             SnackbarManager.showMessage(R.string.empty_title_error)
@@ -66,7 +66,8 @@ class EditPostViewModel @Inject constructor(
             return
         }
 
-        focusManager.clearFocus()
+        post.value = post.value.copy(
+            userId = accountService.currentUserId)
 
         launchCatching {
             val editedPost = post.value

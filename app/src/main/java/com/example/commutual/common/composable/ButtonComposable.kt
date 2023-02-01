@@ -19,6 +19,7 @@ package com.example.commutual.common.composable
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.*
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -38,8 +39,8 @@ fun BasicButton(@StringRes text: Int, modifier: Modifier, onClick: () -> Unit) {
     modifier = modifier,
     colors =
       ButtonDefaults.buttonColors(
-        backgroundColor = MaterialTheme.colors.primary,
-        contentColor = MaterialTheme.colors.onPrimary
+        backgroundColor = MaterialTheme.colorScheme.tertiary,
+        contentColor = MaterialTheme.colorScheme.onTertiary,
       )
   ) {
     Text(text = stringResource(text), fontSize = 16.sp)
@@ -69,8 +70,8 @@ fun DialogConfirmButton(@StringRes text: Int, action: () -> Unit) {
     onClick = action,
     colors =
       ButtonDefaults.buttonColors(
-        backgroundColor = MaterialTheme.colors.primary,
-        contentColor = MaterialTheme.colors.onPrimary
+        backgroundColor = MaterialTheme.colorScheme.tertiary,
+        contentColor = MaterialTheme.colorScheme.onTertiary
       )
   ) {
     Text(text = stringResource(text))
@@ -83,8 +84,8 @@ fun DialogCancelButton(@StringRes text: Int, action: () -> Unit) {
     onClick = action,
     colors =
       ButtonDefaults.buttonColors(
-        backgroundColor = MaterialTheme.colors.onPrimary,
-        contentColor = MaterialTheme.colors.primary
+        backgroundColor = MaterialTheme.colorScheme.tertiary,
+        contentColor = MaterialTheme.colorScheme.onTertiary
       )
   ) {
     Text(text = stringResource(text))

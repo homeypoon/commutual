@@ -1,6 +1,6 @@
 package com.example.commutual.ui.theme
 
-import androidx.compose.material.Typography
+import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -20,42 +20,43 @@ val RobotoSlab = FontFamily(
 
 // Set of Material typography styles to start with
 val Typography = Typography(
-    h1 = TextStyle(
+    headlineLarge = TextStyle(
         fontFamily = RobotoSlab,
         fontWeight = FontWeight.Normal,
         fontSize = 30.sp
     ),
-    // Title for posts
-    h2 = TextStyle(
-        fontFamily = RobotoSlab,
-        fontWeight = FontWeight.Bold,
-        fontSize = 20.sp
-    ),
-    // top title,
-    h3 = TextStyle(
+    // Top bar title
+    titleLarge = TextStyle(
         fontFamily = RobotoSlab,
         fontWeight = FontWeight.Medium,
         fontSize = 24.sp
     ),
-    // dialog title,
-    h4 = TextStyle(
+    // Title for posts, dialog title
+    titleMedium = TextStyle(
+        fontFamily = RobotoSlab,
+        fontWeight = FontWeight.Bold,
+        fontSize = 20.sp
+    ),
+    // Bottom Modal Text
+    titleSmall = TextStyle(
         fontFamily = RobotoSlab,
         fontWeight = FontWeight.Medium,
         fontSize = 20.sp
     ),
     // body text, description, bio
-    body1 = TextStyle(
+     bodyMedium = TextStyle(
         fontFamily = OpenSans,
         fontWeight = FontWeight.Normal,
         fontSize = 14.sp
     ),
-    // Modal Text, Username, caption
-    body2 = TextStyle(
+    // Username, caption
+    labelLarge = TextStyle(
         fontFamily = OpenSans,
         fontWeight = FontWeight.Light,
-        fontSize = 14.sp
+        fontSize = 16.sp
     ),
-    button = TextStyle(
+    // Buttons
+     displaySmall = TextStyle(
         fontFamily = RobotoSlab,
         fontWeight = FontWeight.Bold,
         fontSize = 16.sp

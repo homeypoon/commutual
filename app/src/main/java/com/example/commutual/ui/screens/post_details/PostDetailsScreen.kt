@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -65,11 +66,11 @@ fun PostDetailsScreen(
 
         Text(
             text = post.title,
-            fontSize = 18.sp, style = MaterialTheme.typography.h2
+            fontSize = 18.sp, style = MaterialTheme.typography.titleMedium
         )
         Text(
             text = post.description,
-            fontSize = 18.sp, style = MaterialTheme.typography.body1
+            fontSize = 18.sp, style = MaterialTheme.typography.bodyMedium
         )
 
         RequestMatchButton (
@@ -102,7 +103,7 @@ private fun RequestMatchButton(openScreen: (String) -> Unit, viewModel: PostDeta
             text = {
                 Column(Modifier.fillMaxSize()) {
                     Text(text = stringResource(id = R.string.request_match),
-                        style = MaterialTheme.typography.h4,
+                        style = MaterialTheme.typography.titleMedium,
                         modifier = Modifier.padding(4.dp, 20.dp))
                     DescriptionField(
                         R.string.request_match_message,

@@ -1,44 +1,46 @@
 package com.example.commutual.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.darkColors
-import androidx.compose.material.lightColors
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 
-private val DarkColorPalette = darkColors(
-    primary = Purple200,
-    primaryVariant = Purple700,
-    secondary = Teal200
-)
 
-private val LightColorPalette = lightColors(
-    primary = Purple500,
-    primaryVariant = Purple700,
-    secondary = Teal200
+private val LightColors = lightColorScheme(
+    primary = light_primary,
+    onPrimary = light_onPrimary,
+    secondary = light_secondary,
+    onSecondary = light_on_secondary,
+    primaryContainer = light_primaryContainer,
+    onPrimaryContainer = light_onPrimaryContainer,
+    tertiary = light_tertiary,
+    onTertiary = light_on_tertiary,
+    surface = light_surface,
+    onSurface = light_on_surface,
+    )
 
-    /* Other default colors to override
-    background = Color.White,
-    surface = Color.White,
-    onPrimary = Color.White,
-    onSecondary = Color.Black,
-    onBackground = Color.Black,
-    onSurface = Color.Black,
-    */
+private val DarkColors = darkColorScheme(
+    primary = dark_primary,
+    onPrimary = dark_onPrimary,
+    primaryContainer = dark_primaryContainer,
+    onPrimaryContainer = dark_onPrimaryContainer,
+    surface = dark_surface,
+    onSurface = dark_on_surface,
 )
 
 @Composable
 fun CommutualTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
-    val colors = if (darkTheme) {
-        DarkColorPalette
+    val colorSchemeColors = if (darkTheme) {
+        DarkColors
     } else {
-        LightColorPalette
+        LightColors
     }
 
     MaterialTheme(
-        colors = colors,
         typography = Typography,
         shapes = Shapes,
-        content = content
+        content = content,
+        colorScheme = colorSchemeColors
     )
 }

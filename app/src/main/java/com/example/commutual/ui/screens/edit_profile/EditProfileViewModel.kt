@@ -59,13 +59,15 @@ class EditProfileViewModel @Inject constructor(
 
 //        user.value = user.value.copy(
 //            userId = accountService.currentUserId)
+
+        // Close keyboard
+        focusManager.clearFocus()
+
         // Display error if user didn't input a username
         if (username.isBlank()) {
             SnackbarManager.showMessage(R.string.empty_username_error)
             return
         }
-
-        focusManager.clearFocus()
 
         launchCatching {
             val editedUser = user.value

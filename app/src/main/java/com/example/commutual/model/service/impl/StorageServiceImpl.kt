@@ -16,6 +16,7 @@ limitations under the License.
 
 package com.example.commutual.model.service.impl
 
+import com.example.commutual.model.Chat
 import com.example.commutual.model.Post
 import com.example.commutual.model.User
 import com.example.commutual.model.service.AccountService
@@ -57,12 +58,42 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
             }
 
     @OptIn(ExperimentalCoroutinesApi::class)
+    override val chats: Flow<List<Chat>>
+        get() =
+            auth.currentUser.flatMapLatest {
+                currentChatCollection().whereArrayContains(MEMBERS_ID_FIELD, auth.currentUserId).snapshots()
+                    .map { snapshot -> snapshot.toObjects() }
+            }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun filteredPosts(interest: String): Flow<List<Post>> {
         return auth.currentUser.flatMapLatest {
-            currentPostCollection().whereArrayContains("interests", interest)
+            currentPostCollection().whereArrayContains(INTERESTS_FIELD, interest)
                 .snapshots().map { snapshot -> snapshot.toObjects() }
         }
     }
+
+
+//    @OptIn(ExperimentalCoroutinesApi::class)
+//    override val chat: Flow<List<Chat>>
+//        get() =
+//            auth.currentUser.flatMapLatest {
+//                currentChatCollection().document(chatId).snapshots()
+//                    .map { snapshot -> snapshot.toObjects() }
+//            }
+
+
+
+//
+//    @OptIn(ExperimentalCoroutinesApi::class)
+//    override suspend fun getChat(chatId: String): Flow<List<Chat>> {
+//        return auth.currentUser.flatMapLatest {
+//            currentChatCollection()
+//                .document(chatId)
+//                .snapshots()
+//                .map { snapshot -> snapshot.toObjects() }
+//        }
+//    }
 
 
     override suspend fun getPost(postId: String): Post? =
@@ -77,7 +108,6 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
             currentPostCollection().document(post.postId).set(post).await()
         }
 
-
     override suspend fun deletePost(postId: String) {
         currentPostCollection().document(postId).delete().await()
     }
@@ -85,7 +115,7 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
     override suspend fun getUser(userId: String): User? =
         currentUserCollection().document(userId).get().await().toObject()
 
-    // save user and generate an userId for the user document
+    // save user and generate an sender for the user document
     override suspend fun saveUser(userId: String, user: User): Unit =
         trace(SAVE_POST_TRACE) { currentUserCollection().document(userId).set(user).await() }
 
@@ -94,7 +124,7 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
             currentUserCollection().document(auth.currentUserId).set(user).await()
         }
 
-//  override suspend fun getUser(userId: String): User? {
+//  override suspend fun getUser(sender: String): User? {
 //    val documents = currentUserCollection().whereArrayContains("interests", "interest").get().await()
 //    for (document in documents) {
 //
@@ -122,6 +152,9 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
     private fun currentPostCollection(): CollectionReference =
         firestore.collection(POST_COLLECTION)
 
+    private fun currentChatCollection(): CollectionReference =
+        firestore.collection(CHAT_COLLECTION)
+
     companion object {
         private const val USER_COLLECTION = "users"
         private const val POST_COLLECTION = "posts"
@@ -129,6 +162,13 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
         private const val UPDATE_POST_TRACE = "updatePost"
         private const val USER_ID = "userId"
         private const val USERNAME = "username"
+
+        private const val INTERESTS_FIELD = "interests"
+        private const val MEMBERS_ID_FIELD = "membersId"
+
+        private const val CHAT_COLLECTION = "chats"
+
+        private const val MESSAGE_COLLECTION = "messages"
     }
 
 }

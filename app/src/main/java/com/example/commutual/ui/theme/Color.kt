@@ -11,7 +11,7 @@ val light_primaryContainer = Color(0xFFEEF8DF)
 val light_onPrimaryContainer = Color(0xFF3F3C3C)
 
 /* Post items, Modal Sheet */
-val light_surface = Color(0xFFF7F7FC)
+val light_surface = Color(0xFFFBFBFC)
 val light_on_surface = Color(0xFF2E2E30)
 
 /* Top App Bar */

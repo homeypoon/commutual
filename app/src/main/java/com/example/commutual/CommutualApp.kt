@@ -18,6 +18,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.commutual.common.composable.BottomNavigationComposable
 import com.example.commutual.common.snackbar.SnackbarManager
+import com.example.commutual.ui.screens.chat.ChatScreen
+import com.example.commutual.ui.screens.chat.MessagesScreen
 import com.example.commutual.ui.screens.edit_post.EditPostScreen
 import com.example.commutual.ui.screens.edit_profile.EditProfileScreen
 import com.example.commutual.ui.screens.explore.ExploreScreen
@@ -157,6 +159,16 @@ fun NavGraphBuilder.commutualGraph(appState: CommutualAppState) {
         )
     }
 
+    composable(
+        route = "$MESSAGES_SCREEN$CHAT_ID_ARG",
+        arguments = listOf(navArgument(CHAT_ID) { defaultValue = CHAT_DEFAULT_ID })
+    ) {
+        MessagesScreen(
+            popUpScreen = { appState.popUp()},
+            messageId = it.arguments?.getString(CHAT_ID) ?: CHAT_DEFAULT_ID
+        )
+    }
+
     composable(EDIT_PROFILE_SCREEN) {
         EditProfileScreen( popUpScreen = { appState.popUp()})
     }
@@ -172,6 +184,11 @@ fun NavGraphBuilder.commutualGraph(appState: CommutualAppState) {
 
     composable(EXPLORE_SCREEN) {
         ExploreScreen(
+            openScreen = { route -> appState.navigate(route) })
+    }
+
+    composable(CHAT_SCREEN) {
+        ChatScreen(
             openScreen = { route -> appState.navigate(route) })
     }
 

@@ -18,7 +18,10 @@ limitations under the License.
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material.ContentAlpha
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.LocalContentAlpha
+import androidx.compose.material.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -28,12 +31,10 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import com.example.commutual.R
 import com.example.commutual.common.composable.*
 import com.example.commutual.common.ext.basicButton
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 @ExperimentalMaterialApi
 fun PostDetailsScreen(
@@ -99,7 +100,8 @@ private fun RequestMatchButton(openScreen: (String) -> Unit, viewModel: PostDeta
 
 
     if (showRequestMatchCard) {
-        AlertDialog(
+
+        androidx.compose.material3.AlertDialog(
             text = {
                 Column(Modifier.fillMaxSize()) {
                     Text(text = stringResource(id = R.string.request_match),

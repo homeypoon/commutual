@@ -80,7 +80,7 @@ class EditPostViewModel @Inject constructor(
         }
 //
 //        post.value = post.value.copy(
-//            userId = accountService.currentUserId)
+//            sender = accountService.currentUserId)
 //        post.value = post.value.copy(postId = postId)
 //
 //        launchCatching {

@@ -16,6 +16,7 @@ limitations under the License.
 
 package com.example.commutual.model.service
 
+import com.example.commutual.model.Chat
 import com.example.commutual.model.Post
 import com.example.commutual.model.User
 import kotlinx.coroutines.flow.Flow
@@ -23,6 +24,7 @@ import kotlinx.coroutines.flow.Flow
 interface StorageService {
   val posts: Flow<List<Post>>
   val userPosts: Flow<List<Post>>
+  val chats: Flow<List<Chat>>
 
   // return list of filtered posts based on interest
   suspend fun filteredPosts(interest: String): Flow<List<Post>>

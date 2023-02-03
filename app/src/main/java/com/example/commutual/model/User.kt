@@ -1,7 +1,7 @@
 package com.example.commutual.model
 
 data class User(
-    val userId: String = "",
+//    val sender: String = "",
     val username: String = "",
     val bio: String = ""
 )

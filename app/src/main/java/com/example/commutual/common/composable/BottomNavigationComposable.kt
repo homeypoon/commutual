@@ -17,10 +17,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.example.commutual.EXPLORE_SCREEN
-import com.example.commutual.HOME_SCREEN
-import com.example.commutual.PROFILE_SCREEN
-import com.example.commutual.R
+import com.example.commutual.*
 
 @Composable
 fun BottomNavigationComposable(
@@ -30,6 +27,7 @@ fun BottomNavigationComposable(
     val navItems = listOf(
         Screen.Home,
         Screen.Explore,
+        Screen.Chat,
         Screen.Profile
     )
 
@@ -81,5 +79,6 @@ sealed class Screen(
 ) {
     object Home : Screen(HOME_SCREEN, R.string.home, R.drawable.ic_home)
     object Explore : Screen(EXPLORE_SCREEN, R.string.explore, R.drawable.ic_explore)
+    object Chat : Screen(CHAT_SCREEN, R.string.chat, R.drawable.ic_chat)
     object Profile : Screen(PROFILE_SCREEN, R.string.profile, R.drawable.ic_profile)
 }

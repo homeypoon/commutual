@@ -18,11 +18,15 @@ package com.example.commutual
 
 const val HOME_SCREEN = "HomeScreen"
 const val EXPLORE_SCREEN = "ExploreScreen"
+const val CHAT_SCREEN = "ChatScreen"
+
+const val MESSAGES_SCREEN = "MessagesScreen"
+const val PROFILE_SCREEN = "ProfileScreen"
+
 
 const val EDIT_POST_SCREEN = "EditPostScreen"
 const val SPLASH_SCREEN = "SplashScreen"
 const val SETTINGS_SCREEN = "SettingsScreen"
-const val PROFILE_SCREEN = "ProfileScreen"
 const val EDIT_PROFILE_SCREEN = "EditProfileScreen"
 
 const val POST_DETAILS_SCREEN = "com.example.commutual.ui.screens.post_details.PostDetailsScreen"
@@ -39,3 +43,7 @@ const val POSTS_SCREEN = "PostsScreen"
 const val POST_ID = "postId"
 const val POST_DEFAULT_ID = "-1"
 const val POST_ID_ARG = "?$POST_ID={$POST_ID}"
+
+const val CHAT_ID = "chatId"
+const val CHAT_DEFAULT_ID = "-1"
+const val CHAT_ID_ARG = "?$CHAT_ID={$CHAT_ID}"

@@ -58,7 +58,7 @@ class EditProfileViewModel @Inject constructor(
     fun onDoneClick(popUpScreen: () -> Unit, focusManager: FocusManager) {
 
 //        user.value = user.value.copy(
-//            userId = accountService.currentUserId)
+//            sender = accountService.currentUserId)
 
         // Close keyboard
         focusManager.clearFocus()
@@ -71,7 +71,7 @@ class EditProfileViewModel @Inject constructor(
 
         launchCatching {
             val editedUser = user.value
-            if (editedUser.userId.isBlank()) {
+            if (!accountService.hasUser) {
                 storageService.saveUser(accountService.currentUserId, editedUser)
             } else {
                 storageService.updateUser(editedUser)

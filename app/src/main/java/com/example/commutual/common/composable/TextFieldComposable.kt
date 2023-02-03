@@ -18,6 +18,7 @@ package com.example.commutual.common.composable
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.focusable
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -28,6 +29,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -77,11 +79,15 @@ fun DescriptionField(
     focusManager: FocusManager
 ) {
     OutlinedTextField(
-        modifier = modifier.height(160.dp),
+        modifier = modifier.fillMaxHeight(),
         value = value,
-        maxLines = 6,
         onValueChange = { onNewValue(it) },
-        placeholder = { Text(stringResource(text)) },
+        placeholder = {
+            Text(
+                stringResource(text),
+                style = MaterialTheme.typography.bodyMedium
+            )
+        },
         keyboardOptions = KeyboardOptions.Default.copy(
             keyboardType = KeyboardType.Text,
             autoCorrect = true,
@@ -160,19 +166,24 @@ fun EmailField(
         placeholder = { Text(stringResource(AppText.email)) },
         leadingIcon = { Icon(imageVector = Icons.Default.Email, contentDescription = "Email") },
         keyboardOptions = KeyboardOptions.Default.copy(
-            keyboardType = KeyboardType.Number,
+            keyboardType = KeyboardType.Email,
             imeAction = imeAction
         ),
         keyboardActions = KeyboardActions(
             onNext = { focusManager.moveFocus(FocusDirection.Down) }
         ),
 
-    )
+        )
 }
 
 @Composable
 fun PasswordField(
-    value: String, onNewValue: (String) -> Unit, modifier: Modifier = Modifier, focusManager: FocusManager, imeAction: ImeAction) {
+    value: String,
+    onNewValue: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    focusManager: FocusManager,
+    imeAction: ImeAction
+) {
     PasswordField(value, AppText.password, onNewValue, modifier, focusManager, imeAction)
 }
 

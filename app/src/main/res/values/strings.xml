@@ -43,6 +43,9 @@
     <string name="empty_title_error">Please enter a title for your post!</string>
     <string name="empty_description_error">Please enter a description for your post!</string>
 
+    <!-- Message Screen -->
+    <string name="chat">Chat</string>
+
     <!-- Profile Screen -->
     <string name="profile">Profile</string>
 

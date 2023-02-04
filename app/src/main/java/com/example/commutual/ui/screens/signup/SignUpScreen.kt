@@ -17,6 +17,7 @@ limitations under the License.
  */
 
 
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -25,6 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -39,40 +41,67 @@ import com.example.commutual.R.string as AppText
 
 @Composable
 fun SignUpScreen(
-  openAndPopUp: (String, String) -> Unit,
-  modifier: Modifier = Modifier,
-  openScreen: (String) -> Unit,
-  viewModel: SignUpViewModel = hiltViewModel()
+    openAndPopUp: (String, String) -> Unit,
+    modifier: Modifier = Modifier,
+    openScreen: (String) -> Unit,
+    viewModel: SignUpViewModel = hiltViewModel()
 ) {
-  val uiState by viewModel.uiState
-  val fieldModifier = Modifier.fieldModifier()
-  val focusManager = LocalFocusManager.current
+    val uiState by viewModel.uiState
+    val fieldModifier = Modifier.fieldModifier()
+    val focusManager = LocalFocusManager.current
 
-  BasicToolbar(AppText.create_account)
+    BasicToolbar(AppText.create_account)
 
-  Column(
-    modifier = modifier.fillMaxWidth().fillMaxHeight().verticalScroll(rememberScrollState()),
-    verticalArrangement = Arrangement.Center,
-    horizontalAlignment = Alignment.CenterHorizontally
-  ) {
-    EmailField(uiState.email, viewModel::onEmailChange, fieldModifier, focusManager, ImeAction.Next)
-    PasswordField(uiState.password, viewModel::onPasswordChange, fieldModifier, focusManager, ImeAction.Next)
-    RepeatPasswordField(uiState.repeatPassword, viewModel::onRepeatPasswordChange, fieldModifier, focusManager, ImeAction.Done)
-
-    BasicButton(AppText.create_account, Modifier.basicButton()) {
-      viewModel.onSignUpClick(openAndPopUp, openScreen)
-    }
-
-    Row(
-      verticalAlignment = Alignment.CenterVertically
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .fillMaxHeight()
+            .verticalScroll(rememberScrollState())
+            .pointerInput(Unit) {
+                detectTapGestures(onTap = {
+                    focusManager.clearFocus()
+                })
+            },
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-      Text(stringResource(AppText.already_have_account),
-        Modifier.accountText(), maxLines = 1,
-        fontSize = 16.sp
-      )
-      BasicTextButton(AppText.log_in, Modifier.textButton()) {
-        viewModel.onLoginClick(openAndPopUp)
-      }
+        EmailField(
+            uiState.email,
+            viewModel::onEmailChange,
+            fieldModifier,
+            focusManager,
+            ImeAction.Next
+        )
+        PasswordField(
+            uiState.password,
+            viewModel::onPasswordChange,
+            fieldModifier,
+            focusManager,
+            ImeAction.Next
+        )
+        RepeatPasswordField(
+            uiState.repeatPassword,
+            viewModel::onRepeatPasswordChange,
+            fieldModifier,
+            focusManager,
+            ImeAction.Done
+        )
+
+        BasicButton(AppText.create_account, Modifier.basicButton()) {
+            viewModel.onSignUpClick(openAndPopUp, openScreen)
+        }
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                stringResource(AppText.already_have_account),
+                Modifier.accountText(), maxLines = 1,
+                fontSize = 16.sp
+            )
+            BasicTextButton(AppText.log_in, Modifier.textButton()) {
+                viewModel.onLoginClick(openAndPopUp)
+            }
+        }
     }
-  }
 }

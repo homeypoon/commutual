@@ -67,7 +67,8 @@ class EditPostViewModel @Inject constructor(
         }
 
         post.value = post.value.copy(
-            userId = accountService.currentUserId)
+            userId = accountService.currentUserId
+        )
 
         launchCatching {
             val editedPost = post.value
@@ -78,6 +79,7 @@ class EditPostViewModel @Inject constructor(
             }
             popUpScreen()
         }
+    }
 //
 //        post.value = post.value.copy(
 //            sender = accountService.currentUserId)
@@ -92,5 +94,5 @@ class EditPostViewModel @Inject constructor(
 //            }
 //            popUpScreen()
 //        }
-    }
+
 }

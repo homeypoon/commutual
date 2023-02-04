@@ -17,6 +17,7 @@ limitations under the License.
 package com.example.commutual.model.service
 
 import com.example.commutual.model.Chat
+import com.example.commutual.model.Message
 import com.example.commutual.model.Post
 import com.example.commutual.model.User
 import kotlinx.coroutines.flow.Flow
@@ -25,24 +26,31 @@ interface StorageService {
   val posts: Flow<List<Post>>
   val userPosts: Flow<List<Post>>
   val chats: Flow<List<Chat>>
+  fun getMessages(chatId: String): Flow<List<Message>>
+//  val messages: Flow<List<Message>>
+
+
+
+  // Getter methods
+  suspend fun getPost(postId: String): Post?
+  suspend fun getUser(userId: String): User?
+//  suspend fun getMessages(chatId: String, messageId: String): Message?
+
+  // User methods
+  suspend fun saveUser(userId: String, user: User): Unit
+  suspend fun updateUser(user: User)
+  suspend fun deleteAllForUser(userId: String)
+
+  // Post methods
+  suspend fun savePost(post: Post): String
+  suspend fun updatePost(post: Post)
+  suspend fun deletePost(postId: String)
 
   // return list of filtered posts based on interest
   suspend fun filteredPosts(interest: String): Flow<List<Post>>
 
   suspend fun hasProfile(): Boolean
 
-  suspend fun getPost(postId: String): Post?
-  suspend fun getUser(userId: String): User?
 
-  // Post
-  suspend fun savePost(post: Post): String
-  suspend fun updatePost(post: Post)
-  suspend fun deletePost(postId: String)
 
-//  suspend fun saveUser(user: User): String
-  suspend fun saveUser(userId: String, user: User): Unit
-
-  suspend fun updateUser(user: User)
-
-  suspend fun deleteAllForUser(userId: String)
 }

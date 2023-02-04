@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.dp
 import com.example.commutual.model.Message
 
 @Composable
-fun MessageItem(message: Message) {
+fun MessageItem(message: Message, currentTimeMillis: Long) {
     Row(modifier = Modifier.padding(all = 8.dp)) {
 
         Spacer(modifier = Modifier.width(8.dp))

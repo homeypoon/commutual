@@ -4,6 +4,6 @@ import com.google.firebase.firestore.DocumentId
 
 data class Chat(
     @DocumentId val chatId: String = "",
-    val membersId: MutableList<String> = mutableListOf("df", "")
+    val membersId: MutableList<String> = mutableListOf()
 //    val timestamp: Int
 )

@@ -126,17 +126,17 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
             currentPostCollection().document(post.postId).set(post).await()
         }
 
-//    override suspend fun getMessages(chatId: String, messageId: String): Message? =
-//        currentMessageCollection(chatId).document(messageId).get().await().toObject()
+    // save user and generate an sender for the user document
+    override suspend fun saveChat(chat: Chat): String =
+        trace(SAVE_POST_TRACE) { currentChatCollection().add(chat).await().id }
 
+    override suspend fun saveMessage(message: Message, chatId: String): String =
+        trace(SAVE_POST_TRACE) { currentMessageCollection(chatId).add(message).await().id }
 
-//  override suspend fun getUser(sender: String): User? {
-//    val documents = currentUserCollection().whereArrayContains("interests", "interest").get().await()
-//    for (document in documents) {
-//
-//    }
-//  }
-
+    override suspend fun updateMessage(message: Message, chatId: String): Unit =
+        trace(UPDATE_POST_TRACE) {
+            currentMessageCollection(chatId).document(message.messageId).set(message).await()
+        }
 
     override suspend fun hasProfile(): Boolean =
         trace(UPDATE_POST_TRACE) {

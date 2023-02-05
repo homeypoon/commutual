@@ -98,6 +98,39 @@ fun DescriptionField(
 }
 
 @Composable
+fun MessageInputField(
+    @StringRes text: Int,
+    value: String,
+    onNewValue: (String) -> Unit,
+    leadingIcon: (@Composable () -> Unit),
+    trailingIcon: (@Composable () -> Unit),
+    maxLines: Int,
+    modifier: Modifier = Modifier,
+    focusManager: FocusManager
+) {
+    OutlinedTextField(
+        modifier = modifier,
+        value = value,
+        maxLines = maxLines,
+        onValueChange = { onNewValue(it) },
+        placeholder = {
+            Text(
+                stringResource(text),
+                style = MaterialTheme.typography.bodyMedium
+            )
+        },
+        leadingIcon = leadingIcon,
+        trailingIcon = trailingIcon,
+        keyboardOptions = KeyboardOptions.Default.copy(
+            keyboardType = KeyboardType.Text,
+            autoCorrect = true,
+            capitalization = KeyboardCapitalization.Sentences,
+        )
+
+    )
+}
+
+@Composable
 fun RequestMessageField(
     @StringRes text: Int,
     value: String,

@@ -130,7 +130,6 @@ private fun RequestMatchButton(openScreen: (String) -> Unit, viewModel: PostDeta
                 DialogConfirmButton(R.string.request_match) {
                     showRequestMatchCard = false
                     focusManager.clearFocus()
-                    viewModel.resetRequestMessage()
                     viewModel.onRequestMatchClick(openScreen)
                 }
             },

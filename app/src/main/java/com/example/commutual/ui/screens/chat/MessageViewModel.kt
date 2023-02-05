@@ -1,9 +1,10 @@
 package com.example.commutual.ui.screens.chat
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
-import com.example.commutual.EDIT_POST_SCREEN
-import com.example.commutual.POST_DEFAULT_ID
+import androidx.compose.ui.focus.FocusManager
 import com.example.commutual.model.Message
+import com.example.commutual.model.User
 import com.example.commutual.model.service.AccountService
 import com.example.commutual.model.service.LogService
 import com.example.commutual.model.service.StorageService
@@ -20,82 +21,62 @@ class MessageViewModel @Inject constructor(
 
     ) : CommutualViewModel(logService = logService) {
     val message = mutableStateOf(Message())
-    private var uiState = mutableStateOf(MessageUiState())
+    val sender = mutableStateOf(User())
+
+    var uiState = mutableStateOf(MessageUiState())
         private set
 
-    private val text
+    private val messageText
         get() = uiState.value.messageText
+
+
+    fun getSender() {
+        launchCatching {
+            sender.value = storageService.getUser(accountService.currentUserId) ?: User()
+        }
+    }
 
 //    lateinit var messages: Flow<List<Message>>
     fun getMessages(chatId: String): Flow<List<Message>>  {
          return storageService.getMessages(chatId)
      }
 
-
-    // Navigate to EditPost Screen when user clicks on FAB
-    fun onAddClick(openScreen: (String) -> Unit) = openScreen(EDIT_POST_SCREEN)
-
-    fun initialize(chatId: String) {
-        launchCatching {
-            if (chatId != POST_DEFAULT_ID) {
-//                message.value = storageService.getPost(chatId.idFromParameter()) ?: Post()
-                uiState.value = uiState.value.copy(
-                    messageText = message.value.text
-                )
-//                messages = storageService.getMessages(chatId)
-            }
-        }
+    fun resetMessageText() {
+        uiState.value = uiState.value.copy(messageText = "")
     }
 
-    fun onTextChange(newValue: String) {
+    fun onMessageTextChange(newValue: String) {
         message.value = message.value.copy(text = newValue)
         uiState.value = uiState.value.copy(messageText = newValue)
     }
 
+    fun onSendClick(chatId: String, focusManager: FocusManager) {
 
-//    fun onDoneClick(popUpScreen: () -> Unit, focusManager: FocusManager) {
-//
-//        // Close keyboard
-//        focusManager.clearFocus()
-//
-//        if (title.isBlank()) {
-//            SnackbarManager.showMessage(R.string.empty_title_error)
-//            return
-//        }
-//
-//        if (description.isBlank()) {
-//            SnackbarManager.showMessage(R.string.empty_description_error)
-//            return
-//        }
-//
-//        post.value = post.value.copy(
-//            userId = accountService.currentUserId
-//        )
-//
-//        launchCatching {
-//            val editedPost = post.value
-//            if (editedPost.postId.isBlank()) {
-//                storageService.savePost(editedPost)
-//            } else {
-//                storageService.updatePost(editedPost)
-//            }
-//            popUpScreen()
-//        }
-//    }
+        Log.d("Messageviewmodel", "messagechatid$chatId")
 
-//
-//        post.value = post.value.copy(
-//            sender = accountService.currentUserId)
-//        post.value = post.value.copy(postId = postId)
-//
-//        launchCatching {
-//            val editedPost = post.value
-//            if (editedPost.postId.isBlank()) {
-//                storageService.savePost(editedPost)
-//            } else {
-//                storageService.updatePost(editedPost)
-//            }
-//            popUpScreen()
-//        }
+        // Close keyboard
+        focusManager.clearFocus()
+
+        // If the user didn't input text for the message, don't save or send the message
+        if (messageText.isBlank()) {
+            return
+        }
+
+        message.value = message.value.copy(
+            senderId = accountService.currentUserId
+        )
+
+        launchCatching {
+            val editedMessage = message.value
+            if (editedMessage.messageId.isBlank()) {
+                storageService.saveMessage(editedMessage, chatId)
+                Log.d("Messageviewmodel", "messagechatid$chatId")
+            } else {
+                storageService.updateMessage(editedMessage, chatId)
+            }
+        }
+        resetMessageText()
+    }
+
 
 }

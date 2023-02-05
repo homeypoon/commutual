@@ -43,22 +43,44 @@ fun CommutualApp() {
 
         // Control bottomNav visibility
         when (navBackStackEntry?.destination?.route) {
-            EDIT_POST_SCREEN -> {
+
+            HOME_SCREEN -> {
                 bottomNavState.value = true
             }
-            HOME_SCREEN -> {
+            EXPLORE_SCREEN -> {
+                bottomNavState.value = true
+            }
+            CHAT_SCREEN -> {
                 bottomNavState.value = true
             }
             PROFILE_SCREEN -> {
                 bottomNavState.value = true
             }
+            SETTINGS_SCREEN -> {
+                bottomNavState.value = true
+            }
             SPLASH_SCREEN -> {
+                bottomNavState.value = false
+            }
+            EDIT_PROFILE_SCREEN -> {
                 bottomNavState.value = false
             }
             PROFILE_POST_SCREEN -> {
                 bottomNavState.value = false
             }
-            POSTS_SCREEN -> {
+            LOGIN_SCREEN -> {
+                bottomNavState.value = false
+            }
+            SIGN_UP_SCREEN -> {
+                bottomNavState.value = false
+            }
+            "$EDIT_POST_SCREEN$POST_ID_ARG" -> {
+                bottomNavState.value = false
+            }
+            "$POST_DETAILS_SCREEN$POST_ID_ARG" -> {
+                bottomNavState.value = false
+            }
+            "$MESSAGES_SCREEN$CHAT_ID_ARG" -> {
                 bottomNavState.value = false
             }
         }
@@ -159,6 +181,11 @@ fun NavGraphBuilder.commutualGraph(appState: CommutualAppState) {
         )
     }
 
+    composable(CHAT_SCREEN) {
+        ChatScreen(
+            openScreen = { route -> appState.navigate(route) })
+    }
+
     composable(
         route = "$MESSAGES_SCREEN$CHAT_ID_ARG",
         arguments = listOf(navArgument(CHAT_ID) { defaultValue = CHAT_DEFAULT_ID })
@@ -187,10 +214,6 @@ fun NavGraphBuilder.commutualGraph(appState: CommutualAppState) {
             openScreen = { route -> appState.navigate(route) })
     }
 
-    composable(CHAT_SCREEN) {
-        ChatScreen(
-            openScreen = { route -> appState.navigate(route) })
-    }
 
     composable(PROFILE_SCREEN) {
         ProfileScreen(

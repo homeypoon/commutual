@@ -34,7 +34,7 @@ class ChatViewModel @Inject constructor(
   val chats = storageService.chats
 
   fun onChatClick(openScreen: (String) -> Unit, chat: Chat) {
-    openScreen("$MESSAGES_SCREEN?$CHAT_ID={${chat.chatId}}")
+    openScreen("$MESSAGES_SCREEN?$CHAT_ID=${chat.chatId}")
   }
 
 }

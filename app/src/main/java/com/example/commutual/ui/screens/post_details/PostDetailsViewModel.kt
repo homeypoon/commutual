@@ -16,12 +16,13 @@ limitations under the License.
 
 package com.example.commutual.ui.screens.post_details
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
-import com.example.commutual.HOME_SCREEN
+import com.example.commutual.CHAT_ID
+import com.example.commutual.MESSAGES_SCREEN
 import com.example.commutual.POST_DEFAULT_ID
-import com.example.commutual.POST_ID
-import com.example.commutual.PROFILE_POST_SCREEN
 import com.example.commutual.common.ext.idFromParameter
+import com.example.commutual.model.Chat
 import com.example.commutual.model.Post
 import com.example.commutual.model.User
 import com.example.commutual.model.service.AccountService
@@ -33,52 +34,68 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PostDetailsViewModel @Inject constructor(
-  logService: LogService,
-  private val storageService: StorageService,
-  private val accountService: AccountService
+    logService: LogService,
+    private val storageService: StorageService,
+    private val accountService: AccountService
 ) : CommutualViewModel(logService) {
 
-  val post = mutableStateOf(Post())
-  val user = mutableStateOf(User())
+    val post = mutableStateOf(Post())
+    val user = mutableStateOf(User())
+    val chat = mutableStateOf(Chat())
 
-  var uiState = mutableStateOf(PostDetailsUiState())
-    private set
+    var uiState = mutableStateOf(PostDetailsUiState())
+        private set
 
-  private val requestMessage
-    get() = uiState.value.requestMessage
+    private val requestMessage
+        get() = uiState.value.requestMessage
 
-  fun initialize(postId: String) {
-    launchCatching {
-      if (postId != POST_DEFAULT_ID) {
-        post.value = storageService.getPost(postId.idFromParameter()) ?: Post()
+    fun initialize(postId: String) {
+        launchCatching {
+            if (postId != POST_DEFAULT_ID) {
+                post.value = storageService.getPost(postId.idFromParameter()) ?: Post()
 
-        val postUser = storageService.getUser(post.value.userId)
-        if (postUser != null) {
-          user.value = postUser
-        } else {
-          // Handle the case where there is no user
+                val postUser = storageService.getUser(post.value.userId)
+                if (postUser != null) {
+                    user.value = postUser
+                } else {
+                    // Handle the case where there is no user
+                }
+            }
         }
-      }
     }
-  }
 
-  fun resetRequestMessage() {
-    uiState.value = uiState.value.copy(requestMessage = "")
-  }
+    fun resetRequestMessage() {
+        uiState.value = uiState.value.copy(requestMessage = "")
+    }
 
-  fun onRequestMessageChange(newValue: String) {
-    uiState.value = uiState.value.copy(requestMessage = newValue)
-  }
-
-
-  fun onRequestMatchClick(openScreen: (String) -> Unit) {
-      // Open chat
-      openScreen(HOME_SCREEN)
-  }
+    fun onRequestMessageChange(newValue: String) {
+        uiState.value = uiState.value.copy(requestMessage = newValue)
+    }
 
 
-  fun onPostClick(openScreen: (String) -> Unit, post: Post) {
-    openScreen("$PROFILE_POST_SCREEN?$POST_ID={${post.postId}}")
-  }
+    fun onRequestMatchClick(openScreen: (String) -> Unit) {
+        // Open chat
+
+        chat.value = chat.value.copy(
+            membersId = mutableListOf(accountService.currentUserId, post.value.userId)
+        )
+
+//        if (!storageService.checkContacts(accountService.currentUserId,post.value.userId)) {
+//
+//        }
+
+        var chatId: String = ""
+        launchCatching {
+            chatId = storageService.saveChat(chat.value)
+            openScreen("$MESSAGES_SCREEN?$CHAT_ID=$chatId")
+            Log.v("Postdetails", "chatid: $chatId")
+        }
+        resetRequestMessage()
+    }
+
+
+    fun onPostClick(openScreen: (String) -> Unit, chat: Chat) {
+        openScreen("$MESSAGES_SCREEN?$CHAT_ID={${chat.chatId}}")
+    }
 
 }

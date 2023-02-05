@@ -47,7 +47,7 @@ val Typography = Typography(
      bodyMedium = TextStyle(
         fontFamily = OpenSans,
         fontWeight = FontWeight.Normal,
-        fontSize = 14.sp
+        fontSize = 16.sp
     ),
     // Username, caption
     labelLarge = TextStyle(

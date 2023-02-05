@@ -37,7 +37,7 @@ interface StorageService {
 //  suspend fun getMessages(chatId: String, messageId: String): Message?
 
   // User methods
-  suspend fun saveUser(userId: String, user: User): Unit
+  suspend fun saveUser(userId: String, user: User)
   suspend fun updateUser(user: User)
   suspend fun deleteAllForUser(userId: String)
 
@@ -45,6 +45,11 @@ interface StorageService {
   suspend fun savePost(post: Post): String
   suspend fun updatePost(post: Post)
   suspend fun deletePost(postId: String)
+
+  suspend fun saveChat(chat: Chat): String
+
+  suspend fun saveMessage(message: Message, chatId: String): String
+  suspend fun updateMessage(message: Message, chatId: String)
 
   // return list of filtered posts based on interest
   suspend fun filteredPosts(interest: String): Flow<List<Post>>

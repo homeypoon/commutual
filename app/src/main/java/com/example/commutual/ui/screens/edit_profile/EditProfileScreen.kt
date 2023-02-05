@@ -48,7 +48,6 @@ fun EditProfileScreen(
     var uns by rememberSaveable{ mutableStateOf("") } // Use 'by' to treat this state as a regular variable
 
 
-
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -88,7 +87,6 @@ fun EditProfileScreen(
             KeyboardCapitalization.Sentences,
             focusManager
         )
-
 
     }
 }

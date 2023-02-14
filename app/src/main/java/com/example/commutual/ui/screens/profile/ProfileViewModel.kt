@@ -42,17 +42,15 @@ class ProfileViewModel @Inject constructor(
   val userPosts = storageService.userPosts
   val user = mutableStateOf(User())
 
-  fun onEditProfileClick(openScreen: (String) -> Unit) {
-    openScreen(EDIT_PROFILE_SCREEN)
-  }
-
-
   fun initialize() {
     launchCatching {
         user.value = storageService.getUser(accountService.currentUserId) ?: User()
     }
   }
 
+  fun onEditProfileClick(openScreen: (String) -> Unit) {
+    openScreen(EDIT_PROFILE_SCREEN)
+  }
 
   fun onPostClick(openScreen: (String) -> Unit, post: Post) {
     openScreen("$PROFILE_POST_SCREEN?$POST_ID={${post.postId}}")

@@ -26,14 +26,15 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Surface
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.commutual.R
 import com.example.commutual.common.composable.BasicToolbar
+import com.example.commutual.model.User
 import com.example.commutual.ui.screens.item.ChatItem
+
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
@@ -44,30 +45,56 @@ fun ChatScreen(
     viewModel: ChatViewModel = hiltViewModel()
 ) {
 
-    val scrollState = rememberScrollState()
 
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .fillMaxHeight()
-        .verticalScroll(scrollState)) {
+
+    val scrollState = rememberScrollState()
+//    val chats = viewModel.chats.collectAsStateWithLifecycle(emptyList())
+    val chatsWithUsers by viewModel.chatsWithUsers.collectAsState(emptyList())
+
+
+    var currentPartner by remember { mutableStateOf<User?>(value = null) }
+    val coroutineScope = rememberCoroutineScope()
+    val chatPartners = mutableMapOf<String, User>()
+
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight()
+            .verticalScroll(scrollState)
+    ) {
         BasicToolbar(title = R.string.chat)
 
-        val chats = viewModel.chats.collectAsStateWithLifecycle(emptyList())
         LazyColumn(
             Modifier
                 .fillMaxWidth()
                 .weight(1f, true)
         ) {
-            items(chats.value) { chat ->
+            items(chatsWithUsers) { (chat, user) ->
                 Surface(modifier = Modifier.clickable {
                     viewModel.onChatClick(openScreen, chat)
                 }) {
-                    ChatItem(
-                        chat = chat
-                    )
+                    ChatItem(chat = chat, user = user)
                 }
             }
-        }
+//            items(chats.value, key = { it.chatId }) { chat ->
+////                val partner = viewModel.getPartner(chat.partnerId)
+//
+//
+//                Surface(modifier = Modifier.clickable {
+//                    viewModel.onChatClick(openScreen, chat)
+//                }) {
+//
+//
+//                    ChatItem(
+//                        chat = chat,
+//                        user = user
+//                    )
+//
+//                }
+//
+//            }
 
+        }
     }
 }

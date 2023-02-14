@@ -6,23 +6,27 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import com.example.commutual.model.Chat
+import com.example.commutual.model.User
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ChatItem(chat: Chat) {
+fun ChatItem(
+    chat: Chat,
+    user: User
+) {
 
     ListItem(
         headlineText = {
             Text(
-                chat.chatId,
+                user.username,
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
         },
         supportingText = {
             Text(
-                chat.membersId[0],
+                chat.chatId,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )

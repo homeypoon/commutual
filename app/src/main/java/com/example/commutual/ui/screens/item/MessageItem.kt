@@ -31,8 +31,6 @@ fun MessageItem(
                 style = MaterialTheme.typography.titleMedium
             )
 
-
-
             Spacer(modifier = Modifier.height(4.dp))
 
             Surface(

@@ -57,8 +57,6 @@ class PostDetailsViewModel @Inject constructor(
                 val postUser = storageService.getUser(post.value.userId)
                 if (postUser != null) {
                     user.value = postUser
-                } else {
-                    // Handle the case where there is no user
                 }
             }
         }
@@ -76,14 +74,16 @@ class PostDetailsViewModel @Inject constructor(
     fun onRequestMatchClick(openScreen: (String) -> Unit) {
         // Open chat
 
+        val membersId = mutableListOf(accountService.currentUserId, post.value.userId)
+
         chat.value = chat.value.copy(
-            membersId = mutableListOf(accountService.currentUserId, post.value.userId)
+            membersId = membersId,
+            partnerId = membersId.first { it != accountService.currentUserId }
         )
 
 //        if (!storageService.checkContacts(accountService.currentUserId,post.value.userId)) {
 //
 //        }
-
         var chatId: String = ""
         launchCatching {
             chatId = storageService.saveChat(chat.value)
@@ -92,10 +92,4 @@ class PostDetailsViewModel @Inject constructor(
         }
         resetRequestMessage()
     }
-
-
-    fun onPostClick(openScreen: (String) -> Unit, chat: Chat) {
-        openScreen("$MESSAGES_SCREEN?$CHAT_ID={${chat.chatId}}")
-    }
-
 }

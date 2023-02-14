@@ -66,6 +66,33 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
                     .map { snapshot -> snapshot.toObjects() }
             }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override val chatsWithUsers: Flow<List<Pair<Chat, User>>> // Return a flow of Chat-User pairs
+        get() = auth.currentUser.flatMapLatest {
+            currentChatCollection().whereArrayContains(MEMBERS_ID_FIELD, auth.currentUserId).snapshots()
+                .map { snapshot ->
+                    snapshot.toObjects<Chat>().map { chat ->
+                        val otherUserId = chat.membersId.first { it != auth.currentUserId } // Get the ID of the other user
+                        val otherUser = getUserById(otherUserId) // Get the User object using the ID
+                        chat to otherUser // Return a Pair of Chat and User objects
+                    }
+                }
+        }
+
+    private suspend fun getUserById(userId: String): User {
+        val userDoc = currentUserCollection().document(userId).get().await()
+        return userDoc.toObject<User>() ?: throw IllegalStateException("User $userId not found")
+    }
+
+//    @OptIn(ExperimentalCoroutinesApi::class)
+//    override suspend fun getSenders(chatId: String): Flow<List<Message>> {
+//        chats.collect { chats.}
+//
+//        return auth.currentUser.flatMapLatest {
+//            currentMessageCollection(chatId)
+//                .snapshots().map { snapshot -> snapshot.toObjects() }
+//        }
+//    }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun getMessages(chatId: String): Flow<List<Message>> {
@@ -75,13 +102,7 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
         }
     }
 
-//    @OptIn(ExperimentalCoroutinesApi::class)
-//    override val messages: Flow<List<Message>>
-//        get() =
-//            auth.currentUser.flatMapLatest {
-//                currentMessageCollection(chatId).whereArrayContains(MEMBERS_ID_FIELD, auth.currentUserId).snapshots()
-//                    .map { snapshot -> snapshot.toObjects() }
-//            }
+
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun filteredPosts(interest: String): Flow<List<Post>> {
@@ -96,14 +117,14 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
 //    currentMessageCollection(chatId).document(messageId).get().await().toObject()
 
 
-
-
     override suspend fun deletePost(postId: String) {
         currentPostCollection().document(postId).delete().await()
     }
 
     override suspend fun getUser(userId: String): User? =
         currentUserCollection().document(userId).get().await().toObject()
+
+
 
     // save user and generate an sender for the user document
     override suspend fun saveUser(userId: String, user: User): Unit =

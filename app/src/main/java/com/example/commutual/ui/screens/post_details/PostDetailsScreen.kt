@@ -27,13 +27,17 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.commutual.R
-import com.example.commutual.common.composable.*
+import com.example.commutual.common.composable.BasicButton
+import com.example.commutual.common.composable.BasicToolbar
+import com.example.commutual.common.composable.DialogCancelButton
+import com.example.commutual.common.composable.DialogConfirmButton
 import com.example.commutual.common.ext.basicButton
+import com.example.commutual.model.User
 
 @Composable
 @ExperimentalMaterialApi
@@ -75,7 +79,7 @@ fun PostDetailsScreen(
         )
 
         RequestMatchButton (
-            openScreen, viewModel)
+            openScreen, viewModel, user)
 //        {
 //            viewModel.onRequestMatchClick(openScreen)
 //        }
@@ -87,14 +91,14 @@ fun PostDetailsScreen(
 @Composable
 //private fun com.example.commutual.ui.screens.post_details.RequestMatchButton(onRequestMessageChange: (String) -> Unit, viewModel: PostDetailsViewModel) {
 
-private fun RequestMatchButton(openScreen: (String) -> Unit, viewModel: PostDetailsViewModel) {
+private fun RequestMatchButton(openScreen: (String) -> Unit, viewModel: PostDetailsViewModel, user: User) {
     var showRequestMatchCard by remember { mutableStateOf(false) }
     val text = remember { mutableStateOf("") }
     val focusManager = LocalFocusManager.current
     val uiState by viewModel.uiState
 
     BasicButton(
-        R.string.request_match,
+        R.string.start_chatting,
         Modifier.basicButton()
     ) { showRequestMatchCard = true }
 
@@ -102,24 +106,29 @@ private fun RequestMatchButton(openScreen: (String) -> Unit, viewModel: PostDeta
     if (showRequestMatchCard) {
 
         androidx.compose.material3.AlertDialog(
-            text = {
-                Column(Modifier.fillMaxSize()) {
-                    Text(text = stringResource(id = R.string.request_match),
+//            text = {
+//                Column(Modifier.fillMaxSize()) {
+//                    Text(text = stringResource(R.string.start_chatting_with, user.username),
+//                        overflow = TextOverflow.Ellipsis,
+//                        style = MaterialTheme.typography.titleMedium,
+//                        modifier = Modifier.padding(4.dp, 20.dp))
+//                    DescriptionField(
+//                        R.string.first_message,
+//                        uiState.requestMessage,
+//                        viewModel::onRequestMessageChange ,
+//                        Modifier
+//                            .padding(2.dp, 8.dp)
+//                            .weight(1f)
+//                            .wrapContentHeight(),
+//                        KeyboardCapitalization.Sentences,
+//                        focusManager
+//                    )
+//                }
+//            },
+            text = { Text(text = stringResource(R.string.start_chatting_with, user.username),
+                        overflow = TextOverflow.Ellipsis,
                         style = MaterialTheme.typography.titleMedium,
-                        modifier = Modifier.padding(4.dp, 20.dp))
-                    DescriptionField(
-                        R.string.request_match_message,
-                        uiState.requestMessage,
-                        viewModel::onRequestMessageChange ,
-                        Modifier
-                            .padding(2.dp, 8.dp)
-                            .weight(1f)
-                            .wrapContentHeight(),
-                        KeyboardCapitalization.Sentences,
-                        focusManager
-                    )
-                }
-            },
+                        modifier = Modifier.padding(4.dp, 20.dp)) },
             dismissButton = {
                 DialogCancelButton(R.string.cancel) {
                     showRequestMatchCard = false
@@ -127,7 +136,7 @@ private fun RequestMatchButton(openScreen: (String) -> Unit, viewModel: PostDeta
                 }
             },
             confirmButton = {
-                DialogConfirmButton(R.string.request_match) {
+                DialogConfirmButton(R.string.start_chatting) {
                     showRequestMatchCard = false
                     focusManager.clearFocus()
                     viewModel.onRequestMatchClick(openScreen)

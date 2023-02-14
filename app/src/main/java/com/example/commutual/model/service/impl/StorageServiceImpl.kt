@@ -66,6 +66,9 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
                     .map { snapshot -> snapshot.toObjects() }
             }
 
+    override suspend fun getChat(chatId: String): Chat? =
+        currentUserCollection().document(chatId).get().await().toObject()
+
     @OptIn(ExperimentalCoroutinesApi::class)
     override val chatsWithUsers: Flow<List<Pair<Chat, User>>> // Return a flow of Chat-User pairs
         get() = auth.currentUser.flatMapLatest {
@@ -82,6 +85,20 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
     private suspend fun getUserById(userId: String): User {
         val userDoc = currentUserCollection().document(userId).get().await()
         return userDoc.toObject<User>() ?: throw IllegalStateException("User $userId not found")
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun getMessagesWithUsers(chatId: String): Flow<List<Pair<Message, User>>>  {
+        return auth.currentUser.flatMapLatest {
+            currentMessageCollection(chatId).snapshots()
+                .map { snapshot ->
+                    snapshot.toObjects<Message>().map { message ->
+
+                        val otherUserId = message.senderId // Get the ID of the other user
+                        val sender = getUserById(message.senderId) // Get the User object using the ID
+                        message to sender // Return a Pair of Chat and User objects
+                    }
+                }}
     }
 
 //    @OptIn(ExperimentalCoroutinesApi::class)

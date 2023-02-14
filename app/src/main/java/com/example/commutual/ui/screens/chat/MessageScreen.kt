@@ -18,11 +18,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.commutual.R
 import com.example.commutual.common.composable.BasicToolbar
 import com.example.commutual.common.composable.MessageInputField
-import com.example.commutual.model.Message
 import com.example.commutual.ui.screens.item.MessageItem
 import java.util.*
 import com.example.commutual.R.string as AppText
@@ -37,13 +35,15 @@ fun MessagesScreen(
 ) {
 
 //    val messages = remember { mutableStateListOf<Message>() }
-    LaunchedEffect(Unit) { viewModel.getSender() }
+    LaunchedEffect(Unit) { viewModel.getSender(chatId) }
 
     val sdf = remember { SimpleDateFormat("hh:mm", Locale.ROOT) }
     val focusManager = LocalFocusManager.current
     val uiState by viewModel.uiState
 
-    val messages = viewModel.getMessages(chatId).collectAsStateWithLifecycle(emptyList())
+    val messages by viewModel.getMessagesWithUsers(chatId).collectAsState(emptyList())
+
+//    val messages = viewModel.getMessages(chatId).collectAsStateWithLifecycle(emptyList())
     Log.d("Messageviewmodel", "messagescreenchatid$chatId")
 
 //    val messages = listOf<Message>(Message("s", "hi i'm s"), Message("s", "cool want to be my study buddy??"), Message("x", "hi i'm fdjskfdskjfkldsjlfjdsjdfskljflksjfdkljlkfsdkfjdskljflksdjkldfsjlkdfjlkjdslkjfdjslkfjdslkjfdlskdslkjfldsjdsljklfdsjlkdsdjslkjdsflk3"))
@@ -71,8 +71,8 @@ fun MessagesScreen(
             state = scrollState,
             contentPadding = PaddingValues(top = 8.dp, bottom = 8.dp)
         ) {
-            items(messages.value, key = { it.messageId }) { message: Message ->
-                MessageItem(viewModel.sender, message, System.currentTimeMillis())
+            items(messages) { (message, user) ->
+                MessageItem(message, user, System.currentTimeMillis())
             }
         }
 

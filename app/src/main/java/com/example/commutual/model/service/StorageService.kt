@@ -30,6 +30,8 @@ interface StorageService {
 //  fun getSender(chatId: String): Flow<List<Message>>
 
   val chatsWithUsers: Flow<List<Pair<Chat, User>>>
+  fun getMessagesWithUsers(chatId: String): Flow<List<Pair<Message, User>>>
+
 
 
 
@@ -38,6 +40,10 @@ interface StorageService {
   // Getter methods
   suspend fun getPost(postId: String): Post?
   suspend fun getUser(userId: String): User?
+  suspend fun getChat(chatId: String): Chat?
+  suspend fun getMessage(chatId: String): Chat?
+
+
 
 //  suspend fun getMessages(chatId: String, messageId: String): Message?
 

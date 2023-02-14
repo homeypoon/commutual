@@ -6,7 +6,6 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -15,8 +14,8 @@ import com.example.commutual.model.User
 
 @Composable
 fun MessageItem(
-    sender: MutableState<User>,
     message: Message,
+    sender: User,
     currentTimeMillis: Long
 ) {
     Row(modifier = Modifier.padding(all = 8.dp)) {
@@ -26,7 +25,7 @@ fun MessageItem(
         Column() {
 
             Text(
-                text = sender.value.username,
+                text = sender.username,
                 color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.titleMedium
             )

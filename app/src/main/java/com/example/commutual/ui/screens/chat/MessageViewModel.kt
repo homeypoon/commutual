@@ -3,6 +3,7 @@ package com.example.commutual.ui.screens.chat
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.focus.FocusManager
+import com.example.commutual.model.Chat
 import com.example.commutual.model.Message
 import com.example.commutual.model.User
 import com.example.commutual.model.service.AccountService
@@ -22,6 +23,15 @@ class MessageViewModel @Inject constructor(
     ) : CommutualViewModel(logService = logService) {
     val message = mutableStateOf(Message())
     val sender = mutableStateOf(User())
+    val chat = mutableStateOf(Chat())
+
+
+
+    fun getMessagesWithUsers(chatId: String): Flow<List<Pair<Message, User>>> {
+        return storageService.getMessagesWithUsers(chatId)
+    }
+
+
 
     var uiState = mutableStateOf(MessageUiState())
         private set
@@ -30,10 +40,11 @@ class MessageViewModel @Inject constructor(
         get() = uiState.value.messageText
 
 
-    fun getSender() {
-        launchCatching {
-            sender.value = storageService.getUser(accountService.currentUserId) ?: User()
-        }
+    fun getSender(chatId: String) {
+//        launchCatching {
+//            chat.value = storageService.getChat(chatId) ?: Chat()
+//            sender.value = storageService.getUser(chat.value.partnerId) ?: User()
+//        }
     }
 
 //    lateinit var messages: Flow<List<Message>>

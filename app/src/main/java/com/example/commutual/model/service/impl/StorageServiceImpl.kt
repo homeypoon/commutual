@@ -23,8 +23,10 @@ import com.example.commutual.model.User
 import com.example.commutual.model.service.AccountService
 import com.example.commutual.model.service.StorageService
 import com.example.commutual.model.service.trace
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.snapshots
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.firestore.ktx.toObjects
@@ -47,7 +49,11 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
     override val posts: Flow<List<Post>>
         get() =
             auth.currentUser.flatMapLatest {
-                currentPostCollection().snapshots().map { snapshot -> snapshot.toObjects() }
+                currentPostCollection().snapshots()
+                    .map { snapshot ->
+                        snapshot.toObjects<Post>()
+                            .filter { it.userId != auth.currentUserId }
+                    }
             }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -62,20 +68,26 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
     override val chats: Flow<List<Chat>>
         get() =
             auth.currentUser.flatMapLatest {
-                currentChatCollection().whereArrayContains(MEMBERS_ID_FIELD, auth.currentUserId).snapshots()
+                currentChatCollection().whereArrayContains(MEMBERS_ID_FIELD, auth.currentUserId)
+                    .snapshots()
                     .map { snapshot -> snapshot.toObjects() }
             }
 
     override suspend fun getChat(chatId: String): Chat? =
-        currentUserCollection().document(chatId).get().await().toObject()
+        currentChatCollection().document(chatId).get().await().toObject()
+
+    override suspend fun getPartner(membersId: MutableList<String>): User? =
+        getUser(membersId.first { it != auth.currentUserId })
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override val chatsWithUsers: Flow<List<Pair<Chat, User>>> // Return a flow of Chat-User pairs
         get() = auth.currentUser.flatMapLatest {
-            currentChatCollection().whereArrayContains(MEMBERS_ID_FIELD, auth.currentUserId).snapshots()
+            currentChatCollection().whereArrayContains(MEMBERS_ID_FIELD, auth.currentUserId)
+                .snapshots()
                 .map { snapshot ->
                     snapshot.toObjects<Chat>().map { chat ->
-                        val otherUserId = chat.membersId.first { it != auth.currentUserId } // Get the ID of the other user
+                        val otherUserId =
+                            chat.membersId.first { it != auth.currentUserId } // Get the ID of the other user
                         val otherUser = getUserById(otherUserId) // Get the User object using the ID
                         chat to otherUser // Return a Pair of Chat and User objects
                     }
@@ -88,37 +100,19 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun getMessagesWithUsers(chatId: String): Flow<List<Pair<Message, User>>>  {
+    override fun getMessagesWithUsers(chatId: String): Flow<List<Pair<Message, User>>> {
         return auth.currentUser.flatMapLatest {
-            currentMessageCollection(chatId).snapshots()
+            currentMessageCollection(chatId).orderBy(TIMESTAMP_FIELD, Query.Direction.ASCENDING).snapshots()
                 .map { snapshot ->
                     snapshot.toObjects<Message>().map { message ->
-
-                        val otherUserId = message.senderId // Get the ID of the other user
-                        val sender = getUserById(message.senderId) // Get the User object using the ID
+                        val sender =
+                            getUserById(message.senderId) // Get the User object using the sender's id
                         message to sender // Return a Pair of Chat and User objects
                     }
-                }}
-    }
-
-//    @OptIn(ExperimentalCoroutinesApi::class)
-//    override suspend fun getSenders(chatId: String): Flow<List<Message>> {
-//        chats.collect { chats.}
-//
-//        return auth.currentUser.flatMapLatest {
-//            currentMessageCollection(chatId)
-//                .snapshots().map { snapshot -> snapshot.toObjects() }
-//        }
-//    }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    override fun getMessages(chatId: String): Flow<List<Message>> {
-        return auth.currentUser.flatMapLatest {
-            currentMessageCollection(chatId)
-                .snapshots().map { snapshot -> snapshot.toObjects() }
+                }
         }
     }
-
+//    }
 
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -130,7 +124,6 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
     }
 
 
-
 //    currentMessageCollection(chatId).document(messageId).get().await().toObject()
 
 
@@ -140,7 +133,6 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
 
     override suspend fun getUser(userId: String): User? =
         currentUserCollection().document(userId).get().await().toObject()
-
 
 
     // save user and generate an sender for the user document
@@ -169,7 +161,8 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
         trace(SAVE_POST_TRACE) { currentChatCollection().add(chat).await().id }
 
     override suspend fun saveMessage(message: Message, chatId: String): String =
-        trace(SAVE_POST_TRACE) { currentMessageCollection(chatId).add(message).await().id }
+        trace(SAVE_POST_TRACE) { currentMessageCollection(chatId).add(message.copy(timestamp = Timestamp.now())).await().id }
+
 
     override suspend fun updateMessage(message: Message, chatId: String): Unit =
         trace(UPDATE_POST_TRACE) {
@@ -213,6 +206,7 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
 
         private const val INTERESTS_FIELD = "interests"
         private const val MEMBERS_ID_FIELD = "membersId"
+        private const val TIMESTAMP_FIELD = "timestamp"
 
         private const val CHAT_COLLECTION = "chats"
 

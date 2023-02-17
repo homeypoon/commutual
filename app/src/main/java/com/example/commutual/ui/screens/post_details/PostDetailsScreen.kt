@@ -60,7 +60,7 @@ fun PostDetailsScreen(
             .fillMaxHeight()
             .verticalScroll(scrollState)
     ) {
-        BasicToolbar(title = R.string.explore)
+        BasicToolbar(title = stringResource(R.string.explore))
 
         CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
             Text(

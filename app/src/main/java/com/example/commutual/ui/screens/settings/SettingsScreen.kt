@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import com.example.commutual.R
 import com.example.commutual.common.composable.*
 import com.example.commutual.common.ext.card
 import com.example.commutual.common.ext.spacer
@@ -56,7 +57,7 @@ fun SettingsScreen(
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        BasicToolbar(AppText.settings)
+        BasicToolbar(stringResource(R.string.settings))
 
 
         Spacer(modifier = Modifier.spacer())

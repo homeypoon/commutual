@@ -10,10 +10,11 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.commutual.R
 import com.example.commutual.common.composable.BasicToolbar
-import com.example.commutual.R.string as AppText
 
 @Composable
 fun HomeScreen(
@@ -37,7 +38,7 @@ fun HomeScreen(
             modifier = modifier.padding(padding)
         ) {
             BasicToolbar(
-                title = AppText.home
+                title = stringResource(R.string.home)
             )
         }
     }

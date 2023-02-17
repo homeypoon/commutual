@@ -32,6 +32,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.commutual.R
 import com.example.commutual.common.composable.*
 import com.example.commutual.common.ext.accountText
 import com.example.commutual.common.ext.basicButton
@@ -50,7 +51,7 @@ fun SignUpScreen(
     val fieldModifier = Modifier.fieldModifier()
     val focusManager = LocalFocusManager.current
 
-    BasicToolbar(AppText.create_account)
+    BasicToolbar(stringResource(R.string.create_account))
 
     Column(
         modifier = modifier

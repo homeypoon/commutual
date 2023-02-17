@@ -22,6 +22,7 @@ import com.example.commutual.R
 import com.example.commutual.common.composable.BasicToolbar
 import com.example.commutual.common.composable.MessageInputField
 import com.example.commutual.ui.screens.item.MessageItem
+import kotlinx.coroutines.launch
 import java.util.*
 import com.example.commutual.R.string as AppText
 
@@ -35,18 +36,22 @@ fun MessagesScreen(
 ) {
 
 //    val messages = remember { mutableStateListOf<Message>() }
-    LaunchedEffect(Unit) { viewModel.getSender(chatId) }
+    LaunchedEffect(Unit) {
+        viewModel.getSender(chatId)
+    }
 
+    val scrollState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
     val sdf = remember { SimpleDateFormat("hh:mm", Locale.ROOT) }
     val focusManager = LocalFocusManager.current
     val uiState by viewModel.uiState
 
     val messages by viewModel.getMessagesWithUsers(chatId).collectAsState(emptyList())
-
-//    val messages = viewModel.getMessages(chatId).collectAsStateWithLifecycle(emptyList())
-    Log.d("Messageviewmodel", "messagescreenchatid$chatId")
-
-//    val messages = listOf<Message>(Message("s", "hi i'm s"), Message("s", "cool want to be my study buddy??"), Message("x", "hi i'm fdjskfdskjfkldsjlfjdsjdfskljflksjfdkljlkfsdkfjdskljflksdjkldfsjlkdfjlkjdslkjfdjslkfjdslkjfdlskdslkjfldsjdsljklfdsjlkdsdjslkjdsflk3"))
+    LaunchedEffect(messages) {
+        if (messages.isNotEmpty()) {
+        scrollState.animateScrollToItem(messages.size - 1)
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -58,11 +63,9 @@ fun MessagesScreen(
             }
     ) {
         BasicToolbar(
-            title = AppText.chat
+            title = (stringResource(AppText.chat_with, uiState.partner.username))
         )
 
-        val scrollState = rememberLazyListState()
-        val coroutineScope = rememberCoroutineScope()
 
         LazyColumn(
             modifier = Modifier
@@ -72,52 +75,45 @@ fun MessagesScreen(
             contentPadding = PaddingValues(top = 8.dp, bottom = 8.dp)
         ) {
             items(messages) { (message, user) ->
-                MessageItem(message, user, System.currentTimeMillis())
+                MessageItem(message, user)
+                { timestamp -> viewModel.formatTimestamp(timestamp) }
             }
         }
 
-            MessageInputField(
-                R.string.message,
-                uiState.messageText,
-                viewModel::onMessageTextChange,
-                { Icon(
+        MessageInputField(
+            R.string.message,
+            uiState.messageText,
+            viewModel::onMessageTextChange,
+            {
+                Icon(
                     painter = painterResource(R.drawable.ic_home),
                     contentDescription = stringResource(R.string.send)
-                ) },
-                {
-                    IconButton(
-                        onClick = { viewModel.onSendClick(chatId, focusManager) },
-                        content = {
-                            Icon(
-                                painter = painterResource(R.drawable.ic_send),
-                                contentDescription = stringResource(R.string.send))
+                )
+            },
+            {
+                IconButton(
+                    onClick = {
+                        coroutineScope.launch {
+                            viewModel.onSendClick(chatId, focusManager)
+                            scrollState.animateScrollToItem(messages.size - 1)
+                            Log.v("mscreen", messages.get(messages.size - 1).first.text)
                         }
-                    )
-                },
-                4,
-                Modifier
-                    .padding(2.dp, 8.dp)
-                    .fillMaxWidth(),
-                focusManager
-            )
+                    },
+                    content = {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_send),
+                            contentDescription = stringResource(R.string.send)
+                        )
+                    }
+                )
+            },
+            4,
+            Modifier
+                .padding(2.dp, 8.dp)
+                .fillMaxWidth(),
+            focusManager
+        )
 
-
-//        ChatInput(
-//            onMessageChange = { chat ->
-//                messages.add(
-//                    ChatMessage(
-//                        (messages.size + 1).toLong(),
-//                        messageContent,
-//                        System.currentTimeMillis()
-//                    )
-//                )
-//
-//                coroutineScope.launch {
-//                    scrollState.animateScrollToItem(messages.size - 1)
-//                }
-//
-//            }
-//        )
     }
 
 }

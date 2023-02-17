@@ -30,6 +30,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.commutual.R
 import com.example.commutual.common.composable.*
 import com.example.commutual.common.ext.accountText
 import com.example.commutual.common.ext.basicButton
@@ -46,7 +47,7 @@ fun LoginScreen(
     val uiState by viewModel.uiState
     val focusManager = LocalFocusManager.current
 
-    BasicToolbar(AppText.log_in)
+    BasicToolbar(title = stringResource(R.string.log_in))
 
     Column(
         modifier = modifier

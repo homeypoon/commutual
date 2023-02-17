@@ -33,9 +33,9 @@ import androidx.compose.ui.text.style.TextOverflow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BasicToolbar(@StringRes title: Int) {
+fun BasicToolbar(title: String) {
   CenterAlignedTopAppBar(title = { Text(
-    stringResource(title),
+    title,
     color = MaterialTheme.colorScheme.onSecondary,
     maxLines = 1,
     overflow = TextOverflow.Ellipsis,
@@ -44,6 +44,7 @@ fun BasicToolbar(@StringRes title: Int) {
       MaterialTheme.colorScheme.secondary),
   )
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -46,6 +46,7 @@
 
     <!-- Chat Screen -->
     <string name="chat">Chat</string>
+    <string name="chat_with">Chat with %1$s</string>
 
     <!-- Message Screen -->
     <string name="message">Message</string>

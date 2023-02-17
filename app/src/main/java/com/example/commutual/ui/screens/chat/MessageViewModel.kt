@@ -1,5 +1,6 @@
 package com.example.commutual.ui.screens.chat
 
+import android.icu.text.SimpleDateFormat
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.focus.FocusManager
@@ -10,9 +11,12 @@ import com.example.commutual.model.service.AccountService
 import com.example.commutual.model.service.LogService
 import com.example.commutual.model.service.StorageService
 import com.example.commutual.ui.screens.CommutualViewModel
+import com.google.firebase.Timestamp
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import java.util.*
 import javax.inject.Inject
+
 
 @HiltViewModel
 class MessageViewModel @Inject constructor(
@@ -20,18 +24,17 @@ class MessageViewModel @Inject constructor(
     private val storageService: StorageService,
     private val accountService: AccountService
 
-    ) : CommutualViewModel(logService = logService) {
+) : CommutualViewModel(logService = logService) {
     val message = mutableStateOf(Message())
     val sender = mutableStateOf(User())
+    val partnerObject = mutableStateOf(User())
+
+
     val chat = mutableStateOf(Chat())
-
-
 
     fun getMessagesWithUsers(chatId: String): Flow<List<Pair<Message, User>>> {
         return storageService.getMessagesWithUsers(chatId)
     }
-
-
 
     var uiState = mutableStateOf(MessageUiState())
         private set
@@ -39,18 +42,22 @@ class MessageViewModel @Inject constructor(
     private val messageText
         get() = uiState.value.messageText
 
+    private val partnerName
+        get() = uiState.value.partner
+
 
     fun getSender(chatId: String) {
-//        launchCatching {
-//            chat.value = storageService.getChat(chatId) ?: Chat()
-//            sender.value = storageService.getUser(chat.value.partnerId) ?: User()
-//        }
-    }
+        launchCatching {
 
-//    lateinit var messages: Flow<List<Message>>
-    fun getMessages(chatId: String): Flow<List<Message>>  {
-         return storageService.getMessages(chatId)
-     }
+            chat.value = storageService.getChat(chatId) ?: Chat()
+
+            partnerObject.value = storageService.getPartner(chat.value.membersId) ?: User()
+
+            uiState.value = uiState.value.copy(
+                partner = partnerObject.value
+            )
+        }
+    }
 
     fun resetMessageText() {
         uiState.value = uiState.value.copy(messageText = "")
@@ -61,7 +68,17 @@ class MessageViewModel @Inject constructor(
         uiState.value = uiState.value.copy(messageText = newValue)
     }
 
-    fun onSendClick(chatId: String, focusManager: FocusManager) {
+    fun formatTimestamp(timestamp: Timestamp): String {
+
+        val timeFormatter = SimpleDateFormat(
+            "HH:mm:ss d MMM yyyy",
+            Locale.getDefault()
+        )
+
+        return timeFormatter.format(timestamp.toDate())
+    }
+
+    suspend fun onSendClick(chatId: String, focusManager: FocusManager) {
 
         Log.d("Messageviewmodel", "messagechatid$chatId")
 
@@ -73,19 +90,12 @@ class MessageViewModel @Inject constructor(
             return
         }
 
-        message.value = message.value.copy(
-            senderId = accountService.currentUserId
-        )
+            val editedMessage = message.value.copy(
+                senderId = accountService.currentUserId)
+            storageService.saveMessage(editedMessage, chatId)
+            Log.d("Messageviewmodel", "messagechatid$chatId")
 
-        launchCatching {
-            val editedMessage = message.value
-            if (editedMessage.messageId.isBlank()) {
-                storageService.saveMessage(editedMessage, chatId)
-                Log.d("Messageviewmodel", "messagechatid$chatId")
-            } else {
-                storageService.updateMessage(editedMessage, chatId)
-            }
-        }
+
         resetMessageText()
     }
 

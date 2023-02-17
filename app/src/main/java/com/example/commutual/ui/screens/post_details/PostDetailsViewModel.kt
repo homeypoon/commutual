@@ -81,9 +81,6 @@ class PostDetailsViewModel @Inject constructor(
             partnerId = membersId.first { it != accountService.currentUserId }
         )
 
-//        if (!storageService.checkContacts(accountService.currentUserId,post.value.userId)) {
-//
-//        }
         var chatId: String = ""
         launchCatching {
             chatId = storageService.saveChat(chat.value)

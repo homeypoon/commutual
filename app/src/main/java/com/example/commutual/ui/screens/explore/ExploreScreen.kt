@@ -29,6 +29,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -50,7 +51,7 @@ fun ExploreScreen(
     Column(modifier = Modifier
         .fillMaxWidth()
         .fillMaxHeight().verticalScroll(scrollState)) {
-        BasicToolbar(title = R.string.explore)
+        BasicToolbar(title = stringResource(R.string.explore))
 
         val posts = viewModel.posts.collectAsStateWithLifecycle(emptyList())
         LazyColumn(

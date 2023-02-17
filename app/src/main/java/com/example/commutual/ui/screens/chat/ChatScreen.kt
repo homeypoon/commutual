@@ -26,13 +26,15 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Surface
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import com.example.commutual.R
 import com.example.commutual.common.composable.BasicToolbar
-import com.example.commutual.model.User
 import com.example.commutual.ui.screens.item.ChatItem
 
 
@@ -46,16 +48,9 @@ fun ChatScreen(
 ) {
 
 
-
     val scrollState = rememberScrollState()
 //    val chats = viewModel.chats.collectAsStateWithLifecycle(emptyList())
     val chatsWithUsers by viewModel.chatsWithUsers.collectAsState(emptyList())
-
-
-    var currentPartner by remember { mutableStateOf<User?>(value = null) }
-    val coroutineScope = rememberCoroutineScope()
-    val chatPartners = mutableMapOf<String, User>()
-
 
     Column(
         modifier = Modifier
@@ -63,7 +58,8 @@ fun ChatScreen(
             .fillMaxHeight()
             .verticalScroll(scrollState)
     ) {
-        BasicToolbar(title = R.string.chat)
+        BasicToolbar(
+            title = stringResource(R.string.chat))
 
         LazyColumn(
             Modifier

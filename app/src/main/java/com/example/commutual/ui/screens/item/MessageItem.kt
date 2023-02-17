@@ -11,12 +11,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.commutual.model.Message
 import com.example.commutual.model.User
+import com.google.firebase.Timestamp
 
 @Composable
 fun MessageItem(
     message: Message,
     sender: User,
-    currentTimeMillis: Long
+    formatTimestamp: (Timestamp) -> String
 ) {
     Row(modifier = Modifier.padding(all = 8.dp)) {
 
@@ -24,11 +25,15 @@ fun MessageItem(
 
         Column() {
 
-            Text(
-                text = sender.username,
-                color = MaterialTheme.colorScheme.onSurface,
-                style = MaterialTheme.typography.titleMedium
-            )
+            Row {
+                Text(
+                    text = sender.username,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    style = MaterialTheme.typography.titleMedium
+                )
+                Text(text = formatTimestamp(message.timestamp))
+            }
+
 
             Spacer(modifier = Modifier.height(4.dp))
 

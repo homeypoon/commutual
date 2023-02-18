@@ -21,6 +21,7 @@ import androidx.compose.runtime.mutableStateOf
 import com.example.commutual.CHAT_ID
 import com.example.commutual.MESSAGES_SCREEN
 import com.example.commutual.POST_DEFAULT_ID
+import com.example.commutual.R
 import com.example.commutual.common.ext.idFromParameter
 import com.example.commutual.model.Chat
 import com.example.commutual.model.Post
@@ -49,6 +50,10 @@ class PostDetailsViewModel @Inject constructor(
     private val requestMessage
         get() = uiState.value.requestMessage
 
+    fun setShowRequestMatchCard(showRequestMatchCard: Boolean) {
+        uiState.value = uiState.value.copy(showStartChattingCard = showRequestMatchCard)
+    }
+
     fun initialize(postId: String) {
         launchCatching {
             if (postId != POST_DEFAULT_ID) {
@@ -58,31 +63,41 @@ class PostDetailsViewModel @Inject constructor(
                 if (postUser != null) {
                     user.value = postUser
                 }
+                chat.value = storageService.getChatWithPostUserId(post.value.userId) ?: Chat(chatId = "")
+                setChattingButtonText()
+
             }
 
-//            val chast = storageService.getChatWithPostUserId(post.value.userId) ?: Chat()
-//            chat.value.chatId = chast.chatId
         }
     }
 
-    fun resetRequestMessage() {
-        uiState.value = uiState.value.copy(requestMessage = "")
+    private fun setChattingButtonText() {
+        if (chat.value.chatId != "") {
+            uiState.value = uiState.value.copy(chattingButtonText = R.string.resume_chatting)
+        } else {
+            uiState.value = uiState.value.copy(chattingButtonText = R.string.start_chatting)
+        }
+
     }
 
     fun onRequestMessageChange(newValue: String) {
         uiState.value = uiState.value.copy(requestMessage = newValue)
     }
 
-    fun getChatId(): String {
-        var chatId: String = ""
+    fun updateStartChattingCard(openScreen: (String) -> Unit) {
         Log.d("postdvm chat", "post user${post.value.userId}")
         launchCatching {
-            val chat = storageService.getChatWithPostUserId(post.value.userId) ?: Chat()
-            chatId = chat.chatId
+//            val chatObject = storageService.getChatWithPostUserId(post.value.userId)
 
-//            if (chatId = launchCatching {  })
+            Log.d("postdvm chat", "chat object${chat.value.chatId}")
+            if (chat.value.chatId != "") {
+//                chat.value.chatId = chatObject.chatId
+                setShowRequestMatchCard(false)
+                openScreen("$MESSAGES_SCREEN?$CHAT_ID=${chat.value.chatId}")
+            } else {
+                setShowRequestMatchCard(true)
+            }
         }
-        return chatId
     }
 
     fun navigateToExistingChat(openScreen: (String) -> Unit) {

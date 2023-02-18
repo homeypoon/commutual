@@ -32,6 +32,7 @@
 
     <!-- PostDetails -->
     <string name="post">Post</string>
+    <string name="resume_chatting">Resume Chatting</string>
     <string name="start_chatting">Start Chatting</string>
     <string name="start_chatting_with">Start Chatting with %1$s!</string>
     <string name="first_message">First message</string>

@@ -15,7 +15,6 @@ limitations under the License.
  */
 
 
-import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -79,7 +78,7 @@ fun PostDetailsScreen(
             fontSize = 18.sp, style = MaterialTheme.typography.bodyMedium
         )
 
-        RequestMatchButton(
+        ChattingButton(
             openScreen, viewModel, user
         )
 //        {
@@ -91,28 +90,25 @@ fun PostDetailsScreen(
 
 @ExperimentalMaterialApi
 @Composable
-//private fun com.example.commutual.ui.screens.post_details.RequestMatchButton(onRequestMessageChange: (String) -> Unit, viewModel: PostDetailsViewModel) {
+//private fun com.example.commutual.ui.screens.post_details.ChattingButton(onRequestMessageChange: (String) -> Unit, viewModel: PostDetailsViewModel) {
 
-private fun RequestMatchButton(
+private fun ChattingButton(
     openScreen: (String) -> Unit,
     viewModel: PostDetailsViewModel,
     user: User
 ) {
-    var showRequestMatchCard by remember { mutableStateOf(false) }
-    val text = remember { mutableStateOf("") }
+//    var showStartChattingCard by remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
     val uiState by viewModel.uiState
     val coroutineScope = rememberCoroutineScope()
 
     BasicButton(
-        R.string.start_chatting,
+        text = uiState.chattingButtonText,
         Modifier.basicButton()
-    ) { showRequestMatchCard = true }
+    ) { viewModel.updateStartChattingCard(openScreen) }
 
+    if (uiState.showStartChattingCard) {
 
-    if (showRequestMatchCard) {
-
-        if (viewModel.getChatId() != null) {
             androidx.compose.material3.AlertDialog(
 //            text = {
 //                Column(Modifier.fillMaxSize()) {
@@ -143,26 +139,21 @@ private fun RequestMatchButton(
                 },
                 dismissButton = {
                     DialogCancelButton(R.string.cancel) {
-                        showRequestMatchCard = false
+                        viewModel.setShowRequestMatchCard(false)
                         focusManager.clearFocus()
                     }
                 },
                 confirmButton = {
                     DialogConfirmButton(R.string.start_chatting) {
-                        showRequestMatchCard = false
+                        viewModel.setShowRequestMatchCard(false)
                         focusManager.clearFocus()
                         viewModel.onStartChattingClick(openScreen)
                     }
                 },
-                onDismissRequest = { showRequestMatchCard = false },
+                onDismissRequest = { viewModel.setShowRequestMatchCard(false) },
                 modifier = Modifier.height(380.dp)
             )
-        } else {
-            Log.d("postd", viewModel.getChatId())
-            viewModel.navigateToExistingChat(openScreen)
         }
 
-
-    }
 }
 

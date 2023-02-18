@@ -95,8 +95,11 @@ fun MessagesScreen(
                     onClick = {
                         coroutineScope.launch {
                             viewModel.onSendClick(chatId, focusManager)
-                            scrollState.animateScrollToItem(messages.size - 1)
-                            Log.v("mscreen", messages.get(messages.size - 1).first.text)
+                            if (messages.isNotEmpty()) {
+                                scrollState.animateScrollToItem(messages.size - 1)
+                                Log.v("mscreen", messages.get(messages.size - 1).first.text)
+
+                            }
                         }
                     },
                     content = {

@@ -16,6 +16,7 @@ limitations under the License.
 
 package com.example.commutual.model.service.impl
 
+import android.util.Log
 import com.example.commutual.model.Chat
 import com.example.commutual.model.Message
 import com.example.commutual.model.Post
@@ -73,7 +74,7 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
                     .map { snapshot -> snapshot.toObjects() }
             }
 
-    override suspend fun getChat(chatId: String): Chat? =
+    override suspend fun getChatWithChatId(chatId: String): Chat? =
         currentChatCollection().document(chatId).get().await().toObject()
 
     override suspend fun getPartner(membersId: MutableList<String>): User? =
@@ -102,7 +103,8 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun getMessagesWithUsers(chatId: String): Flow<List<Pair<Message, User>>> {
         return auth.currentUser.flatMapLatest {
-            currentMessageCollection(chatId).orderBy(TIMESTAMP_FIELD, Query.Direction.ASCENDING).snapshots()
+            currentMessageCollection(chatId).orderBy(TIMESTAMP_FIELD, Query.Direction.ASCENDING)
+                .snapshots()
                 .map { snapshot ->
                     snapshot.toObjects<Message>().map { message ->
                         val sender =
@@ -137,10 +139,10 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
 
     // save user and generate an sender for the user document
     override suspend fun saveUser(userId: String, user: User): Unit =
-        trace(SAVE_POST_TRACE) { currentUserCollection().document(userId).set(user).await() }
+        trace(SAVE_USER_TRACE) { currentUserCollection().document(userId).set(user).await() }
 
     override suspend fun updateUser(user: User): Unit =
-        trace(UPDATE_POST_TRACE) {
+        trace(UPDATE_USER_TRACE) {
             currentUserCollection().document(auth.currentUserId).set(user).await()
         }
 
@@ -158,19 +160,47 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
 
     // save user and generate an sender for the user document
     override suspend fun saveChat(chat: Chat): String =
-        trace(SAVE_POST_TRACE) { currentChatCollection().add(chat).await().id }
+        trace(SAVE_CHAT_TRACE) { currentChatCollection().add(chat).await().id }
+
+//    override suspend fun hasChat(postUserId: String): Boolean =
+//        trace(HAS_CHAT_TRACE) {
+//            return currentChatCollection().whereArrayContains(MEMBERS_ID_FIELD, auth.currentUserId).get().await().exists()
+//        }
+
+    override suspend fun getChatWithPostUserId(postUserId: String): Chat? {
+
+        val chat = currentChatCollection()
+            .whereEqualTo(MEMBERS_ID_FIELD, mutableListOf(auth.currentUserId, postUserId))
+//            .whereEqualTo(MEMBERS_ID_FIELD, mutableListOf(auth.currentUserId, postUserId))
+            .get().await().toObjects<Chat>().firstOrNull()
+
+
+        if (chat != null) {
+            Log.d("storageservice", "final chat id = ${chat.chatId}")
+        } else {
+            Log.d("storageservice", "final chat id = null")
+        }
+        return chat
+    }
 
     override suspend fun saveMessage(message: Message, chatId: String): String =
-        trace(SAVE_POST_TRACE) { currentMessageCollection(chatId).add(message.copy(timestamp = Timestamp.now())).await().id }
+        trace(SAVE_MESSAGE_TRACE) {
+            currentMessageCollection(chatId).add(
+                message.copy(
+                    timestamp = Timestamp.now(),
+                    senderId = auth.currentUserId
+                )
+            ).await().id
+        }
 
 
     override suspend fun updateMessage(message: Message, chatId: String): Unit =
-        trace(UPDATE_POST_TRACE) {
+        trace(UPDATE_MESSAGE_TRACE) {
             currentMessageCollection(chatId).document(message.messageId).set(message).await()
         }
 
     override suspend fun hasProfile(): Boolean =
-        trace(UPDATE_POST_TRACE) {
+        trace(HAS_PROFILE_TRACE) {
             val userRef = currentUserCollection().document(auth.currentUserId).get().await()
             return userRef.exists()
         }
@@ -200,6 +230,16 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
         private const val POST_COLLECTION = "posts"
         private const val SAVE_POST_TRACE = "savePost"
         private const val UPDATE_POST_TRACE = "updatePost"
+        private const val SAVE_USER_TRACE = "saveUser"
+        private const val UPDATE_USER_TRACE = "updateUser"
+        private const val SAVE_CHAT_TRACE = "saveChat"
+        private const val UPDATE_CHAT_TRACE = "updateChat"
+        private const val SAVE_MESSAGE_TRACE = "saveMessage"
+        private const val UPDATE_MESSAGE_TRACE = "updateMessage"
+
+        private const val HAS_PROFILE_TRACE = "hasProfile"
+        private const val HAS_CHAT_TRACE = "hasChat"
+
         private const val USER_ID = "userId"
         private const val MESSAGE_ID = "messageId"
         private const val USERNAME = "username"

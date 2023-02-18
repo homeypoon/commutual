@@ -15,6 +15,7 @@ limitations under the License.
  */
 
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -78,10 +79,11 @@ fun PostDetailsScreen(
             fontSize = 18.sp, style = MaterialTheme.typography.bodyMedium
         )
 
-        RequestMatchButton (
-            openScreen, viewModel, user)
+        RequestMatchButton(
+            openScreen, viewModel, user
+        )
 //        {
-//            viewModel.onRequestMatchClick(openScreen)
+//            viewModel.onStartChattingClick(openScreen)
 //        }
 
     }
@@ -91,11 +93,16 @@ fun PostDetailsScreen(
 @Composable
 //private fun com.example.commutual.ui.screens.post_details.RequestMatchButton(onRequestMessageChange: (String) -> Unit, viewModel: PostDetailsViewModel) {
 
-private fun RequestMatchButton(openScreen: (String) -> Unit, viewModel: PostDetailsViewModel, user: User) {
+private fun RequestMatchButton(
+    openScreen: (String) -> Unit,
+    viewModel: PostDetailsViewModel,
+    user: User
+) {
     var showRequestMatchCard by remember { mutableStateOf(false) }
     val text = remember { mutableStateOf("") }
     val focusManager = LocalFocusManager.current
     val uiState by viewModel.uiState
+    val coroutineScope = rememberCoroutineScope()
 
     BasicButton(
         R.string.start_chatting,
@@ -105,7 +112,8 @@ private fun RequestMatchButton(openScreen: (String) -> Unit, viewModel: PostDeta
 
     if (showRequestMatchCard) {
 
-        androidx.compose.material3.AlertDialog(
+        if (viewModel.getChatId() != null) {
+            androidx.compose.material3.AlertDialog(
 //            text = {
 //                Column(Modifier.fillMaxSize()) {
 //                    Text(text = stringResource(R.string.start_chatting_with, user.username),
@@ -125,26 +133,36 @@ private fun RequestMatchButton(openScreen: (String) -> Unit, viewModel: PostDeta
 //                    )
 //                }
 //            },
-            text = { Text(text = stringResource(R.string.start_chatting_with, user.username),
+                text = {
+                    Text(
+                        text = stringResource(R.string.start_chatting_with, user.username),
                         overflow = TextOverflow.Ellipsis,
                         style = MaterialTheme.typography.titleMedium,
-                        modifier = Modifier.padding(4.dp, 20.dp)) },
-            dismissButton = {
-                DialogCancelButton(R.string.cancel) {
-                    showRequestMatchCard = false
-                    focusManager.clearFocus()
-                }
-            },
-            confirmButton = {
-                DialogConfirmButton(R.string.start_chatting) {
-                    showRequestMatchCard = false
-                    focusManager.clearFocus()
-                    viewModel.onRequestMatchClick(openScreen)
-                }
-            },
-            onDismissRequest = { showRequestMatchCard = false },
-            modifier = Modifier.height(380.dp)
-        )
+                        modifier = Modifier.padding(4.dp, 20.dp)
+                    )
+                },
+                dismissButton = {
+                    DialogCancelButton(R.string.cancel) {
+                        showRequestMatchCard = false
+                        focusManager.clearFocus()
+                    }
+                },
+                confirmButton = {
+                    DialogConfirmButton(R.string.start_chatting) {
+                        showRequestMatchCard = false
+                        focusManager.clearFocus()
+                        viewModel.onStartChattingClick(openScreen)
+                    }
+                },
+                onDismissRequest = { showRequestMatchCard = false },
+                modifier = Modifier.height(380.dp)
+            )
+        } else {
+            Log.d("postd", viewModel.getChatId())
+            viewModel.navigateToExistingChat(openScreen)
+        }
+
+
     }
 }
 

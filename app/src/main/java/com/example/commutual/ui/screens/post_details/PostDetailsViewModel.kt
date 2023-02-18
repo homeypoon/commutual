@@ -59,6 +59,9 @@ class PostDetailsViewModel @Inject constructor(
                     user.value = postUser
                 }
             }
+
+//            val chast = storageService.getChatWithPostUserId(post.value.userId) ?: Chat()
+//            chat.value.chatId = chast.chatId
         }
     }
 
@@ -70,23 +73,42 @@ class PostDetailsViewModel @Inject constructor(
         uiState.value = uiState.value.copy(requestMessage = newValue)
     }
 
+    fun getChatId(): String {
+        var chatId: String = ""
+        Log.d("postdvm chat", "post user${post.value.userId}")
+        launchCatching {
+            val chat = storageService.getChatWithPostUserId(post.value.userId) ?: Chat()
+            chatId = chat.chatId
 
-    fun onRequestMatchClick(openScreen: (String) -> Unit) {
-        // Open chat
+//            if (chatId = launchCatching {  })
+        }
+        return chatId
+    }
 
+    fun navigateToExistingChat(openScreen: (String) -> Unit) {
+        launchCatching {
+            val chat = storageService.getChatWithPostUserId(post.value.userId) ?: Chat()
+            val chatId = chat.chatId
+            Log.v("postdetailsvm", chatId)
+            openScreen("$MESSAGES_SCREEN?$CHAT_ID=$chatId")
+        }
+    }
+
+
+    fun onStartChattingClick(openScreen: (String) -> Unit) {
         val membersId = mutableListOf(accountService.currentUserId, post.value.userId)
 
         chat.value = chat.value.copy(
-            membersId = membersId,
-            partnerId = membersId.first { it != accountService.currentUserId }
+            membersId = membersId
+//            partnerId = membersId.first { it != accountService.currentUserId }
         )
 
-        var chatId: String = ""
         launchCatching {
-            chatId = storageService.saveChat(chat.value)
+            val chatId = storageService.saveChat(chat.value)
             openScreen("$MESSAGES_SCREEN?$CHAT_ID=$chatId")
             Log.v("Postdetails", "chatid: $chatId")
         }
-        resetRequestMessage()
+
+
     }
 }

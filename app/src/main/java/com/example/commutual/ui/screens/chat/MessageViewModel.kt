@@ -49,7 +49,7 @@ class MessageViewModel @Inject constructor(
     fun getSender(chatId: String) {
         launchCatching {
 
-            chat.value = storageService.getChat(chatId) ?: Chat()
+            chat.value = storageService.getChatWithChatId(chatId) ?: Chat()
 
             partnerObject.value = storageService.getPartner(chat.value.membersId) ?: User()
 
@@ -89,11 +89,11 @@ class MessageViewModel @Inject constructor(
         if (messageText.isBlank()) {
             return
         }
-
-            val editedMessage = message.value.copy(
-                senderId = accountService.currentUserId)
-            storageService.saveMessage(editedMessage, chatId)
-            Log.d("Messageviewmodel", "messagechatid$chatId")
+//        val editedMessage = message.value.copy(
+//            senderId = accountService.currentUserId
+//        )
+        storageService.saveMessage(message.value, chatId)
+        Log.d("Messageviewmodel", "messagechatid$chatId")
 
 
         resetMessageText()

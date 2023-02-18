@@ -40,8 +40,8 @@ interface StorageService {
   suspend fun getPost(postId: String): Post?
   suspend fun getUser(userId: String): User?
   suspend fun getPartner(membersId: MutableList<String>): User?
-  suspend fun getChat(chatId: String): Chat?
-
+  suspend fun getChatWithChatId(chatId: String): Chat?
+  suspend fun getChatWithPostUserId(postUserId: String): Chat?
 
 
   // User methods
@@ -63,7 +63,6 @@ interface StorageService {
   suspend fun filteredPosts(interest: String): Flow<List<Post>>
 
   suspend fun hasProfile(): Boolean
-
 
 
 }

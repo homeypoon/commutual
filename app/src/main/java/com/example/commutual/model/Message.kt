@@ -8,9 +8,4 @@ data class Message(
     val senderId: String = "", // user ID
     val text: String = "",
     val timestamp: Timestamp = Timestamp.now(),
-
-//    @ServerTimestamp val timestamp: Timestamp = Timestamp.now(),
-
-//    val profilePhotoUrl: String? = null,
-//    val imageUrl: String? = null
 )

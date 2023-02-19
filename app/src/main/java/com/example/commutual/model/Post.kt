@@ -8,5 +8,6 @@ data class Post(
 //    val user: User = User(),
     val title: String = "",
     val description: String = "",
+    val category: Category? = null
 //    val timestamp: Any = FieldValue.serverTimestamp()
 )

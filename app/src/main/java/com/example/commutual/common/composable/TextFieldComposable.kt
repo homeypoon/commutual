@@ -17,8 +17,8 @@ limitations under the License.
 package com.example.commutual.common.composable
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -29,15 +29,18 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.*
 import androidx.compose.ui.unit.dp
+import com.example.commutual.ui.screens.edit_post.EditPostViewModel
 import com.example.commutual.R.drawable as AppIcon
 import com.example.commutual.R.string as AppText
 
@@ -79,8 +82,9 @@ fun DescriptionField(
     focusManager: FocusManager
 ) {
     OutlinedTextField(
-        modifier = modifier.fillMaxHeight(),
+        modifier = modifier,
         value = value,
+        maxLines = 8,
         onValueChange = { onNewValue(it) },
         placeholder = {
             Text(
@@ -96,6 +100,48 @@ fun DescriptionField(
 
     )
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DropDownField(
+    viewModel: EditPostViewModel,
+    value: String,
+    labelText: String,
+    icon: ImageVector,
+    onValueChange: (String) -> Unit,
+    expanded: Boolean,
+    modifier: Modifier = Modifier,
+) {
+    OutlinedTextField(
+        modifier = modifier,
+        value = value,
+        onValueChange = { onValueChange(it) },
+        label = {
+            Text(
+                text = labelText,
+                style = MaterialTheme.typography.labelSmall
+            )
+        },
+        placeholder = {
+            Text(
+                stringResource(AppText.category),
+                style = MaterialTheme.typography.bodyMedium
+            )
+        },
+        trailingIcon = {
+//            TrailingIcon(
+//                expanded = viewModel.expandedDropDownMenu,
+//                viewModel.setExpandedDropDownMenu()
+//            )
+            Icon(
+                icon, "contentDescription",
+                Modifier.clickable { viewModel.setExpandedDropDownMenu(!expanded) })
+        },
+        readOnly = true
+
+    )
+}
+
 
 @Composable
 fun MessageInputField(

@@ -25,10 +25,20 @@ class EditPostViewModel @Inject constructor(
     private var uiState = mutableStateOf(EditPostUiState())
         private set
 
-    private val title
+     val title
         get() = uiState.value.postTitle
-    private val description
+     val description
         get() = uiState.value.postDescription
+     val category
+        get() = uiState.value.category
+    val expandedDropDownMenu
+        get() = uiState.value.expandedDropDownMenu
+
+    fun setExpandedDropDownMenu(expandedDropDownMenu: Boolean) {
+        uiState.value = uiState.value.copy(
+            expandedDropDownMenu = expandedDropDownMenu
+        )
+    }
 
     fun initialize(postId: String) {
         launchCatching {

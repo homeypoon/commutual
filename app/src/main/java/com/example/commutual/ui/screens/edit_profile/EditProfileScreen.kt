@@ -91,14 +91,3 @@ fun EditProfileScreen(
     }
 }
 
-// Additional feature: Add icon for categories
-sealed class CategoryChips(val name: String, @StringRes val categoryResourceId: Int) {
-    object Academics : CategoryChips("Academics", R.string.academics)
-    object Art: CategoryChips("Art",R.string.art)
-    object Coding : CategoryChips("Coding",R.string.coding)
-    object HealthAndWellness : CategoryChips("HealthAndWellness",R.string.health_and_wellness)
-    object Music: CategoryChips("Music",R.string.music)
-    object Routine : CategoryChips("Routine",R.string.routine)
-    object Sports: CategoryChips("Sports",R.string.sports)
-    object Work : CategoryChips("Work",R.string.work)
-}

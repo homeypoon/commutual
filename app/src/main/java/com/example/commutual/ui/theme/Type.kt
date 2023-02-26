@@ -56,6 +56,12 @@ val Typography = Typography(
         fontSize = 16.sp
     ),
     // Buttons
+    displayMedium = TextStyle(
+        fontFamily = RobotoSlab,
+        fontWeight = FontWeight.Bold,
+        fontSize = 16.sp
+    ),
+    // Extended FAB
      displaySmall = TextStyle(
         fontFamily = RobotoSlab,
         fontWeight = FontWeight.Bold,

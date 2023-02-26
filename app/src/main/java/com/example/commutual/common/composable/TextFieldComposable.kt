@@ -38,9 +38,9 @@ import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.*
 import androidx.compose.ui.unit.dp
-import com.example.commutual.ui.screens.edit_post.EditPostViewModel
 import com.example.commutual.R.drawable as AppIcon
 import com.example.commutual.R.string as AppText
 
@@ -103,13 +103,52 @@ fun DescriptionField(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+fun SearchField(
+    text: String,
+    value: String,
+    onNewValue: (String) -> Unit,
+    onSearchClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    capitalization: KeyboardCapitalization,
+) {
+    androidx.compose.material3.OutlinedTextField(
+        modifier = modifier,
+        value = value,
+        maxLines = 1,
+        onValueChange = { onNewValue(it) },
+        placeholder = {
+            Text(
+                text,
+                style = MaterialTheme.typography.bodyMedium
+            )
+        },
+        trailingIcon = {
+            IconButton(
+                onClick = onSearchClick,
+            ) {
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = AppIcon.ic_explore),
+                    contentDescription = null,
+                )
+            }
+        },
+        keyboardOptions = KeyboardOptions.Default.copy(
+            keyboardType = KeyboardType.Text,
+            autoCorrect = true,
+            capitalization = capitalization,
+            imeAction = ImeAction.Search
+        )
+    )
+}
+
+@Composable
 fun DropDownField(
-    viewModel: EditPostViewModel,
     value: String,
     labelText: String,
     icon: ImageVector,
     onValueChange: (String) -> Unit,
     expanded: Boolean,
+    setExpandedDropDownMenu: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     OutlinedTextField(
@@ -135,7 +174,7 @@ fun DropDownField(
 //            )
             Icon(
                 icon, "contentDescription",
-                Modifier.clickable { viewModel.setExpandedDropDownMenu(!expanded) })
+                Modifier.clickable { setExpandedDropDownMenu(!expanded) })
         },
         readOnly = true
 

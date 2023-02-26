@@ -6,6 +6,7 @@ import com.example.commutual.POST_DEFAULT_ID
 import com.example.commutual.R
 import com.example.commutual.common.ext.idFromParameter
 import com.example.commutual.common.snackbar.SnackbarManager
+import com.example.commutual.model.CategoryEnum
 import com.example.commutual.model.Post
 import com.example.commutual.model.service.AccountService
 import com.example.commutual.model.service.LogService
@@ -22,14 +23,16 @@ class EditPostViewModel @Inject constructor(
 
     ) : CommutualViewModel(logService = logService) {
     val post = mutableStateOf(Post())
+//    val category = mutableStateOf(Category())
+
     private var uiState = mutableStateOf(EditPostUiState())
         private set
 
-     val title
+    private val title
         get() = uiState.value.postTitle
-     val description
+    private val description
         get() = uiState.value.postDescription
-     val category
+    private val categoryEnum
         get() = uiState.value.category
     val expandedDropDownMenu
         get() = uiState.value.expandedDropDownMenu
@@ -46,7 +49,8 @@ class EditPostViewModel @Inject constructor(
                 post.value = storageService.getPost(postId.idFromParameter()) ?: Post()
                 uiState.value = uiState.value.copy(
                     postTitle = post.value.title,
-                    postDescription = post.value.description)
+                    postDescription = post.value.description,
+                    category = post.value.category)
             }
         }
     }
@@ -61,6 +65,12 @@ class EditPostViewModel @Inject constructor(
         uiState.value = uiState.value.copy(postDescription = newValue)
     }
 
+
+    fun onCategoryButtonClick(selectedCategory: CategoryEnum) {
+        post.value = post.value.copy(category = selectedCategory)
+        uiState.value = uiState.value.copy(category = selectedCategory)
+    }
+
     fun onDoneClick(popUpScreen: () -> Unit, focusManager: FocusManager) {
 
         // Close keyboard
@@ -73,6 +83,11 @@ class EditPostViewModel @Inject constructor(
 
         if (description.isBlank()) {
             SnackbarManager.showMessage(R.string.empty_description_error)
+            return
+        }
+
+        if (categoryEnum == CategoryEnum.DEFAULT) {
+            SnackbarManager.showMessage(R.string.empty_category_error)
             return
         }
 

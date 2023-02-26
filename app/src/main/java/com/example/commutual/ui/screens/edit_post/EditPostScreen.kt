@@ -33,7 +33,7 @@ import com.example.commutual.common.composable.DropDownField
 import com.example.commutual.common.ext.fieldModifier
 import com.example.commutual.common.ext.spacer
 import com.example.commutual.common.ext.toolbarActions
-import com.example.commutual.model.Category
+import com.example.commutual.model.CategoryEnum
 import com.example.commutual.R.drawable as AppIcon
 import com.example.commutual.R.string as AppText
 
@@ -46,35 +46,23 @@ fun EditPostScreen(
     viewModel: EditPostViewModel = hiltViewModel()
 ) {
     val post by viewModel.post
+
     val scrollState = rememberScrollState()
     val focusManager = LocalFocusManager.current
 
-    val categories = listOf(
-        Category.Academics, Category.Art, Category.Coding, Category.HealthAndWellness,
-        Category.Music, Category.Routine, Category.Sports, Category.Work
-    )
-    val (selectedCategory, setSelectedCategory) = remember { mutableStateOf<Category?>(null) }
+    val categories = enumValues<CategoryEnum>()
+        .filter { it != CategoryEnum.DEFAULT }
 
-//
-//    val options = listOf("Option 1", "Option 2", "Option 3", "Option 4", "Option 5")
-//    var expanded by remember { mutableStateOf(false) }
-    var selectedCategoryText by remember { mutableStateOf(categories[0]) }
+    var categoryResourceId by remember { mutableStateOf(R.string.empty_string) }
 
-
-    var expanded by remember { mutableStateOf(false) }
-    val suggestions = listOf("Kotlin", "Java", "Dart", "Python")
-    var selectedText by remember { mutableStateOf("") }
-
-    var textfieldSize by remember { mutableStateOf(Size.Zero) }
+    var textFieldSize by remember { mutableStateOf(Size.Zero) }
 
     val icon = if (viewModel.expandedDropDownMenu)
         Icons.Filled.KeyboardArrowUp
     else
         Icons.Filled.KeyboardArrowDown
 
-
     LaunchedEffect(Unit) { viewModel.initialize(postId) }
-
 
     Column(
         modifier = modifier
@@ -101,7 +89,8 @@ fun EditPostScreen(
         val fieldModifier = Modifier.fieldModifier()
 
         BasicField(
-            AppText.post_title, post.title,
+            AppText.post_title,
+            post.title,
             viewModel::onTitleChange, fieldModifier,
             ImeAction.Next,
             KeyboardCapitalization.Words,
@@ -119,42 +108,43 @@ fun EditPostScreen(
         Column(Modifier.padding(16.dp, 0.dp)) {
 
             DropDownField(
-                viewModel = viewModel,
-                value = selectedText,
-                onValueChange = {selectedText = it },
+                value = stringResource(categoryResourceId),
+//                onValueChange = {selectedText = it },
+                onValueChange = {},
                 labelText = stringResource(R.string.category),
                 icon = icon,
                 expanded = viewModel.expandedDropDownMenu,
+                setExpandedDropDownMenu = { viewModel.setExpandedDropDownMenu(it) } ,
                 modifier = Modifier
                     .fillMaxWidth()
                     .onGloballyPositioned { coordinates ->
                         //This value is used to assign to the DropDown the same width
-                        textfieldSize = coordinates.size.toSize()
-                    },
+                        textFieldSize = coordinates.size.toSize()
+                    }
             )
 
             DropdownMenu(
                 expanded = viewModel.expandedDropDownMenu,
                 onDismissRequest = { viewModel.setExpandedDropDownMenu(false) },
                 modifier = Modifier
-                    .width(with(LocalDensity.current) { textfieldSize.width.toDp() })
+                    .width(with(LocalDensity.current) { textFieldSize.width.toDp() })
             ) {
                 categories.forEach { category ->
                     DropdownMenuItem(
                         onClick = {
-                            selectedText = category.name
+                            categoryResourceId = category.categoryResourceId
+                            viewModel.onCategoryButtonClick(category)
                             viewModel.setExpandedDropDownMenu(false)
                         },
-                        text = { Text(
-                            text = category.name
-                        ) }
+                        text = {
+                            Text(
+                                text = stringResource(category.categoryResourceId)
+                            )
+                        }
                     )
                 }
             }
         }
-
-
     }
-
 
 }

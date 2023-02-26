@@ -36,6 +36,7 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.transformLatest
 import kotlinx.coroutines.tasks.asDeferred
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -114,8 +115,6 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
                 }
         }
     }
-//    }
-
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun filteredPosts(interest: String): Flow<List<Post>> {
@@ -125,8 +124,19 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
         }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override suspend fun searchedPosts(search: String): Flow<List<Post>> {
 
-//    currentMessageCollection(chatId).document(messageId).get().await().toObject()
+        return posts
+            .transformLatest { posts ->
+                emit(posts.filter { post ->
+                    post.title.contains(search, ignoreCase = true) ||
+                            post.description.contains(search, ignoreCase = true)
+                }
+                )
+            }
+
+    }
 
 
     override suspend fun deletePost(postId: String) {
@@ -169,8 +179,10 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
 
     override suspend fun getChatWithPostUserId(postUserId: String): Chat? {
 
+        val membersId = mutableListOf(auth.currentUserId, postUserId)
+
         val chat = currentChatCollection()
-            .whereEqualTo(MEMBERS_ID_FIELD, mutableListOf(auth.currentUserId, postUserId))
+            .whereIn(MEMBERS_ID_FIELD, listOf(membersId, membersId.reversed()))
 //            .whereEqualTo(MEMBERS_ID_FIELD, mutableListOf(auth.currentUserId, postUserId))
             .get().await().toObjects<Chat>().firstOrNull()
 

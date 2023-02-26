@@ -16,6 +16,8 @@ limitations under the License.
 
 package com.example.commutual.ui.screens.explore
 
+import android.util.Log
+import androidx.compose.runtime.mutableStateOf
 import com.example.commutual.POST_DETAILS_SCREEN
 import com.example.commutual.POST_ID
 import com.example.commutual.model.Post
@@ -23,18 +25,49 @@ import com.example.commutual.model.service.LogService
 import com.example.commutual.model.service.StorageService
 import com.example.commutual.ui.screens.CommutualViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 @HiltViewModel
 class ExploreViewModel @Inject constructor(
-  logService: LogService,
-  private val storageService: StorageService,
+    logService: LogService,
+    private val storageService: StorageService,
 ) : CommutualViewModel(logService) {
 
-  val posts = storageService.posts
+    var posts = storageService.posts
+    var searchedPosts: Flow<List<Post>> = flow { listOf<Post>()}
 
-  fun onPostClick(openScreen: (String) -> Unit, post: Post) {
-    openScreen("$POST_DETAILS_SCREEN?$POST_ID={${post.postId}}")
-  }
+    private var uiState = mutableStateOf(ExploreUiState())
+        private set
+
+     val searchText
+        get() = uiState.value.searchText
+
+    val postsSearched
+        get() = uiState.value.postsSearched
+
+    fun onSearchTextChange(searchText: String) {
+        uiState.value = uiState.value.copy(searchText = searchText)
+
+        Log.d("", postsSearched.toString())
+
+        if (searchText.isEmpty()) {
+            uiState.value = uiState.value.copy(postsSearched = false)
+        }
+    }
+
+    fun onSearchClick() {
+        uiState.value = uiState.value.copy(postsSearched = true)
+        launchCatching {
+            posts = storageService.searchedPosts(searchText)
+        }
+        Log.d("", postsSearched.toString())
+    }
+
+
+    fun onPostClick(openScreen: (String) -> Unit, post: Post) {
+        openScreen("$POST_DETAILS_SCREEN?$POST_ID={${post.postId}}")
+    }
 
 }

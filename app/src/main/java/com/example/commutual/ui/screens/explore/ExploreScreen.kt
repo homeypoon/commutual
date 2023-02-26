@@ -20,6 +20,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -30,11 +31,14 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.commutual.R
 import com.example.commutual.common.composable.BasicToolbar
+import com.example.commutual.common.composable.SearchField
 import com.example.commutual.ui.screens.item.PostItem
 
 @OptIn(ExperimentalLifecycleComposeApi::class, ExperimentalMaterial3Api::class)
@@ -46,30 +50,46 @@ fun ExploreScreen(
     viewModel: ExploreViewModel = hiltViewModel()
 ) {
 
+    val posts = viewModel.posts.collectAsStateWithLifecycle(emptyList())
+    val searchedPosts = viewModel.searchedPosts
+
     val scrollState = rememberScrollState()
 
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .fillMaxHeight().verticalScroll(scrollState)) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight()
+            .verticalScroll(scrollState)
+    ) {
         BasicToolbar(title = stringResource(R.string.explore))
 
-        val posts = viewModel.posts.collectAsStateWithLifecycle(emptyList())
+        SearchField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(4.dp),
+            text = stringResource(R.string.search),
+            value = viewModel.searchText,
+            onNewValue = viewModel::onSearchTextChange,
+            onSearchClick = viewModel::onSearchClick,
+            capitalization = KeyboardCapitalization.None
+        )
         LazyColumn(
             Modifier
                 .fillMaxWidth()
                 .weight(1f, true)
         ) {
-            items(posts.value, key = { it.postId }) { postItem ->
-                Surface(modifier = Modifier.clickable {
-                    viewModel.onPostClick(openScreen, postItem)
-                }) {
-                    PostItem(
-                        post = postItem
-                    )
-                }
-            }
-        }
 
+                items(posts.value, key = { it.postId }) { postItem ->
+                    Surface(modifier = Modifier.clickable {
+                        viewModel.onPostClick(openScreen, postItem)
+                    }) {
+                        PostItem(
+                            post = postItem
+                        )
+                    }
+            }
+
+        }
 
 
     }

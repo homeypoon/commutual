@@ -31,6 +31,8 @@ interface StorageService {
   val chatsWithUsers: Flow<List<Pair<Chat, User>>>
   fun getMessagesWithUsers(chatId: String): Flow<List<Pair<Message, User>>>
 
+  suspend fun searchedPosts(search: String): Flow<List<Post>>
+
 
 
 

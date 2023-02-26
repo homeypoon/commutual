@@ -15,8 +15,13 @@ limitations under the License.
  */
 
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.ExperimentalMaterialApi
@@ -60,7 +65,7 @@ fun PostDetailsScreen(
             .fillMaxHeight()
             .verticalScroll(scrollState)
     ) {
-        BasicToolbar(title = stringResource(R.string.explore))
+        BasicToolbar(title = stringResource(R.string.post_details))
 
         CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
             Text(
@@ -68,6 +73,19 @@ fun PostDetailsScreen(
                 fontSize = 12.sp
             )
         }
+
+        Text(
+            stringResource(post.category.categoryResourceId),
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.onSurface,
+            modifier = Modifier
+                .border(
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.secondary,
+                    shape = RoundedCornerShape(5.dp)
+                )
+                .padding(8.dp, 4.dp)
+        )
 
         Text(
             text = post.title,
@@ -110,25 +128,6 @@ private fun ChattingButton(
     if (uiState.showStartChattingCard) {
 
             androidx.compose.material3.AlertDialog(
-//            text = {
-//                Column(Modifier.fillMaxSize()) {
-//                    Text(text = stringResource(R.string.start_chatting_with, user.username),
-//                        overflow = TextOverflow.Ellipsis,
-//                        style = MaterialTheme.typography.titleMedium,
-//                        modifier = Modifier.padding(4.dp, 20.dp))
-//                    DescriptionField(
-//                        R.string.first_message,
-//                        uiState.requestMessage,
-//                        viewModel::onRequestMessageChange ,
-//                        Modifier
-//                            .padding(2.dp, 8.dp)
-//                            .weight(1f)
-//                            .wrapContentHeight(),
-//                        KeyboardCapitalization.Sentences,
-//                        focusManager
-//                    )
-//                }
-//            },
                 text = {
                     Text(
                         text = stringResource(R.string.start_chatting_with, user.username),
@@ -151,7 +150,6 @@ private fun ChattingButton(
                     }
                 },
                 onDismissRequest = { viewModel.setShowRequestMatchCard(false) },
-                modifier = Modifier.height(380.dp)
             )
         }
 

@@ -85,9 +85,9 @@ class PostDetailsViewModel @Inject constructor(
     }
 
     fun updateStartChattingCard(openScreen: (String) -> Unit) {
-        Log.d("postdvm chat", "post user${post.value.userId}")
+        Log.d("postdvm chat", "task user${post.value.userId}")
         launchCatching {
-//            val chatObject = storageService.getChatWithPostUserId(post.value.userId)
+//            val chatObject = storageService.getChatWithPostUserId(task.value.userId)
 
             Log.d("postdvm chat", "chat object${chat.value.chatId}")
             if (chat.value.chatId != "") {
@@ -115,7 +115,6 @@ class PostDetailsViewModel @Inject constructor(
 
         chat.value = chat.value.copy(
             membersId = membersId
-//            partnerId = membersId.first { it != accountService.currentUserId }
         )
 
         launchCatching {

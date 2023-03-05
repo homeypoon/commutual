@@ -22,6 +22,7 @@ import com.example.commutual.ui.screens.chat.ChatScreen
 import com.example.commutual.ui.screens.chat.MessagesScreen
 import com.example.commutual.ui.screens.edit_post.EditPostScreen
 import com.example.commutual.ui.screens.edit_profile.EditProfileScreen
+import com.example.commutual.ui.screens.edit_task.EditTaskScreen
 import com.example.commutual.ui.screens.explore.ExploreScreen
 import com.example.commutual.ui.screens.home.HomeScreen
 import com.example.commutual.ui.screens.login.LoginScreen
@@ -139,7 +140,7 @@ fun NavGraphBuilder.commutualGraph(appState: CommutualAppState) {
     composable(SPLASH_SCREEN) {
         SplashScreen(
             openScreen = { route -> appState.navigate(route) },
-            popUpScreen = { appState.popUp()},
+            popUpScreen = { appState.popUp() },
             openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) }
         )
     }
@@ -152,22 +153,26 @@ fun NavGraphBuilder.commutualGraph(appState: CommutualAppState) {
 
     composable(
         route = "$PROFILE_POST_SCREEN$POST_ID_ARG",
-        arguments = listOf(navArgument(POST_ID) { defaultValue = POST_DEFAULT_ID})
+        arguments = listOf(navArgument(POST_ID) { defaultValue = POST_DEFAULT_ID })
     ) {
         ProfilePostScreen(
-            popUpScreen = { appState.popUp()},
+            popUpScreen = { appState.popUp() },
             openScreen = { route -> appState.navigate(route) },
             postId = it.arguments?.getString(POST_ID) ?: POST_DEFAULT_ID
         )
     }
 
     composable(
-        route = "$EDIT_POST_SCREEN$POST_ID_ARG",
-        arguments = listOf(navArgument(POST_ID) { defaultValue = POST_DEFAULT_ID })
+        route = "$EDIT_POST_SCREEN$POST_ID_ARG$SCREEN_TITLE_ARG",
+        arguments = listOf(
+            navArgument(POST_ID) { defaultValue = POST_DEFAULT_ID },
+            navArgument(SCREEN_TITLE) { defaultValue = ST_CREATE_POST }
+        )
     ) {
         EditPostScreen(
-            popUpScreen = { appState.popUp()},
-            postId = it.arguments?.getString(POST_ID) ?: POST_DEFAULT_ID
+            popUpScreen = { appState.popUp() },
+            postId = it.arguments?.getString(POST_ID) ?: POST_DEFAULT_ID,
+            screenTitle = it.arguments?.getString(SCREEN_TITLE) ?: ST_CREATE_POST
         )
     }
 
@@ -191,13 +196,38 @@ fun NavGraphBuilder.commutualGraph(appState: CommutualAppState) {
         arguments = listOf(navArgument(CHAT_ID) { defaultValue = CHAT_DEFAULT_ID })
     ) {
         MessagesScreen(
-            popUpScreen = { appState.popUp()},
+            popUpScreen = { appState.popUp() },
+            openScreen = { route -> appState.navigate(route) },
             chatId = it.arguments?.getString(CHAT_ID) ?: CHAT_DEFAULT_ID
         )
     }
 
-    composable(EDIT_PROFILE_SCREEN) {
-        EditProfileScreen( popUpScreen = { appState.popUp()})
+    composable(
+        route = "$EDIT_TASK_SCREEN$TASK_ID_ARG$CHAT_ID_ARG$SCREEN_TITLE_ARG",
+        arguments = listOf(
+            navArgument(TASK_ID) { defaultValue = TASK_DEFAULT_ID },
+            navArgument(CHAT_ID) { defaultValue = CHAT_DEFAULT_ID },
+            navArgument(SCREEN_TITLE) { defaultValue = ST_CREATE_TASK }
+        )
+    ) {
+        EditTaskScreen(
+            popUpScreen = { appState.popUp() },
+            taskId = it.arguments?.getString(TASK_ID) ?: TASK_DEFAULT_ID,
+            chatId = it.arguments?.getString(CHAT_ID) ?: CHAT_DEFAULT_ID,
+            screenTitle = it.arguments?.getString(SCREEN_TITLE) ?: ST_CREATE_TASK
+        )
+    }
+
+    composable(
+        route = "$EDIT_PROFILE_SCREEN$SCREEN_TITLE_ARG",
+        arguments = listOf(
+            navArgument(SCREEN_TITLE) { defaultValue = ST_CREATE_PROFILE }
+        )
+    ) {
+        EditProfileScreen(
+            popUpScreen = { appState.popUp() },
+            screenTitle = it.arguments?.getString(SCREEN_TITLE) ?: ST_CREATE_PROFILE
+        )
     }
 
     composable(LOGIN_SCREEN) {
@@ -213,7 +243,6 @@ fun NavGraphBuilder.commutualGraph(appState: CommutualAppState) {
         ExploreScreen(
             openScreen = { route -> appState.navigate(route) })
     }
-
 
     composable(PROFILE_SCREEN) {
         ProfileScreen(

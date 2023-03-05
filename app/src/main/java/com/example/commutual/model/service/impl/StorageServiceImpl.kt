@@ -16,11 +16,7 @@ limitations under the License.
 
 package com.example.commutual.model.service.impl
 
-import android.util.Log
-import com.example.commutual.model.Chat
-import com.example.commutual.model.Message
-import com.example.commutual.model.Post
-import com.example.commutual.model.User
+import com.example.commutual.model.*
 import com.example.commutual.model.service.AccountService
 import com.example.commutual.model.service.StorageService
 import com.example.commutual.model.service.trace
@@ -117,11 +113,50 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override suspend fun filteredPosts(interest: String): Flow<List<Post>> {
+    override fun getCompletedTasksWithUsers(chatId: String): Flow<List<Pair<Task, User>>> {
         return auth.currentUser.flatMapLatest {
-            currentPostCollection().whereArrayContains(INTERESTS_FIELD, interest)
-                .snapshots().map { snapshot -> snapshot.toObjects() }
+            currentTaskCollection(chatId)
+                .whereEqualTo(COMPLETED_FIELD, true)
+                .orderBy(TIMESTAMP_FIELD, Query.Direction.ASCENDING)
+                .snapshots()
+                .map { snapshot ->
+                    snapshot.toObjects<Task>().map { task ->
+                        val sender =
+                            getUserById(task.creatorId)
+                        task to sender
+                    }
+                }
         }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun getTasksWithUsers(chatId: String): Flow<Pair<List<Pair<Task, User>>, List<Pair<Task, User>>>> {
+        return auth.currentUser.flatMapLatest {
+            currentTaskCollection(chatId)
+                .orderBy(DATE_FIELD, Query.Direction.ASCENDING)
+                .snapshots()
+                .map { snapshot ->
+                    val pairs = snapshot.toObjects<Task>().map { message ->
+                        val sender = getUserById(message.creatorId)
+                        message to sender
+                    }
+                    val (completedTasks, upcomingTasks) = pairs.partition { it.first.completed }
+                    completedTasks to upcomingTasks
+                }
+        }
+    }
+
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override suspend fun filteredPosts(search: String, category: CategoryEnum): Flow<List<Post>> {
+
+        return posts.transformLatest { posts ->
+            emit(posts.filter { post ->
+                post.category == category && (post.title.contains(search, ignoreCase = true) ||
+                        post.description.contains(search, ignoreCase = true))
+            })
+        }
+
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -139,10 +174,6 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
     }
 
 
-    override suspend fun deletePost(postId: String) {
-        currentPostCollection().document(postId).delete().await()
-    }
-
     override suspend fun getUser(userId: String): User? =
         currentUserCollection().document(userId).get().await().toObject()
 
@@ -159,7 +190,6 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
     override suspend fun getPost(postId: String): Post? =
         currentPostCollection().document(postId).get().await().toObject()
 
-    // save user and generate an postId for the user document
     override suspend fun savePost(post: Post): String =
         trace(SAVE_POST_TRACE) { currentPostCollection().add(post).await().id }
 
@@ -168,14 +198,36 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
             currentPostCollection().document(post.postId).set(post).await()
         }
 
+    override suspend fun deletePost(postId: String) {
+        currentPostCollection().document(postId).delete().await()
+    }
+
+    override suspend fun getTask(taskId: String, chatId: String): Task? =
+        currentTaskCollection(chatId).document(taskId).get().await().toObject()
+
+    override suspend fun saveTask(task: Task, chatId: String): String =
+        trace(SAVE_MESSAGE_TRACE) {
+            currentTaskCollection(chatId).add(
+                task.copy(
+                    timestamp = Timestamp.now(),
+                    creatorId = auth.currentUserId
+                )
+            ).await().id
+        }
+
+    override suspend fun updateTask(task: Task, chatId: String): Unit =
+        trace(UPDATE_TASK_TRACE) {
+            currentTaskCollection(chatId).document(task.taskId).set(task).await()
+        }
+
+    override suspend fun deleteTask(taskId: String, chatId: String) {
+        currentTaskCollection(chatId).document(taskId).delete().await()
+    }
+
     // save user and generate an sender for the user document
     override suspend fun saveChat(chat: Chat): String =
         trace(SAVE_CHAT_TRACE) { currentChatCollection().add(chat).await().id }
 
-//    override suspend fun hasChat(postUserId: String): Boolean =
-//        trace(HAS_CHAT_TRACE) {
-//            return currentChatCollection().whereArrayContains(MEMBERS_ID_FIELD, auth.currentUserId).get().await().exists()
-//        }
 
     override suspend fun getChatWithPostUserId(postUserId: String): Chat? {
 
@@ -186,12 +238,6 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
 //            .whereEqualTo(MEMBERS_ID_FIELD, mutableListOf(auth.currentUserId, postUserId))
             .get().await().toObjects<Chat>().firstOrNull()
 
-
-        if (chat != null) {
-            Log.d("storageservice", "final chat id = ${chat.chatId}")
-        } else {
-            Log.d("storageservice", "final chat id = null")
-        }
         return chat
     }
 
@@ -231,6 +277,9 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
     private fun currentPostCollection(): CollectionReference =
         firestore.collection(POST_COLLECTION)
 
+    private fun currentTaskCollection(chatId: String): CollectionReference =
+        firestore.collection(CHAT_COLLECTION).document(chatId).collection(TASK_COLLECTION)
+
     private fun currentChatCollection(): CollectionReference =
         firestore.collection(CHAT_COLLECTION)
 
@@ -240,8 +289,12 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
     companion object {
         private const val USER_COLLECTION = "users"
         private const val POST_COLLECTION = "posts"
+        private const val TASK_COLLECTION = "tasks"
+
         private const val SAVE_POST_TRACE = "savePost"
         private const val UPDATE_POST_TRACE = "updatePost"
+        private const val SAVE_TASK_TRACE = "saveTask"
+        private const val UPDATE_TASK_TRACE = "updateTask"
         private const val SAVE_USER_TRACE = "saveUser"
         private const val UPDATE_USER_TRACE = "updateUser"
         private const val SAVE_CHAT_TRACE = "saveChat"
@@ -259,6 +312,9 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
         private const val INTERESTS_FIELD = "interests"
         private const val MEMBERS_ID_FIELD = "membersId"
         private const val TIMESTAMP_FIELD = "timestamp"
+        private const val DATE_FIELD = "date"
+        private const val COMPLETED_FIELD = "completed"
+
 
         private const val CHAT_COLLECTION = "chats"
 

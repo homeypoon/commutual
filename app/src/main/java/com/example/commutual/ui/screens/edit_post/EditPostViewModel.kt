@@ -32,8 +32,10 @@ class EditPostViewModel @Inject constructor(
         get() = uiState.value.postTitle
     private val description
         get() = uiState.value.postDescription
-    private val categoryEnum
+
+    val category
         get() = uiState.value.category
+
     val expandedDropDownMenu
         get() = uiState.value.expandedDropDownMenu
 
@@ -42,6 +44,7 @@ class EditPostViewModel @Inject constructor(
             expandedDropDownMenu = expandedDropDownMenu
         )
     }
+
 
     fun initialize(postId: String) {
         launchCatching {
@@ -86,7 +89,7 @@ class EditPostViewModel @Inject constructor(
             return
         }
 
-        if (categoryEnum == CategoryEnum.DEFAULT) {
+        if (category == CategoryEnum.ANY) {
             SnackbarManager.showMessage(R.string.empty_category_error)
             return
         }
@@ -105,19 +108,6 @@ class EditPostViewModel @Inject constructor(
             popUpScreen()
         }
     }
-//
-//        post.value = post.value.copy(
-//            sender = accountService.currentUserId)
-//        post.value = post.value.copy(postId = postId)
-//
-//        launchCatching {
-//            val editedPost = post.value
-//            if (editedPost.postId.isBlank()) {
-//                storageService.savePost(editedPost)
-//            } else {
-//                storageService.updatePost(editedPost)
-//            }
-//            popUpScreen()
-//        }
+
 
 }

@@ -16,9 +16,12 @@ limitations under the License.
 
 package com.example.commutual.common.ext
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 fun Modifier.textButton(): Modifier {
@@ -27,6 +30,16 @@ fun Modifier.textButton(): Modifier {
 
 fun Modifier.accountText(): Modifier {
   return this
+}
+
+fun Modifier.categoryChip(color: Color): Modifier {
+  return this
+    .border(
+      width = 1.dp,
+      color = color,
+      shape = RoundedCornerShape(5.dp)
+    )
+    .padding(8.dp, 4.dp)
 }
 
 fun Modifier.basicButton(): Modifier {

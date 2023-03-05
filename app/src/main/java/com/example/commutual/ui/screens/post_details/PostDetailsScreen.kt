@@ -15,13 +15,11 @@ limitations under the License.
  */
 
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.ExperimentalMaterialApi
@@ -42,6 +40,7 @@ import com.example.commutual.common.composable.BasicToolbar
 import com.example.commutual.common.composable.DialogCancelButton
 import com.example.commutual.common.composable.DialogConfirmButton
 import com.example.commutual.common.ext.basicButton
+import com.example.commutual.common.ext.categoryChip
 import com.example.commutual.model.User
 
 @Composable
@@ -75,16 +74,12 @@ fun PostDetailsScreen(
         }
 
         Text(
-            stringResource(post.category.categoryResourceId),
+            stringResource(post.category.categoryStringRes),
             style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier
-                .border(
-                    width = 1.dp,
-                    color = MaterialTheme.colorScheme.secondary,
-                    shape = RoundedCornerShape(5.dp)
-                )
-                .padding(8.dp, 4.dp)
+            modifier = Modifier.categoryChip(
+                MaterialTheme.colorScheme.secondary
+            )
         )
 
         Text(

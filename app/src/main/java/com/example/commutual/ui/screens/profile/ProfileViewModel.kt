@@ -17,10 +17,7 @@ limitations under the License.
 package com.example.commutual.ui.screens.profile
 
 import androidx.compose.runtime.mutableStateOf
-import com.example.commutual.EDIT_PROFILE_SCREEN
-import com.example.commutual.POST_ID
-import com.example.commutual.PROFILE_POST_SCREEN
-import com.example.commutual.SETTINGS_SCREEN
+import com.example.commutual.*
 import com.example.commutual.model.Post
 import com.example.commutual.model.User
 import com.example.commutual.model.service.AccountService
@@ -49,7 +46,7 @@ class ProfileViewModel @Inject constructor(
   }
 
   fun onEditProfileClick(openScreen: (String) -> Unit) {
-    openScreen(EDIT_PROFILE_SCREEN)
+    openScreen("$EDIT_PROFILE_SCREEN?$SCREEN_TITLE=$ST_EDIT_PROFILE")
   }
 
   fun onPostClick(openScreen: (String) -> Unit, post: Post) {

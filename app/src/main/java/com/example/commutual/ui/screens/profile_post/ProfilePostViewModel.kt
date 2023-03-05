@@ -19,9 +19,7 @@ package com.example.commutual.ui.screens.profile_post
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.runtime.mutableStateOf
-import com.example.commutual.EDIT_POST_SCREEN
-import com.example.commutual.POST_DEFAULT_ID
-import com.example.commutual.POST_ID
+import com.example.commutual.*
 import com.example.commutual.common.ext.idFromParameter
 import com.example.commutual.model.Post
 import com.example.commutual.model.service.ConfigurationService
@@ -64,10 +62,9 @@ class ProfilePostViewModel @Inject constructor(
         coroutineScope: CoroutineScope,
         bottomSheetState: ModalBottomSheetState
     ) {
-        openScreen("$EDIT_POST_SCREEN?$POST_ID={${post.postId}}")
+        openScreen("$EDIT_POST_SCREEN?$POST_ID={${post.postId}}?$SCREEN_TITLE=${ST_EDIT_POST}")
         coroutineScope.launch {
-            if (bottomSheetState.isVisible)
-                bottomSheetState.hide()
+            bottomSheetState.hide()
         }
     }
 

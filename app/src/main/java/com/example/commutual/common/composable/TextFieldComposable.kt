@@ -107,9 +107,12 @@ fun SearchField(
     text: String,
     value: String,
     onNewValue: (String) -> Unit,
-    onSearchClick: () -> Unit,
+    onSearchClick: (FocusManager) -> Unit,
+    onFilterClick: (FocusManager) -> Unit,
+    openScreen: (String) -> Unit,
     modifier: Modifier = Modifier,
     capitalization: KeyboardCapitalization,
+    focusManager: FocusManager
 ) {
     androidx.compose.material3.OutlinedTextField(
         modifier = modifier,
@@ -122,9 +125,19 @@ fun SearchField(
                 style = MaterialTheme.typography.bodyMedium
             )
         },
+        leadingIcon = {
+            IconButton(
+                onClick = { onFilterClick(focusManager) },
+            ) {
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = AppIcon.ic_filter),
+                    contentDescription = null,
+                )
+            }
+        },
         trailingIcon = {
             IconButton(
-                onClick = onSearchClick,
+                onClick = { onSearchClick(focusManager) },
             ) {
                 Icon(
                     imageVector = ImageVector.vectorResource(id = AppIcon.ic_explore),

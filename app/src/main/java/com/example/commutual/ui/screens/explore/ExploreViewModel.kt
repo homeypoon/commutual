@@ -18,15 +18,15 @@ package com.example.commutual.ui.screens.explore
 
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.focus.FocusManager
 import com.example.commutual.POST_DETAILS_SCREEN
 import com.example.commutual.POST_ID
+import com.example.commutual.model.CategoryEnum
 import com.example.commutual.model.Post
 import com.example.commutual.model.service.LogService
 import com.example.commutual.model.service.StorageService
 import com.example.commutual.ui.screens.CommutualViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 @HiltViewModel
@@ -36,7 +36,6 @@ class ExploreViewModel @Inject constructor(
 ) : CommutualViewModel(logService) {
 
     var posts = storageService.posts
-    var searchedPosts: Flow<List<Post>> = flow { listOf<Post>()}
 
     private var uiState = mutableStateOf(ExploreUiState())
         private set
@@ -46,6 +45,33 @@ class ExploreViewModel @Inject constructor(
 
     val postsSearched
         get() = uiState.value.postsSearched
+
+    val showFiltersDialog
+        get() = uiState.value.showFiltersDialog
+
+    val selectedCategory
+        get() = uiState.value.selectedCategory
+
+    val filterChipCategory
+        get() = uiState.value.filterChipCategory
+
+    val expandedDropDownMenu
+        get() = uiState.value.expandedDropDownMenu
+
+    val showProgressIndicator
+        get() = uiState.value.showProgressIndicator
+
+    fun resetFilters() {
+        uiState.value = uiState.value.copy(selectedCategory = CategoryEnum.ANY)
+    }
+
+    fun onCategorySelected(category: CategoryEnum) {
+        uiState.value = uiState.value.copy(selectedCategory = category)
+    }
+
+    fun setShowFiltersDialog(showFiltersDialog: Boolean) {
+        uiState.value = uiState.value.copy(showFiltersDialog = showFiltersDialog)
+    }
 
     fun onSearchTextChange(searchText: String) {
         uiState.value = uiState.value.copy(searchText = searchText)
@@ -57,17 +83,63 @@ class ExploreViewModel @Inject constructor(
         }
     }
 
-    fun onSearchClick() {
-        uiState.value = uiState.value.copy(postsSearched = true)
-        launchCatching {
-            posts = storageService.searchedPosts(searchText)
+
+    fun onSearchClick(focusManager: FocusManager) {
+        uiState.value = uiState.value.copy(
+            postsSearched = true,
+            showProgressIndicator = true
+        )
+
+        if (filterChipCategory == CategoryEnum.ANY) {
+            launchCatching {
+                posts = storageService.searchedPosts(searchText)
+                showProgressIndicator(false)
+            }
+        } else {
+            launchCatching {
+                posts = storageService.filteredPosts(searchText, filterChipCategory)
+                showProgressIndicator(false)
+            }
         }
+
+        clearFocus(focusManager)
         Log.d("", postsSearched.toString())
     }
 
+    fun onFilterClick(focusManager: FocusManager) {
+        clearFocus(focusManager)
+        uiState.value = uiState.value.copy(showFiltersDialog = true)
+    }
+
+    fun onCloseFilterChipClick(focusManager: FocusManager) {
+        uiState.value = uiState.value.copy(
+            selectedCategory = CategoryEnum.ANY,
+            filterChipCategory = CategoryEnum.ANY
+        )
+        onSearchClick(focusManager)
+    }
+
+    fun onApplyFilterClick(focusManager: FocusManager) {
+        setShowFiltersDialog(false)
+        uiState.value = uiState.value.copy(
+            showFiltersDialog = false,
+            filterChipCategory = selectedCategory
+        )
+        onSearchClick(focusManager)
+    }
 
     fun onPostClick(openScreen: (String) -> Unit, post: Post) {
         openScreen("$POST_DETAILS_SCREEN?$POST_ID={${post.postId}}")
+    }
+
+    fun clearFocus(focusManager: FocusManager) {
+        focusManager.clearFocus()
+    }
+
+    fun showProgressIndicator(showProgressIndicator: Boolean) {
+        uiState.value = uiState.value.copy(
+            showProgressIndicator = showProgressIndicator
+        )
     }
 
 }

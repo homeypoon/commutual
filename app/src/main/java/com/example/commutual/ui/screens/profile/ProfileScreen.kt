@@ -30,6 +30,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -61,7 +62,7 @@ fun ProfileScreen(
             .wrapContentHeight()
     ) {
         ActionToolbar(
-            title = AppText.profile,
+            title = stringResource(AppText.profile),
             endActionIcon = R.drawable.ic_settings,
             endAction = { viewModel.onSettingsClick(openScreen) },
             modifier = modifier

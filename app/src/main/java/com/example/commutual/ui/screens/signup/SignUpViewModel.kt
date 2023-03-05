@@ -17,10 +17,7 @@ limitations under the License.
 package com.example.commutual.ui.screens.signup
 
 import androidx.compose.runtime.mutableStateOf
-import com.example.commutual.EDIT_PROFILE_SCREEN
-import com.example.commutual.HOME_SCREEN
-import com.example.commutual.LOGIN_SCREEN
-import com.example.commutual.SIGN_UP_SCREEN
+import com.example.commutual.*
 import com.example.commutual.common.ext.isValidEmail
 import com.example.commutual.common.ext.isValidPassword
 import com.example.commutual.common.ext.passwordMatches
@@ -80,7 +77,7 @@ class SignUpViewModel @Inject constructor(
     launchCatching {
       accountService.createAccount(email, password)
       openAndPopUp(HOME_SCREEN, SIGN_UP_SCREEN)
-      openScreen(EDIT_PROFILE_SCREEN)
+      openScreen("$EDIT_PROFILE_SCREEN?$SCREEN_TITLE=$ST_CREATE_PROFILE")
     }
   }
 }

@@ -21,8 +21,10 @@ const val EXPLORE_SCREEN = "ExploreScreen"
 const val CHAT_SCREEN = "ChatScreen"
 
 const val MESSAGES_SCREEN = "MessagesScreen"
+const val EDIT_TASK_SCREEN = "EditTaskScreen"
 const val PROFILE_SCREEN = "ProfileScreen"
 
+const val FILTERS_SCREEN = "FiltersScreen"
 
 const val EDIT_POST_SCREEN = "EditPostScreen"
 const val SPLASH_SCREEN = "SplashScreen"
@@ -44,6 +46,22 @@ const val POST_ID = "postId"
 const val POST_DEFAULT_ID = "-1"
 const val POST_ID_ARG = "?$POST_ID={$POST_ID}"
 
+const val SCREEN_TITLE = "screenTitle"
+const val ST_CREATE_POST = "Create New Post"
+const val ST_EDIT_POST = "Edit Post"
+const val ST_CREATE_PROFILE = "Create New Profile"
+const val ST_EDIT_PROFILE = "Edit Profile"
+const val ST_CREATE_TASK = "Create New Task"
+const val ST_EDIT_TASK = "Edit Task"
+
+
+const val SCREEN_TITLE_ARG = "?$SCREEN_TITLE={$SCREEN_TITLE}"
+
+
 const val CHAT_ID = "chatId"
 const val CHAT_DEFAULT_ID = "-1"
 const val CHAT_ID_ARG = "?$CHAT_ID={$CHAT_ID}"
+
+const val TASK_ID = "taskId"
+const val TASK_DEFAULT_ID = "-1"
+const val TASK_ID_ARG = "?$TASK_ID={$TASK_ID}"

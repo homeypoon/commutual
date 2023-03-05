@@ -17,10 +17,7 @@ limitations under the License.
 package com.example.commutual.ui.screens.splash
 
 import androidx.compose.runtime.mutableStateOf
-import com.example.commutual.EDIT_PROFILE_SCREEN
-import com.example.commutual.HOME_SCREEN
-import com.example.commutual.LOGIN_SCREEN
-import com.example.commutual.SPLASH_SCREEN
+import com.example.commutual.*
 import com.example.commutual.model.service.AccountService
 import com.example.commutual.model.service.ConfigurationService
 import com.example.commutual.model.service.LogService
@@ -50,7 +47,7 @@ class SplashViewModel @Inject constructor(
                     openAndPopUp(HOME_SCREEN, SPLASH_SCREEN)
                 } else {
                     openAndPopUp(HOME_SCREEN, SPLASH_SCREEN)
-                    openScreen(EDIT_PROFILE_SCREEN)
+                    openScreen("$EDIT_PROFILE_SCREEN?$SCREEN_TITLE=$ST_CREATE_PROFILE")
                 }
             }
         } else openAndPopUp(LOGIN_SCREEN, SPLASH_SCREEN)

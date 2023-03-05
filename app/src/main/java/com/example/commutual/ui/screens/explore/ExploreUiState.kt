@@ -6,9 +6,12 @@ data class ExploreUiState(
     val searchText: String = "",
     val postDescription: String = "",
     val postsSearched: Boolean = false,
+    val showFiltersDialog: Boolean = false,
+    val filterChipCategory: CategoryEnum = CategoryEnum.ANY,
+    val selectedCategory: CategoryEnum = CategoryEnum.ANY,
 
+    val expandedDropDownMenu: Boolean = false,
+    val showProgressIndicator: Boolean = false
 
-    val category: CategoryEnum = CategoryEnum.DEFAULT,
-    val expandedDropDownMenu: Boolean = false
 )
 

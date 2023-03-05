@@ -16,7 +16,6 @@ limitations under the License.
 
 package com.example.commutual.ui.screens.splash
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -68,7 +67,6 @@ fun SplashScreen(
   }
 
   LaunchedEffect(true) {
-    Log.d("launched", "fds")
     delay(SPLASH_TIMEOUT)
     viewModel.onAppStart(openAndPopUp, openScreen, popUpScreen)
   }

@@ -8,7 +8,6 @@ data class Post(
 //    val user: User = User(),
     val title: String = "",
     val description: String = "",
-    val category: CategoryEnum = CategoryEnum.DEFAULT,
-//    val category: CategoryEnum = CategoryEnum.DEFAULT
-//    val timestamp: Any = FieldValue.serverTimestamp()
+    val category: CategoryEnum = CategoryEnum.ANY,
+//    val category: CategoryEnum = CategoryEnum.ANY
 )

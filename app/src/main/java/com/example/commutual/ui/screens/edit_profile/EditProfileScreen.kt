@@ -1,6 +1,5 @@
 package com.example.commutual.ui.screens.edit_profile
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -19,7 +18,6 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.commutual.R
 import com.example.commutual.common.composable.ActionToolbar
 import com.example.commutual.common.composable.BasicField
 import com.example.commutual.common.composable.DescriptionField
@@ -32,6 +30,7 @@ import com.example.commutual.R.string as AppText
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun EditProfileScreen(
+    screenTitle: String,
     popUpScreen: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: EditProfileViewModel = hiltViewModel()
@@ -56,11 +55,12 @@ fun EditProfileScreen(
             .pointerInput(Unit) {
                 detectTapGestures(onTap = {
                     focusManager.clearFocus()
-                })},
+                })
+            },
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         ActionToolbar(
-            title = AppText.edit_profile,
+            title = screenTitle,
             modifier = Modifier.toolbarActions(),
             endActionIcon = AppIcon.ic_check,
             endAction = { viewModel.onDoneClick(popUpScreen, focusManager) }

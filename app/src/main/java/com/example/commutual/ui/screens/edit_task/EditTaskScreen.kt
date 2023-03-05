@@ -1,9 +1,11 @@
-package com.example.commutual.ui.screens.edit_post
+package com.example.commutual.ui.screens.edit_task
 
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
@@ -16,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
@@ -24,34 +27,34 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.commutual.FormatterClass
 import com.example.commutual.R
-import com.example.commutual.common.composable.ActionToolbar
-import com.example.commutual.common.composable.BasicField
-import com.example.commutual.common.composable.DescriptionField
-import com.example.commutual.common.composable.DropDownField
+import com.example.commutual.common.composable.*
+import com.example.commutual.common.ext.card
 import com.example.commutual.common.ext.fieldModifier
 import com.example.commutual.common.ext.spacer
 import com.example.commutual.common.ext.toolbarActions
 import com.example.commutual.model.CategoryEnum
+import com.example.commutual.model.Task
 import com.example.commutual.R.drawable as AppIcon
-import com.example.commutual.R.string as AppText
 
+@ExperimentalMaterialApi
 @Composable
-fun EditPostScreen(
+fun EditTaskScreen(
     popUpScreen: () -> Unit,
-    postId: String,
+    taskId: String,
+    chatId: String,
     screenTitle: String,
     modifier: Modifier = Modifier,
-    viewModel: EditPostViewModel = hiltViewModel()
+    viewModel: EditTaskViewModel = hiltViewModel()
 ) {
-    val post by viewModel.post
+    val task by viewModel.task
 
     val scrollState = rememberScrollState()
     val focusManager = LocalFocusManager.current
 
     val categories = enumValues<CategoryEnum>()
         .filter { it != CategoryEnum.ANY }
-
 
     var textFieldSize by remember { mutableStateOf(Size.Zero) }
 
@@ -60,7 +63,7 @@ fun EditPostScreen(
     else
         Icons.Filled.KeyboardArrowDown
 
-    LaunchedEffect(Unit) { viewModel.initialize(postId) }
+    LaunchedEffect(Unit) { viewModel.initialize(taskId, chatId) }
 
     Column(
         modifier = modifier
@@ -79,7 +82,7 @@ fun EditPostScreen(
             title = screenTitle,
             modifier = Modifier.toolbarActions(),
             endActionIcon = AppIcon.ic_check,
-            endAction = { viewModel.onDoneClick(popUpScreen, focusManager) }
+            endAction = { viewModel.onDoneClick(chatId, popUpScreen, focusManager) }
         )
 
         Spacer(modifier = Modifier.spacer())
@@ -87,17 +90,17 @@ fun EditPostScreen(
         val fieldModifier = Modifier.fieldModifier()
 
         BasicField(
-            AppText.post_title,
-            post.title,
+            R.string.task_title,
+            task.title,
             viewModel::onTitleChange, fieldModifier,
             ImeAction.Next,
             KeyboardCapitalization.Words,
             focusManager
         )
         DescriptionField(
-            AppText.post_description,
-            post.description,
-            viewModel::onDescriptionChange,
+            R.string.task_details,
+            task.details,
+            viewModel::onDetailsChange,
             fieldModifier,
             KeyboardCapitalization.Sentences,
             focusManager
@@ -106,12 +109,12 @@ fun EditPostScreen(
         Column(Modifier.padding(16.dp, 0.dp)) {
 
             DropDownField(
-                value = stringResource(viewModel.category.categoryStringRes),
+                value = stringResource(task.category.categoryStringRes),
                 onValueChange = {},
                 labelText = stringResource(R.string.category),
                 icon = icon,
                 expanded = viewModel.expandedDropDownMenu,
-                setExpandedDropDownMenu = { viewModel.setExpandedDropDownMenu(it) } ,
+                setExpandedDropDownMenu = { viewModel.setExpandedDropDownMenu(it) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .onGloballyPositioned { coordinates ->
@@ -119,6 +122,17 @@ fun EditPostScreen(
                         textFieldSize = coordinates.size.toSize()
                     }
             )
+
+        CardEditors(
+            task = task,
+            startTime = viewModel.startTime,
+            endTime = viewModel.endTime,
+            viewModel::showDatePicker,
+            viewModel::showTimePicker,
+            viewModel::onDateChange,
+            viewModel::onStartTimeChange,
+            viewModel::onEndTimeChange
+        )
 
             DropdownMenu(
                 expanded = viewModel.expandedDropDownMenu,
@@ -142,5 +156,32 @@ fun EditPostScreen(
             }
         }
     }
-
 }
+
+@ExperimentalMaterialApi
+@Composable
+fun CardEditors(
+    task: Task,
+    startTime: String,
+    endTime: String,
+    showDatePicker: (AppCompatActivity?, (Long) -> Unit) -> Unit,
+    showTimePicker: (AppCompatActivity?, (Int, Int) -> Unit) -> Unit,
+    onDateChange: (Long) -> Unit,
+    onStartTimeChange: (Int, Int) -> Unit,
+    onEndTimeChange: (Int, Int) -> Unit
+) {
+    val activity = LocalContext.current as AppCompatActivity
+
+    RegularCardEditor(R.string.date, R.drawable.ic_calendar, FormatterClass.formatDate(task.date), Modifier.card()) {
+        showDatePicker(activity, onDateChange)
+    }
+
+    RegularCardEditor(R.string.start_time, R.drawable.ic_time, startTime, Modifier.card()) {
+        showTimePicker(activity, onStartTimeChange)
+    }
+
+    RegularCardEditor(R.string.end_time, R.drawable.ic_time, endTime, Modifier.card()) {
+        showTimePicker(activity, onEndTimeChange)
+    }
+}
+

@@ -38,7 +38,6 @@ fun HomeScreen(
             },
             onClick = { viewModel.onAddClick(openScreen) },
             modifier = modifier.padding(16.dp),
-//            expanded = sharedViewModel.expandedFab.value,
             containerColor = MaterialTheme.colorScheme.tertiary,
         )
     }

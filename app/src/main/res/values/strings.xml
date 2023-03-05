@@ -32,6 +32,11 @@
     <string name="explore">Explore</string>
     <string name="search">Search</string>
 
+    <!-- Filters Screen -->
+    <string name="filters">Filters</string>
+    <string name="reset_filters">Reset Filters</string>
+    <string name="apply_filters">Apply Filters</string>
+
 
     <!-- PostDetails -->
     <string name="post">Post</string>
@@ -43,12 +48,15 @@
     <string name="message_sent">Request Message Sent</string>
 
     <!-- Create Post Screen -->
-    <string name="create_post">Create Your Post</string>
+<!--    <string name="create_post">Create New Post</string>-->
+    <string name="edit_post">Edit Post</string>
+
     <string name="post_title">Post Title</string>
     <string name="post_description">Post Description</string>
     <string name="category">Category</string>
-    <string name="empty_string">""</string>
+    <string name="any">Any</string>
 
+    <string name="empty_string"></string>
     <string name="empty_title_error">Please enter a title for your post!</string>
     <string name="empty_description_error">Please enter a description for your post!</string>
     <string name="empty_category_error">Please choose a category for your post!</string>
@@ -60,7 +68,33 @@
     <!-- Message Screen -->
     <string name="message">Message</string>
     <string name="send">send</string>
+    <string name="tasks">Tasks</string>
     <string name="long_message_error">Please enter a title for your post!</string>
+
+    <string name="upcoming_tasks">Upcoming Tasks</string>
+    <string name="completed_tasks">Completed Tasks</string>
+
+    <string name="formatted_task_time">%1$s | %2$s-%3$s</string>
+
+
+
+    <!-- Edit Task Screen -->
+    <string name="create_task">Create New Task</string>
+    <string name="edit_task">Edit Task</string>
+    <string name="add_task">ADD TASK</string>
+
+    <string name="task_title">Task Title</string>
+    <string name="task_details">Task Details</string>
+    <string name="date">Date</string>
+    <string name="start_time">Start Time</string>
+    <string name="end_time">End Time</string>
+
+
+    <!--    <string name="task_details">Task Details</string>-->
+<!--    <string name="task_details">Task Details</string>-->
+    <string name="empty_task_title_error">Please enter a title for your task!</string>
+    <string name="empty_task_details_error">Please enter details for your task!</string>
+    <string name="empty_task_category_error">Please choose a category for your task!</string>
 
 
     <!-- Profile Screen -->

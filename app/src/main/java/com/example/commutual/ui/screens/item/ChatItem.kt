@@ -3,6 +3,7 @@ package com.example.commutual.ui.screens.item
 import androidx.compose.material.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import com.example.commutual.model.Chat
@@ -17,6 +18,9 @@ fun ChatItem(
 ) {
 
     ListItem(
+        colors = ListItemDefaults.colors(
+            MaterialTheme.colorScheme.surface
+        ),
         headlineText = {
             Text(
                 user.username,

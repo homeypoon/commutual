@@ -56,7 +56,7 @@ import com.example.commutual.common.composable.SearchField
 import com.example.commutual.model.CategoryEnum
 import com.example.commutual.ui.screens.item.PostItem
 
-@OptIn(ExperimentalLifecycleComposeApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLifecycleComposeApi::class)
 @Composable
 @ExperimentalMaterialApi
 fun ExploreScreen(
@@ -164,6 +164,8 @@ fun FullScreenDialog(
     val focusManager = LocalFocusManager.current
 
     val categories = enumValues<CategoryEnum>()
+        .filter { it != CategoryEnum.NONE }
+
 
     var textFieldSize by remember { mutableStateOf(Size.Zero) }
 

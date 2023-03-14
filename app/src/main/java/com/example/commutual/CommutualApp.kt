@@ -36,11 +36,17 @@ import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun CommutualApp() {
+    val context = LocalContext.current
+
     Surface(color = MaterialTheme.colors.background) {
         val appState = rememberAppState()
         val bottomNavState = rememberSaveable { (mutableStateOf(false)) }
 
         val navBackStackEntry by appState.navController.currentBackStackEntryAsState()
+
+        LaunchedEffect(Unit) {
+            appState.createNotificationChannel(context)
+        }
 
         // Control bottomNav visibility
         when (navBackStackEntry?.destination?.route) {
@@ -104,6 +110,7 @@ fun CommutualApp() {
             },
             scaffoldState = appState.scaffoldState
         ) { innerPaddingModifier ->
+
             NavHost(
                 navController = appState.navController,
                 startDestination = SPLASH_SCREEN,
@@ -214,7 +221,9 @@ fun NavGraphBuilder.commutualGraph(appState: CommutualAppState) {
             popUpScreen = { appState.popUp() },
             taskId = it.arguments?.getString(TASK_ID) ?: TASK_DEFAULT_ID,
             chatId = it.arguments?.getString(CHAT_ID) ?: CHAT_DEFAULT_ID,
-            screenTitle = it.arguments?.getString(SCREEN_TITLE) ?: ST_CREATE_TASK
+            screenTitle = it.arguments?.getString(SCREEN_TITLE) ?: ST_CREATE_TASK,
+            showReminderNotification = appState::showReminderNotification,
+            setAlarmManager = appState::setAlarmManager
         )
     }
 

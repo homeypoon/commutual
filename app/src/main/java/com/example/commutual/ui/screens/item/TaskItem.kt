@@ -5,16 +5,14 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.material.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.commutual.FormatterClass
 import com.example.commutual.R
 import com.example.commutual.common.ext.categoryChip
-import com.example.commutual.model.CategoryEnum
-import com.example.commutual.model.Post
 import com.example.commutual.model.Task
 import com.example.commutual.model.User
 
@@ -25,7 +23,9 @@ fun TaskItem(
     creator: User,
 ) {
     ListItem(
-
+        colors = ListItemDefaults.colors(
+            MaterialTheme.colorScheme.surface
+        ),
         overlineText = {
 
             Column {
@@ -69,10 +69,4 @@ fun TaskItem(
             }
         }
     )
-}
-
-@Preview
-@Composable
-fun TaskItem() {
-    PostItem(post = Post("fds", "userid", "title", "description", CategoryEnum.CODING))
 }

@@ -30,7 +30,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import com.example.commutual.R
 import com.example.commutual.common.composable.*
 import com.example.commutual.common.ext.card
@@ -40,7 +39,6 @@ import com.example.commutual.R.drawable as AppIcon
 import com.example.commutual.R.string as AppText
 
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 @ExperimentalMaterialApi
 fun SettingsScreen(

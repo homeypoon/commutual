@@ -6,6 +6,7 @@ import com.example.commutual.R
 
 enum class CategoryEnum(@StringRes val categoryStringRes: Int) {
     ANY(R.string.any),
+    NONE(R.string.empty_string),
     ACADEMICS(R.string.academics),
     ART(R.string.art),
     CODING(R.string.coding),

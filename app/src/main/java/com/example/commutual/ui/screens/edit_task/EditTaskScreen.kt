@@ -1,17 +1,18 @@
 package com.example.commutual.ui.screens.edit_task
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,6 +37,9 @@ import com.example.commutual.common.ext.spacer
 import com.example.commutual.common.ext.toolbarActions
 import com.example.commutual.model.CategoryEnum
 import com.example.commutual.model.Task
+import java.util.*
+import kotlin.reflect.KFunction4
+import kotlin.reflect.KFunction5
 import com.example.commutual.R.drawable as AppIcon
 
 @ExperimentalMaterialApi
@@ -46,7 +50,9 @@ fun EditTaskScreen(
     chatId: String,
     screenTitle: String,
     modifier: Modifier = Modifier,
-    viewModel: EditTaskViewModel = hiltViewModel()
+    viewModel: EditTaskViewModel = hiltViewModel(),
+    showReminderNotification: KFunction5<Context, Int, String, String, Int, Unit>,
+    setAlarmManager: KFunction4<Context, String, String, Calendar, Unit>,
 ) {
     val task by viewModel.task
 
@@ -54,7 +60,7 @@ fun EditTaskScreen(
     val focusManager = LocalFocusManager.current
 
     val categories = enumValues<CategoryEnum>()
-        .filter { it != CategoryEnum.ANY }
+        .filter { (it != CategoryEnum.ANY) && (it != CategoryEnum.NONE) }
 
     var textFieldSize by remember { mutableStateOf(Size.Zero) }
 
@@ -62,6 +68,8 @@ fun EditTaskScreen(
         Icons.Filled.KeyboardArrowUp
     else
         Icons.Filled.KeyboardArrowDown
+
+    val context = LocalContext.current
 
     LaunchedEffect(Unit) { viewModel.initialize(taskId, chatId) }
 
@@ -82,7 +90,7 @@ fun EditTaskScreen(
             title = screenTitle,
             modifier = Modifier.toolbarActions(),
             endActionIcon = AppIcon.ic_check,
-            endAction = { viewModel.onDoneClick(chatId, popUpScreen, focusManager) }
+            endAction = { viewModel.onDoneClick(chatId, popUpScreen, focusManager, context, showReminderNotification, setAlarmManager) }
         )
 
         Spacer(modifier = Modifier.spacer())
@@ -123,17 +131,6 @@ fun EditTaskScreen(
                     }
             )
 
-        CardEditors(
-            task = task,
-            startTime = viewModel.startTime,
-            endTime = viewModel.endTime,
-            viewModel::showDatePicker,
-            viewModel::showTimePicker,
-            viewModel::onDateChange,
-            viewModel::onStartTimeChange,
-            viewModel::onEndTimeChange
-        )
-
             DropdownMenu(
                 expanded = viewModel.expandedDropDownMenu,
                 onDismissRequest = { viewModel.setExpandedDropDownMenu(false) },
@@ -154,8 +151,23 @@ fun EditTaskScreen(
                     )
                 }
             }
+
+            CardEditors(
+                task = task,
+                startTime = viewModel.startTime,
+                endTime = viewModel.endTime,
+                viewModel::showDatePicker,
+                viewModel::showTimePicker,
+                viewModel::onDateChange,
+                viewModel::onStartTimeChange,
+                viewModel::onEndTimeChange
+            )
+
+
         }
+
     }
+
 }
 
 @ExperimentalMaterialApi
@@ -172,7 +184,12 @@ fun CardEditors(
 ) {
     val activity = LocalContext.current as AppCompatActivity
 
-    RegularCardEditor(R.string.date, R.drawable.ic_calendar, FormatterClass.formatDate(task.date), Modifier.card()) {
+    RegularCardEditor(
+        R.string.date,
+        R.drawable.ic_calendar,
+        FormatterClass.formatDate(task.date),
+        Modifier.card()
+    ) {
         showDatePicker(activity, onDateChange)
     }
 

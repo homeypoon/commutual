@@ -26,9 +26,7 @@ class MessageViewModel @Inject constructor(
     val chat = mutableStateOf(Chat())
 
     val messageTabs = enumValues<MessageTabEnum>()
-
 //    var tasks = storageService.tasks
-
 
     fun getMessagesWithUsers(chatId: String): Flow<List<Pair<Message, User>>> {
         return storageService.getMessagesWithUsers(chatId)
@@ -92,6 +90,10 @@ class MessageViewModel @Inject constructor(
         storageService.saveMessage(message.value, chatId)
 
         resetMessageText()
+    }
+
+    fun onCreatedTaskCLicked() {
+        setMessageTab(1)
     }
 
     fun onAddTaskClick(openScreen: (String) -> Unit) {

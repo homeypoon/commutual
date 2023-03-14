@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -19,7 +20,9 @@ fun PostItem(
     post: Post,
 ) {
     ListItem(
-
+        colors = ListItemDefaults.colors(
+            MaterialTheme.colorScheme.surface
+        ),
         headlineText = {
             Text(
                 post.title,
@@ -50,20 +53,6 @@ fun PostItem(
             }
         }
     )
-//    Divider()
-//    Card(
-//        backgroundColor = MaterialTheme.colors.background,
-//        modifier = Modifier.padding(8.dp, 0.dp, 8.dp, 8.dp)
-//    ) {
-//        Row(
-//            verticalAlignment = Alignment.CenterVertically,
-//            modifier = Modifier.fillMaxWidth()
-//        ) {
-//            Column(modifier = Modifier.weight(1f)) {
-//                Text(text = task.title)
-//                Text(text = task.description)
-//            }
-//        }
 }
 
 @Preview

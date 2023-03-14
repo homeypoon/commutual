@@ -8,7 +8,7 @@ data class Task(
     val creatorId: String = "",
     val title: String = "",
     val details: String = "",
-    val category: CategoryEnum = CategoryEnum.ANY,
+    val category: CategoryEnum = CategoryEnum.NONE,
     val date: Long = Timestamp.now().toDate().time,
     val startTime: String = "",
     val endTime: String = "",

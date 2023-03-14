@@ -34,7 +34,6 @@ fun MessageItem(
                 Text(text = formatTimestamp(message.timestamp))
             }
 
-
             Spacer(modifier = Modifier.height(4.dp))
 
             Surface(

@@ -32,13 +32,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import com.example.commutual.R
 import com.example.commutual.common.composable.BasicToolbar
 import com.example.commutual.ui.screens.item.ChatItem
 
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 @ExperimentalMaterialApi
 fun ChatScreen(

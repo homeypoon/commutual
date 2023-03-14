@@ -13,6 +13,7 @@ plugins {
 
 android {
     compileSdk 33
+    namespace 'com.example.commutual'
 
     defaultConfig {
         applicationId "com.example.commutual"

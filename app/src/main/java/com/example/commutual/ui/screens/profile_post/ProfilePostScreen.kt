@@ -15,7 +15,6 @@ limitations under the License.
  */
 
 
-@file:OptIn(ExperimentalLifecycleComposeApi::class)
 
 package com.example.commutual.ui.screens.profile_post
 
@@ -36,7 +35,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import com.example.commutual.R
 import com.example.commutual.common.composable.BasicIconButton
 import com.example.commutual.common.composable.BasicToolbar
@@ -44,7 +42,6 @@ import com.example.commutual.common.ext.basicIconButton
 import com.example.commutual.ui.screens.item.BottomSheetOptionItem
 import com.example.commutual.R.string as AppText
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 @ExperimentalMaterialApi
 fun ProfilePostScreen(

@@ -50,8 +50,7 @@ fun EditPostScreen(
     val focusManager = LocalFocusManager.current
 
     val categories = enumValues<CategoryEnum>()
-        .filter { it != CategoryEnum.ANY }
-
+        .filter { (it != CategoryEnum.ANY) && (it != CategoryEnum.NONE) }
 
     var textFieldSize by remember { mutableStateOf(Size.Zero) }
 

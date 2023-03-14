@@ -18,17 +18,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import com.example.commutual.FormatterClass
 import com.example.commutual.R
 import com.example.commutual.common.composable.BasicToolbar
 import com.example.commutual.common.composable.MessageInputField
+import com.example.commutual.model.Message
+import com.example.commutual.model.Task
+import com.example.commutual.ui.screens.item.CreatedTaskItem
 import com.example.commutual.ui.screens.item.MessageItem
 import com.example.commutual.ui.screens.item.TaskItem
 import kotlinx.coroutines.launch
 import com.example.commutual.R.string as AppText
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun MessagesScreen(
     popUpScreen: () -> Unit,
@@ -53,6 +54,13 @@ fun MessagesScreen(
     val tasksWithUsers by viewModel.getTasksWithUsers(chatId)
         .collectAsState(Pair(emptyList(), emptyList()))
     val (completedTasks, upcomingTasks) = tasksWithUsers
+
+    // Sort messages and tasks by timestamp
+    val messagesWithTasks = (messages.map { Pair(it.first.timestamp, it) } +
+            upcomingTasks.map { Pair(it.first.timestamp, it) } +
+            completedTasks.map { Pair(it.first.timestamp, it) })
+        .sortedBy { it.first }
+        .map { it.second }
 
 
     LaunchedEffect(messages) {
@@ -129,9 +137,18 @@ fun MessagesScreen(
                     state = scrollState,
                     contentPadding = PaddingValues(top = 8.dp, bottom = 8.dp)
                 ) {
-                    items(messages) { (message, user) ->
-                        MessageItem(message, user)
-                        { timestamp -> FormatterClass.formatTimestamp(timestamp, true) }
+                    items(messagesWithTasks) { (item, user) ->
+
+                        when (item) {
+                            is Message -> {
+                                MessageItem(item, user)
+                                { timestamp -> FormatterClass.formatTimestamp(timestamp, true) }
+                            }
+                            is Task -> {
+                                CreatedTaskItem(item, user, viewModel::onCreatedTaskCLicked)
+                            }
+                        }
+
                     }
                 }
 
@@ -148,6 +165,7 @@ fun MessagesScreen(
                     {
                         IconButton(
                             onClick = {
+
                                 coroutineScope.launch {
                                     viewModel.onSendClick(chatId, focusManager)
                                     if (messages.isNotEmpty()) {
@@ -176,15 +194,17 @@ fun MessagesScreen(
                 // Tasks Tab
 
                 if (upcomingTasks.isNotEmpty()) {
-                    Text(
-                        text = stringResource(R.string.upcoming_tasks)
-                    )
 
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxWidth(),
                         contentPadding = PaddingValues(top = 8.dp, bottom = 8.dp)
                     ) {
+                        item {
+                            Text(
+                                text = stringResource(R.string.upcoming_tasks)
+                            )
+                        }
                         items(upcomingTasks) { (upcomingTasks, creator) ->
                             TaskItem(task = upcomingTasks, creator = creator)
                         }

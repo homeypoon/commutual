@@ -51,9 +51,8 @@ fun Modifier.basicIconButton(): Modifier {
 }
 
 
-
 fun Modifier.card(): Modifier {
-  return this.padding(16.dp, 0.dp, 16.dp, 8.dp)
+  return this.padding(0.dp, 16.dp, 0.dp, 16.dp)
 }
 
 fun Modifier.contextMenu(): Modifier {

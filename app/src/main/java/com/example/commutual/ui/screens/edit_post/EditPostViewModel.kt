@@ -23,7 +23,6 @@ class EditPostViewModel @Inject constructor(
 
     ) : CommutualViewModel(logService = logService) {
     val post = mutableStateOf(Post())
-//    val category = mutableStateOf(Category())
 
     private var uiState = mutableStateOf(EditPostUiState())
         private set
@@ -89,7 +88,7 @@ class EditPostViewModel @Inject constructor(
             return
         }
 
-        if (category == CategoryEnum.ANY) {
+        if (category == CategoryEnum.NONE) {
             SnackbarManager.showMessage(R.string.empty_category_error)
             return
         }

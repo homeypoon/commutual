@@ -9,7 +9,6 @@ class FormatterClass {
 
         fun formatTimestamp(timestamp: Timestamp, hasYear: Boolean): String {
 
-
             var timeFormatter = SimpleDateFormat(
                 "HH:mm MMM d",
                 Locale.getDefault()
@@ -31,7 +30,9 @@ class FormatterClass {
             val timeFormatter = SimpleDateFormat(
                 "MMM d yyyy",
                 Locale.getDefault()
-            )
+            ).apply {
+                timeZone = TimeZone.getTimeZone("UTC")
+            }
 
             return timeFormatter.format(timestamp)
         }

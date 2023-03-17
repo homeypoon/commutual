@@ -46,6 +46,10 @@ class ProfileViewModel @Inject constructor(
     fun initialize() {
         launchCatching {
             user.value = storageService.getUser(accountService.currentUserId) ?: User()
+            uiState.value = uiState.value.copy(
+                totalTasksScheduled = user.value.tasksScheduled,
+                totalTasksCompleted = user.value.tasksCompleted
+            )
             calculateUserTime()
         }
     }

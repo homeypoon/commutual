@@ -141,6 +141,7 @@ class CommutualAppState(
         contentText: String,
         attendanceCalendar: Calendar,
         completionCalendar: Calendar,
+        membersId: Array<String>,
         task: Task,
         chatId: String,
     ) {
@@ -155,6 +156,7 @@ class CommutualAppState(
         attendanceIntent.putExtra("content", contentText)
         attendanceIntent.putExtra("content", contentText)
         attendanceIntent.putExtra("alarmType", ATTENDANCE)
+        attendanceIntent.putExtra("membersId", membersId)
         attendanceIntent.putExtra("chatId", chatId)
         attendanceIntent.putExtra("task", task as Serializable)
         attendanceIntent.setAction((System.currentTimeMillis().toString()))
@@ -178,6 +180,7 @@ class CommutualAppState(
         completionIntent.putExtra("content", contentText)
         completionIntent.putExtra("content", contentText)
         completionIntent.putExtra("alarmType", COMPLETION)
+        completionIntent.putExtra("membersId", membersId)
         completionIntent.putExtra("chatId", chatId)
         completionIntent.putExtra("task", task as Serializable)
         completionIntent.setAction((System.currentTimeMillis().toString()))

@@ -34,6 +34,8 @@ class AlarmReceiver(
         val title = intent?.getStringExtra("title")
         val content = intent?.getStringExtra("content")
         val chatId = intent?.getStringExtra("chatId")
+        val membersId = intent?.getStringArrayExtra("membersId")
+
 
 
         val alarmType = intent?.getIntExtra("alarmType", COMPLETION)
@@ -58,7 +60,10 @@ class AlarmReceiver(
             if (chatId != null) {
                 CoroutineScope(Dispatchers.Default).launch {
                     storageService.updateTaskAM(task, chatId, ATTENDANCE)
-                    storageService.incrementTasksScheduled()
+
+                    if (membersId != null) {
+                        storageService.incrementTasksScheduled(membersId)
+                    }
 
                     Log.d("attendance alarm r task", "chatid: $chatId")
 

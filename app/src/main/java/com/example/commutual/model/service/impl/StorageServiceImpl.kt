@@ -195,9 +195,12 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
         userRef.update("commitCount", FieldValue.increment(incrementCommitCount))
     }
 
-    override suspend fun incrementTasksScheduled() {
-        val userRef = currentUserCollection().document(auth.currentUserId)
-        userRef.update("tasksScheduled", FieldValue.increment(1))
+    override suspend fun incrementTasksScheduled(membersId: Array<String>) {
+
+        for (memberId in membersId) {
+            val userRef = currentUserCollection().document(memberId)
+            userRef.update("tasksScheduled", FieldValue.increment(1))
+        }
     }
 
     override suspend fun incrementTasksCompleted() {
@@ -263,12 +266,11 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
                     ).await()
 
                     val completionMap = mapOf("completion.${auth.currentUserId}" to attendanceType)
-
                     currentTaskCollection(chatId)
                         .document(task.taskId)
                         .update(completionMap)
-                }
 
+                }
 
 
             } else {
@@ -288,19 +290,22 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
         if (updateType == ATTENDANCE) {
             Log.d("attendance", "taskid:${task.taskId}, chatid:${chatId}")
 
-            currentTaskCollection(chatId).document(task.taskId).set(
-                task.copy(
-                    showAttendanceTimestamp = Timestamp.now(),
-                    showAttendance = true,
-                )
+            currentTaskCollection(chatId).document(task.taskId)
+                .update("showAttendanceTimestamp", Timestamp. now (),
+            "showAttendance", true
             ).await()
         } else if (updateType == COMPLETION) {
-            currentTaskCollection(chatId).document(task.taskId).set(
-                task.copy(
-                    showCompletionTimestamp = Timestamp.now(),
-                    showCompletion = true
-                )
-            ).await()
+            currentTaskCollection(chatId).document(task.taskId)
+                .update("showCompletionTimestamp", Timestamp. now (),
+                    "showCompletion", true
+                ).await()
+
+//            currentTaskCollection(chatId).document(task.taskId).set(
+//                task.copy(
+//                    showCompletionTimestamp = Timestamp.now(),
+//                    showCompletion = true
+//                )
+//            ).await()
         }
 
         Log.d("check", "taskid:${task.taskId}, chatid:${chatId}")

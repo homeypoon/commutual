@@ -51,7 +51,7 @@ interface StorageService {
   suspend fun updateUser(user: User)
   suspend fun deleteAllForUser(userId: String)
   suspend fun incrementCommitCount(incrementCommitCount: Long)
-  suspend fun incrementTasksScheduled()
+  suspend fun incrementTasksScheduled(membersId: Array<String>)
   suspend fun incrementTasksCompleted()
 
   // Post methods

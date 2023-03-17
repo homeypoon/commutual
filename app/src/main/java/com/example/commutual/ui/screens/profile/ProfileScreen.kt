@@ -16,6 +16,7 @@ limitations under the License.
 
 package com.example.commutual.ui.screens.profile
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -70,33 +71,49 @@ fun ProfileScreen(
         )
 
 
-            LazyColumn(
-                Modifier
-                    .weight(1f)
+        LazyColumn(
+            Modifier
+                .weight(1f)
 //                    .wrapContentHeight()
-            ) {
-                item {
-                    Text(text = user.username, style = MaterialTheme.typography.headlineLarge)
-                    Text(text = user.bio, style = MaterialTheme.typography.bodyMedium)
-                    Text(text = user.commitCount.toString(), style = MaterialTheme.typography.bodyMedium)
-                    Text(text = stringResource(AppText.days, uiState.userTotalDays.toString()), style = MaterialTheme.typography.bodyMedium)
+        ) {
+            item {
+                Text(text = user.username, style = MaterialTheme.typography.headlineLarge)
+                Text(text = user.bio, style = MaterialTheme.typography.bodyMedium)
+                Text(
+                    text = user.commitCount.toString(),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                Text(
+                    text = stringResource(AppText.days, uiState.userTotalDays.toString()),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                Text(
+                    text = "totalTasksScheduled: ${uiState.totalTasksScheduled}",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+
+                Log.d("profile", "totalTasksScheduled: ${uiState.totalTasksScheduled}")
+                Text(
+                    text = "totalTasksCompleted: ${uiState.totalTasksCompleted}",
+                    style = MaterialTheme.typography.bodyMedium
+                )
 
 
-                    BasicButton(
-                        AppText.edit_profile,
-                        Modifier.basicButton()
-                    ) { viewModel.onEditProfileClick(openScreen) }
+                BasicButton(
+                    AppText.edit_profile,
+                    Modifier.basicButton()
+                ) { viewModel.onEditProfileClick(openScreen) }
+            }
+            items(userPosts.value, key = { it.postId }) { postItem ->
+                Surface(modifier = Modifier.clickable {
+                    viewModel.onPostClick(openScreen, postItem)
+                }) {
+                    PostItem(
+                        post = postItem
+                    )
                 }
-                items(userPosts.value, key = { it.postId }) { postItem ->
-                    Surface(modifier = Modifier.clickable {
-                        viewModel.onPostClick(openScreen, postItem)
-                    }) {
-                        PostItem(
-                            post = postItem
-                        )
-                    }
 
-                }
+            }
         }
 
 

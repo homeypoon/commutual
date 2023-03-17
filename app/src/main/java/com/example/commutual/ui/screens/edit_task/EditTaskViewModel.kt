@@ -26,7 +26,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.*
 import javax.inject.Inject
 import kotlin.reflect.KFunction5
-import kotlin.reflect.KFunction7
+import kotlin.reflect.KFunction8
 
 
 @HiltViewModel
@@ -153,7 +153,7 @@ class EditTaskViewModel @Inject constructor(
         focusManager: FocusManager,
         context: Context,
         showReminderNotification: KFunction5<Context, Int, String, String, Int, Unit>,
-        setAlarmManager: KFunction7<Context, String, String, Calendar, Calendar, Task, String, Unit>
+        setAlarmManager: KFunction8<Context, String, String, Calendar, Calendar, Array<String>, Task, String, Unit>
     ) {
 
         focusManager.clearFocus()
@@ -216,6 +216,7 @@ class EditTaskViewModel @Inject constructor(
                 uiState.value.startMin,
                 0
             )
+
             Log.d("calendar", "${attendanceCalendar.time}")
 
             val completionCalendar: Calendar = Calendar.getInstance()
@@ -229,19 +230,20 @@ class EditTaskViewModel @Inject constructor(
             )
             Log.d("calendar", "${completionCalendar.time}")
 
+
             setAlarmManager(
                 context,
                 "${task.value.title} is starting: Are you ready to work?",
                 "${task.value.startTime} - ${task.value.endTime}",
                 attendanceCalendar,
                 completionCalendar,
+                chat.value.membersId.toTypedArray(),
                 task.value,
                 chatId)
 
-
-
             popUpScreen()
 
+            Log.d("chat.value.membersId.toTypedArray()", chat.value.membersId.toTypedArray().toString())
         }
     }
 

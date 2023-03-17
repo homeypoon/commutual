@@ -50,6 +50,9 @@ interface StorageService {
   suspend fun saveUser(userId: String, user: User)
   suspend fun updateUser(user: User)
   suspend fun deleteAllForUser(userId: String)
+  suspend fun incrementCommitCount(incrementCommitCount: Long)
+  suspend fun incrementTasksScheduled()
+  suspend fun incrementTasksCompleted()
 
   // Post methods
   suspend fun getPost(postId: String): Post?
@@ -60,7 +63,9 @@ interface StorageService {
   // Task methods
   suspend fun getTask(taskId: String, chatId: String): Task?
   suspend fun saveTask(task: Task, chatId: String): String
-  suspend fun updateTask(task: Task, chatId: String)
+  suspend fun updateTask(task: Task, chatId: String, attendanceType: Int?)
+  suspend fun updateTaskAM(task: Task, chatId: String, updateType: Int)
+
   suspend fun deleteTask(taskId: String, chatId: String)
 
   suspend fun saveChat(chat: Chat): String

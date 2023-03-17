@@ -10,6 +10,7 @@ import com.example.commutual.model.service.AccountService
 import com.example.commutual.model.service.LogService
 import com.example.commutual.model.service.StorageService
 import com.example.commutual.ui.screens.CommutualViewModel
+import com.google.firebase.Timestamp
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -63,8 +64,11 @@ class EditProfileViewModel @Inject constructor(
         }
 
         launchCatching {
-            val editedUser = user.value
+            var editedUser = user.value
             if (!accountService.hasUser) {
+                editedUser = user.value.copy(
+                    signUpTimestamp = Timestamp.now()
+                )
                 storageService.saveUser(accountService.currentUserId, editedUser)
             } else {
                 storageService.updateUser(editedUser)

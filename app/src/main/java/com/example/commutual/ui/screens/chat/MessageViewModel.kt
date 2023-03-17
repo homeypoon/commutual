@@ -4,6 +4,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.focus.FocusManager
 import com.example.commutual.*
 import com.example.commutual.model.*
+import com.example.commutual.model.Task.Companion.ATTENDANCE_NO
+import com.example.commutual.model.Task.Companion.ATTENDANCE_YES
+import com.example.commutual.model.Task.Companion.COMPLETION_NO
+import com.example.commutual.model.Task.Companion.COMPLETION_YES
 import com.example.commutual.model.service.AccountService
 import com.example.commutual.model.service.LogService
 import com.example.commutual.model.service.StorageService
@@ -21,9 +25,10 @@ class MessageViewModel @Inject constructor(
 
 ) : CommutualViewModel(logService = logService) {
     val message = mutableStateOf(Message())
-    val sender = mutableStateOf(User())
+    val currentUser = mutableStateOf(User())
     val partnerObject = mutableStateOf(User())
     val chat = mutableStateOf(Chat())
+    val currentUserId = accountService.currentUserId
 
     val messageTabs = enumValues<MessageTabEnum>()
 //    var tasks = storageService.tasks
@@ -54,6 +59,8 @@ class MessageViewModel @Inject constructor(
 
             chat.value = storageService.getChatWithChatId(chatId) ?: Chat()
 
+            currentUser.value = storageService.getUser(accountService.currentUserId) ?: User()
+
             partnerObject.value = storageService.getPartner(chat.value.membersId) ?: User()
 
             uiState.value = uiState.value.copy(
@@ -76,7 +83,6 @@ class MessageViewModel @Inject constructor(
     }
 
 
-
     suspend fun onSendClick(chatId: String, focusManager: FocusManager) {
 
         // Close keyboard
@@ -94,6 +100,45 @@ class MessageViewModel @Inject constructor(
 
     fun onCreatedTaskCLicked() {
         setMessageTab(1)
+    }
+
+    fun onAttendanceItemClicked() {
+        setMessageTab(1)
+    }
+
+    fun onCompletionItemClicked() {
+        setMessageTab(1)
+    }
+
+    fun onAttendanceYesClicked(task: Task, chatId: String) {
+
+        launchCatching {
+            storageService.updateTask(task, chatId, ATTENDANCE_YES)
+            storageService.incrementCommitCount(ATTENDANCE_YES_POINTS)
+        }
+    }
+
+    fun onAttendanceNoClicked(task: Task, chatId: String) {
+        launchCatching {
+            storageService.updateTask(task, chatId, ATTENDANCE_NO)
+            storageService.incrementCommitCount(ATTENDANCE_NO_POINTS)
+        }
+    }
+
+
+    fun onCompletionYesClicked(task: Task, chatId: String) {
+        launchCatching {
+            storageService.updateTask(task, chatId, COMPLETION_YES)
+            storageService.incrementCommitCount(COMPLETION_YES_POINTS)
+            storageService.incrementTasksCompleted()
+        }
+    }
+
+    fun onCompletionNoClicked(task: Task, chatId: String) {
+        launchCatching {
+            storageService.updateTask(task, chatId, COMPLETION_NO)
+            storageService.incrementCommitCount(COMPLETION_NO_POINTS)
+        }
     }
 
     fun onAddTaskClick(openScreen: (String) -> Unit) {

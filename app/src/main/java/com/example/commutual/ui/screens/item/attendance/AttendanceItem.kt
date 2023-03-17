@@ -59,13 +59,15 @@ fun AttendanceItem(
                 }
 
                 Text(
-                    task.title,
+                    stringResource(
+                        R.string.formatted_task_title, task.title
+                    ),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
                     stringResource(
-                        R.string.formatted_task_time,
+                        R.string.formatted_task_time_nd,
                         task.startTime,
                         task.endTime
                     )
@@ -80,7 +82,7 @@ fun AttendanceItem(
                 Row {
                     Button(onClick = onYesClick) {
                         Text(
-                            task.title,
+                            stringResource(R.string.yes),
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.onSurface
                         )
@@ -88,7 +90,7 @@ fun AttendanceItem(
 
                     Button(onClick = onNoClick) {
                         Text(
-                            task.title,
+                            stringResource(R.string.no),
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.onSurface
                         )

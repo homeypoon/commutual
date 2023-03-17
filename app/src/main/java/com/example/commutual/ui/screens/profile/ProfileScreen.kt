@@ -53,6 +53,7 @@ fun ProfileScreen(
 
     LaunchedEffect(Unit) { viewModel.initialize() }
 
+    val uiState by viewModel.uiState
     val userPosts = viewModel.userPosts.collectAsStateWithLifecycle(emptyList())
     val user by viewModel.user
 
@@ -67,11 +68,7 @@ fun ProfileScreen(
             endAction = { viewModel.onSettingsClick(openScreen) },
             modifier = modifier
         )
-//        Column(
-//            modifier = Modifier
-//                .weight(1f)
-//                .verticalScroll(rememberScrollState())
-//        ) {
+
 
             LazyColumn(
                 Modifier
@@ -81,6 +78,10 @@ fun ProfileScreen(
                 item {
                     Text(text = user.username, style = MaterialTheme.typography.headlineLarge)
                     Text(text = user.bio, style = MaterialTheme.typography.bodyMedium)
+                    Text(text = user.commitCount.toString(), style = MaterialTheme.typography.bodyMedium)
+                    Text(text = stringResource(AppText.days, uiState.userTotalDays.toString()), style = MaterialTheme.typography.bodyMedium)
+
+
                     BasicButton(
                         AppText.edit_profile,
                         Modifier.basicButton()

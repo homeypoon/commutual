@@ -16,12 +16,16 @@ limitations under the License.
 
 package com.example.commutual.model.service.impl
 
+import android.util.Log
 import com.example.commutual.model.*
+import com.example.commutual.model.AlarmReceiver.Companion.ATTENDANCE
+import com.example.commutual.model.AlarmReceiver.Companion.COMPLETION
 import com.example.commutual.model.service.AccountService
 import com.example.commutual.model.service.StorageService
 import com.example.commutual.model.service.trace
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.snapshots
@@ -41,7 +45,6 @@ class StorageServiceImpl
 @Inject
 constructor(private val firestore: FirebaseFirestore, private val auth: AccountService) :
     StorageService {
-
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override val posts: Flow<List<Post>>
@@ -187,6 +190,22 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
             currentUserCollection().document(auth.currentUserId).set(user).await()
         }
 
+    override suspend fun incrementCommitCount(incrementCommitCount: Long) {
+        val userRef = currentUserCollection().document(auth.currentUserId)
+        userRef.update("commitCount", FieldValue.increment(incrementCommitCount))
+    }
+
+    override suspend fun incrementTasksScheduled() {
+        val userRef = currentUserCollection().document(auth.currentUserId)
+        userRef.update("tasksScheduled", FieldValue.increment(1))
+    }
+
+    override suspend fun incrementTasksCompleted() {
+        val userRef = currentUserCollection().document(auth.currentUserId)
+        userRef.update("tasksCompleted", FieldValue.increment(1))
+    }
+
+
     override suspend fun getPost(postId: String): Post? =
         currentPostCollection().document(postId).get().await().toObject()
 
@@ -209,16 +228,93 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
         trace(SAVE_MESSAGE_TRACE) {
             currentTaskCollection(chatId).add(
                 task.copy(
-                    timestamp = Timestamp.now(),
-                    creatorId = auth.currentUserId
+                    timestamp = Timestamp.now()
                 )
             ).await().id
+
         }
 
-    override suspend fun updateTask(task: Task, chatId: String): Unit =
+    override suspend fun updateTask(task: Task, chatId: String, attendanceType: Int?): Unit =
         trace(UPDATE_TASK_TRACE) {
-            currentTaskCollection(chatId).document(task.taskId).set(task).await()
+
+            if (attendanceType != null) {
+
+                if (attendanceType == Task.ATTENDANCE_YES || attendanceType == Task.ATTENDANCE_NO) {
+                    Log.d("attendance", "taskid:${task.taskId}, chatid:${chatId}")
+                    currentTaskCollection(chatId).document(task.taskId).set(
+                        task.copy(
+                            timestamp = Timestamp.now(),
+                            creatorId = auth.currentUserId,
+                        )
+                    ).await()
+
+                    val attendanceMap = mapOf("attendance.${auth.currentUserId}" to attendanceType)
+
+                    currentTaskCollection(chatId)
+                        .document(task.taskId)
+                        .update(attendanceMap)
+                } else if (attendanceType == Task.COMPLETION_YES || attendanceType == Task.COMPLETION_NO) {
+                    Log.d("attendance", "taskid:${task.taskId}, chatid:${chatId}")
+                    currentTaskCollection(chatId).document(task.taskId).set(
+                        task.copy(
+                            timestamp = Timestamp.now(),
+                            creatorId = auth.currentUserId,
+                        )
+                    ).await()
+
+                    val completionMap = mapOf("completion.${auth.currentUserId}" to attendanceType)
+
+                    currentTaskCollection(chatId)
+                        .document(task.taskId)
+                        .update(completionMap)
+                }
+
+
+
+            } else {
+                Log.d("not attendance", "taskid:${task.taskId}, chatid:${chatId}")
+                currentTaskCollection(chatId).document(task.taskId).set(
+                    task.copy(
+                        timestamp = Timestamp.now(),
+                        creatorId = auth.currentUserId
+                    )
+                ).await()
+            }
+
         }
+
+    override suspend fun updateTaskAM(task: Task, chatId: String, updateType: Int): Unit {
+
+        if (updateType == ATTENDANCE) {
+            Log.d("attendance", "taskid:${task.taskId}, chatid:${chatId}")
+
+            currentTaskCollection(chatId).document(task.taskId).set(
+                task.copy(
+                    showAttendanceTimestamp = Timestamp.now(),
+                    showAttendance = true,
+                )
+            ).await()
+        } else if (updateType == COMPLETION) {
+            currentTaskCollection(chatId).document(task.taskId).set(
+                task.copy(
+                    showCompletionTimestamp = Timestamp.now(),
+                    showCompletion = true
+                )
+            ).await()
+        }
+
+        Log.d("check", "taskid:${task.taskId}, chatid:${chatId}")
+
+
+        Log.d(
+            "d", task.copy(
+                showAttendanceTimestamp = Timestamp.now(),
+                showAttendance = false,
+                completed = true
+            ).toString()
+        )
+
+    }
 
     override suspend fun deleteTask(taskId: String, chatId: String) {
         currentTaskCollection(chatId).document(taskId).delete().await()
@@ -295,6 +391,9 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
         private const val UPDATE_POST_TRACE = "updatePost"
         private const val SAVE_TASK_TRACE = "saveTask"
         private const val UPDATE_TASK_TRACE = "updateTask"
+        private const val UPDATE_TASK_TRACE_AM = "updateTaskAM"
+
+
         private const val SAVE_USER_TRACE = "saveUser"
         private const val UPDATE_USER_TRACE = "updateUser"
         private const val SAVE_CHAT_TRACE = "saveChat"

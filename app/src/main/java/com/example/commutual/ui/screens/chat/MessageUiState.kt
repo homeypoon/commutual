@@ -5,6 +5,6 @@ import com.example.commutual.model.User
 data class MessageUiState(
     val messageText: String = "",
     val partner: User = User(),
-    val tabIndex: Int = 0
+    val tabIndex: Int = 0,
 )
 

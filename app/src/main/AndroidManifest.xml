@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.USE_EXACT_ALARM"/>
 
     <application
@@ -13,6 +14,8 @@
         android:theme="@style/Theme.Commutual"
         android:name=".CommutualApplication"
         tools:targetApi="31">
+        <receiver android:name=".model.AlarmReceiver" />
+
         <activity
             android:name=".CommutualActivity"
             android:exported="true"

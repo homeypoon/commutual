@@ -74,6 +74,7 @@ class SignUpViewModel @Inject constructor(
       return
     }
 
+
     launchCatching {
       accountService.createAccount(email, password)
       openAndPopUp(HOME_SCREEN, SIGN_UP_SCREEN)

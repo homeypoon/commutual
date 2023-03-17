@@ -205,7 +205,7 @@ fun NavGraphBuilder.commutualGraph(appState: CommutualAppState) {
         MessagesScreen(
             popUpScreen = { appState.popUp() },
             openScreen = { route -> appState.navigate(route) },
-            chatId = it.arguments?.getString(CHAT_ID) ?: CHAT_DEFAULT_ID
+            chatId = it.arguments?.getString(CHAT_ID) ?: CHAT_DEFAULT_ID,
         )
     }
 

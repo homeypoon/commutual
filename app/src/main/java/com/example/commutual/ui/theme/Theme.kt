@@ -76,19 +76,19 @@ private val DarkColors = darkColorScheme(
 
 @Composable
 fun CommutualTheme(
-  useDarkTheme: Boolean = isSystemInDarkTheme(),
-  content: @Composable() () -> Unit
+    useDarkTheme: Boolean = isSystemInDarkTheme(),
+    content: @Composable() () -> Unit
 ) {
-  val colors = if (!useDarkTheme) {
-    LightColors
-  } else {
-    DarkColors
-  }
+    val colors = if (!useDarkTheme) {
+        LightColors
+    } else {
+        DarkColors
+    }
 
-  MaterialTheme(
-    colorScheme = colors,
-    content = content,
-      typography = Typography,
-      shapes = Shapes
-  )
+    MaterialTheme(
+        colorScheme = colors,
+        content = content,
+        typography = Typography,
+        shapes = Shapes
+    )
 }

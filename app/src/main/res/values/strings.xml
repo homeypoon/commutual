@@ -57,6 +57,7 @@
     <string name="empty_title_error">Please enter a title for your post!</string>
     <string name="empty_description_error">Please enter a description for your post!</string>
     <string name="empty_category_error">Please choose a category for your post!</string>
+    <string name="invalid_time">Invalid time! Please ensure the end time is after the start time!</string>
 
     <!-- Chat Screen -->
     <string name="chat">Chat</string>
@@ -71,13 +72,36 @@
     <string name="completed_tasks">Completed Tasks</string>
 
     <string name="formatted_task_time">%1$s | %2$s-%3$s</string>
-    <string name="formatted_task_time_Nd">%1$s-%2$s</string>
+<!--    no date-->
+    <string name="formatted_task_time_nd">%1$s-%2$s</string>
 
     <string name="task_created">%1$s created a task</string>
+    <string name="formatted_task_title">Task: %1$s</string>
+
+
+    <!--  attendance  -->
     <string name="task_starting">Your task is starting</string>
+
     <string name="are_you_here">Are you ready to work during this task session?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+
+    <string name="confirmed_attendance">%1$s is ready to work</string>
+    <string name="earned_attendance_points">+%1$s commit counters</string>
+
+    <string name="no_attendance">%1$s is not attending this session</string>
+    <string name="lost_attendance_points">%1$s commit counters</string>
+
+    <!--  completion  -->
+    <string name="task_over">Your task is over</string>
+
+    <string name="did_you_complete">Did you complete this task session?</string>
+
+    <string name="confirmed_completion">%1$s has completed this session</string>
+    <string name="earned_completion_points">+%1$s commit counters</string>
+
+    <string name="no_completion">%1$s has not completed this session</string>
+    <string name="lost_completion_points">%1$s commit counters</string>
 
 
 
@@ -95,6 +119,8 @@
 
     <!-- Profile Screen -->
     <string name="profile">Profile</string>
+    <string name="days">%1$s days</string>
+
 
     <!-- Edit Profile Screen -->
     <string name="edit_profile">Edit Profile</string>

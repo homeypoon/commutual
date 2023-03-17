@@ -8,4 +8,6 @@ data class Message(
     val senderId: String = "", // user ID
     val text: String = "",
     val timestamp: Timestamp = Timestamp.now(),
+    // if type = 0, message; if type = 1, reminder message
+    val type: Int = 0
 )

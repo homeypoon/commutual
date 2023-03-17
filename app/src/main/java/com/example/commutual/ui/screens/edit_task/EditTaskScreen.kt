@@ -52,7 +52,7 @@ fun EditTaskScreen(
     modifier: Modifier = Modifier,
     viewModel: EditTaskViewModel = hiltViewModel(),
     showReminderNotification: KFunction5<Context, Int, String, String, Int, Unit>,
-    setAlarmManager: KFunction7<Context, String, String, Calendar, Task, String, Int, Unit>,
+    setAlarmManager: KFunction7<Context, String, String, Calendar, Calendar, Task, String, Unit>,
 ) {
     val task by viewModel.task
 

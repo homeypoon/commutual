@@ -36,6 +36,8 @@ import androidx.navigation.NavHostController
 import com.example.commutual.common.snackbar.SnackbarManager
 import com.example.commutual.common.snackbar.SnackbarMessage.Companion.toMessage
 import com.example.commutual.model.AlarmReceiver
+import com.example.commutual.model.AlarmReceiver.Companion.ATTENDANCE
+import com.example.commutual.model.AlarmReceiver.Companion.COMPLETION
 import com.example.commutual.model.Task
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.filterNotNull
@@ -123,8 +125,10 @@ class CommutualAppState(
                     Manifest.permission.POST_NOTIFICATIONS
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
-                ActivityCompat.requestPermissions(CommutualActivity(),
-                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
+                ActivityCompat.requestPermissions(
+                    CommutualActivity(),
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1
+                )
                 return
             }
             notify(notificationId, builder.build())
@@ -135,45 +139,71 @@ class CommutualAppState(
         context: Context,
         titleText: String,
         contentText: String,
-        calendar: Calendar,
+        attendanceCalendar: Calendar,
+        completionCalendar: Calendar,
         task: Task,
         chatId: String,
-        alarmType: Int
     ) {
         Log.d("before am task", "task:$task")
 
         val alarmManager =
             context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-        val intent = Intent(context, AlarmReceiver::class.java)
+        val attendanceIntent = Intent(context, AlarmReceiver::class.java)
 
-        intent.putExtra("title", titleText)
-        intent.putExtra("content", contentText)
-        intent.putExtra("content", contentText)
-        intent.putExtra("alarmType", alarmType)
-        intent.putExtra("chatId", chatId)
-        intent.putExtra("task", task as Serializable)
-        intent.setAction((System.currentTimeMillis().toString()));
+        attendanceIntent.putExtra("title", titleText)
+        attendanceIntent.putExtra("content", contentText)
+        attendanceIntent.putExtra("content", contentText)
+        attendanceIntent.putExtra("alarmType", ATTENDANCE)
+        attendanceIntent.putExtra("chatId", chatId)
+        attendanceIntent.putExtra("task", task as Serializable)
+        attendanceIntent.setAction((System.currentTimeMillis().toString()))
 
+        val attendancePendingIntent =
+            PendingIntent.getBroadcast(
+                context, 0, attendanceIntent,
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_ONE_SHOT
+            )
+
+        alarmManager.setExact(
+            AlarmManager.RTC_WAKEUP,
+            attendanceCalendar.timeInMillis,
+            attendancePendingIntent
+        )
+
+
+        val completionIntent = Intent(context, AlarmReceiver::class.java)
+
+        completionIntent.putExtra("title", titleText)
+        completionIntent.putExtra("content", contentText)
+        completionIntent.putExtra("content", contentText)
+        completionIntent.putExtra("alarmType", COMPLETION)
+        completionIntent.putExtra("chatId", chatId)
+        completionIntent.putExtra("task", task as Serializable)
+        completionIntent.setAction((System.currentTimeMillis().toString()))
+
+        val completionPendingIntent =
+            PendingIntent.getBroadcast(
+                context, 1, completionIntent,
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_ONE_SHOT
+            )
+
+        alarmManager.setExact(
+            AlarmManager.RTC_WAKEUP,
+            completionCalendar.timeInMillis,
+            completionPendingIntent
+        )
 
         Log.d("com app state before am task", "task:$task")
-        Log.d("com app state", "alarm type:$alarmType")
 
         val amRequestId = Random().nextInt(543254)
         Log.d("com app state", "am requestid:$amRequestId")
 
-        val pendingIntent =
-            PendingIntent.getBroadcast(context, amRequestId, intent,
-                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_ONE_SHOT)
 
-        alarmManager.setExact(
-            AlarmManager.RTC_WAKEUP,
-            calendar.timeInMillis,
-            pendingIntent
+        Log.d(
+            "alarm attendanceCalendar",
+            "attendanceCalendar:${FormatterClass.formatDate(attendanceCalendar.timeInMillis)}"
         )
-
-        Log.d("alarm calendar", "calendar:${FormatterClass.formatDate(calendar.timeInMillis)}")
-
 
         Log.d("", "alarm set")
 
@@ -184,7 +214,6 @@ class CommutualAppState(
         const val CHANNEL_ID = "notificationChannel"
         private const val CHANNEL_NAME = "Commutual Notifications"
         private const val CHANNEL_DESCRIPTION = "Receive notifications from Commutual"
-
 
 
     }

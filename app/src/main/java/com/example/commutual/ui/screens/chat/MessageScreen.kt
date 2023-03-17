@@ -1,6 +1,5 @@
 package com.example.commutual.ui.screens.chat
 
-import android.util.Log
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -153,11 +152,6 @@ fun MessagesScreen(
                             }
                             is Task -> {
                                 CreatedTaskItem(item, user, viewModel::onCreatedTaskCLicked)
-                                Log.d("item.showAttendance", item.showAttendance.toString())
-                                Log.d(
-                                    "item.attendance[viewModel.currentUserId] ==",
-                                    (item.attendance[viewModel.currentUserId] == ATTENDANCE_NOT_DONE).toString()
-                                )
 
                                 if (item.showAttendance && (item.attendance[viewModel.currentUserId] == ATTENDANCE_NOT_DONE)) {
                                     AttendanceItem(

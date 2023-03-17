@@ -10,7 +10,6 @@ import com.example.commutual.R
 import com.example.commutual.TASK_DEFAULT_ID
 import com.example.commutual.common.ext.idFromParameter
 import com.example.commutual.common.snackbar.SnackbarManager
-import com.example.commutual.model.AlarmReceiver
 import com.example.commutual.model.CategoryEnum
 import com.example.commutual.model.Chat
 import com.example.commutual.model.Task
@@ -154,7 +153,7 @@ class EditTaskViewModel @Inject constructor(
         focusManager: FocusManager,
         context: Context,
         showReminderNotification: KFunction5<Context, Int, String, String, Int, Unit>,
-        setAlarmManager: KFunction7<Context, String, String, Calendar, Task, String, Int, Unit>
+        setAlarmManager: KFunction7<Context, String, String, Calendar, Calendar, Task, String, Unit>
     ) {
 
         focusManager.clearFocus()
@@ -219,16 +218,6 @@ class EditTaskViewModel @Inject constructor(
             )
             Log.d("calendar", "${attendanceCalendar.time}")
 
-            setAlarmManager(
-                context,
-                "${task.value.title} is starting: Are you ready to work?",
-                "${task.value.startTime} - ${task.value.endTime}",
-                attendanceCalendar,
-                task.value,
-                chatId,
-                AlarmReceiver.ATTENDANCE
-            )
-
             val completionCalendar: Calendar = Calendar.getInstance()
             completionCalendar.set(
                 completionCalendar.get(Calendar.YEAR),
@@ -240,15 +229,16 @@ class EditTaskViewModel @Inject constructor(
             )
             Log.d("calendar", "${completionCalendar.time}")
 
-//            setAlarmManager(
-//                context,
-//                "${task.value.title} is over: Did you complete it?",
-//                "${task.value.startTime} - ${task.value.endTime}",
-//                completionCalendar,
-//                task.value,
-//                chatId,
-//                AlarmReceiver.COMPLETION
-//            )
+            setAlarmManager(
+                context,
+                "${task.value.title} is starting: Are you ready to work?",
+                "${task.value.startTime} - ${task.value.endTime}",
+                attendanceCalendar,
+                completionCalendar,
+                task.value,
+                chatId)
+
+
 
             popUpScreen()
 

@@ -24,10 +24,9 @@ data class Task(
     val showCompletionTimestamp: Timestamp = Timestamp.now(),
 
     // created task timestamp
-    val timestamp: Timestamp = Timestamp.now(),
-    val completed: Boolean = false,
-    // start timestamp
-    val startTimestamp: Timestamp = Timestamp.now(),
+    val createTimestamp: Timestamp = Timestamp.now(),
+    val taskCompleted: Boolean = false,
+
     val attendance: Map<String, Int> = emptyMap(),
     val completion: Map<String, Int> = emptyMap(),
 

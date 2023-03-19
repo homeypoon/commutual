@@ -1,5 +1,6 @@
 package com.example.commutual
 
+import SettingsScreen
 import android.content.res.Resources
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
@@ -28,7 +29,6 @@ import com.example.commutual.ui.screens.home.HomeScreen
 import com.example.commutual.ui.screens.login.LoginScreen
 import com.example.commutual.ui.screens.post_details.PostDetailsScreen
 import com.example.commutual.ui.screens.profile.ProfileScreen
-import com.example.commutual.ui.screens.profile.SettingsScreen
 import com.example.commutual.ui.screens.profile_post.ProfilePostScreen
 import com.example.commutual.ui.screens.signup.SignUpScreen
 import com.example.commutual.ui.screens.splash.SplashScreen
@@ -203,7 +203,6 @@ fun NavGraphBuilder.commutualGraph(appState: CommutualAppState) {
         arguments = listOf(navArgument(CHAT_ID) { defaultValue = CHAT_DEFAULT_ID })
     ) {
         MessagesScreen(
-            popUpScreen = { appState.popUp() },
             openScreen = { route -> appState.navigate(route) },
             chatId = it.arguments?.getString(CHAT_ID) ?: CHAT_DEFAULT_ID,
         )

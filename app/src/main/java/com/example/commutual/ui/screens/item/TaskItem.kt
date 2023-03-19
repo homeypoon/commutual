@@ -41,7 +41,7 @@ fun TaskItem(
                 Row {
                     Text(creator.username)
 
-                    Text(FormatterClass.formatTimestamp(task.timestamp, false))
+                    Text(FormatterClass.formatTimestamp(task.createTimestamp, false))
                 }
             }
 

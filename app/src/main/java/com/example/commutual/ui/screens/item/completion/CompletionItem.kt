@@ -52,7 +52,7 @@ fun CompletionItem(
                         modifier = Modifier.alignByBaseline()
                     )
                     Text(
-                        text = formatTimestamp(task.timestamp, true),
+                        text = formatTimestamp(task.showCompletionTimestamp, true),
                         modifier = Modifier.alignByBaseline()
                     )
 

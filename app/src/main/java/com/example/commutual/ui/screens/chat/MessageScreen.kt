@@ -1,5 +1,7 @@
 package com.example.commutual.ui.screens.chat
 
+import CompletionNoItem
+import android.util.Log
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -35,17 +37,16 @@ import com.example.commutual.R.string as AppText
 
 @Composable
 fun MessagesScreen(
-    popUpScreen: () -> Unit,
     openScreen: (String) -> Unit,
     chatId: String,
     modifier: Modifier = Modifier,
     viewModel: MessageViewModel = hiltViewModel()
 ) {
 
-//    val messages = remember { mutableStateListOf<Message>() }
     LaunchedEffect(Unit) {
         viewModel.getSender(chatId)
     }
+
 
     val scrollState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
@@ -60,20 +61,25 @@ fun MessagesScreen(
 
     // Sort messages and tasks by timestamp
     val messagesWithTasks = (messages.map { Pair(it.first.timestamp, it) } +
-            upcomingTasks.map { Pair(it.first.timestamp, it) } +
-            completedTasks.map { Pair(it.first.timestamp, it) })
+            upcomingTasks.map { Pair(it.first.showAttendanceTimestamp, it) } +
+            completedTasks.map { Pair(it.first.showCompletionTimestamp, it) })
         .sortedBy { it.first }
         .map { it.second }
 
 
-    LaunchedEffect(messages) {
-        if (messages.isNotEmpty() && messagesWithTasks.isNotEmpty()) {
-            scrollState.animateScrollToItem(messages.size - 1)
+    /**
+     * Scroll to bottom of chat
+     */
+    suspend fun scrollToBottom() {
+        if (messagesWithTasks.isNotEmpty()) {
+            scrollState.animateScrollToItem(messagesWithTasks.lastIndex)
         }
     }
 
-//    val currentUserId = viewModel.currentUserId
-//    val partnerId = viewModel.chat.value.membersId.first { it != currentUserId }
+    LaunchedEffect(messagesWithTasks.size) {
+        Log.d("messageswT", messagesWithTasks.toString())
+        scrollToBottom()
+    }
 
     androidx.compose.material.Scaffold(
 
@@ -134,8 +140,11 @@ fun MessagesScreen(
 
 
             if (viewModel.tabIndex == 0) {
+                LaunchedEffect(Unit) {
+                    scrollToBottom()
+                }
 
-//            Chat Tab
+                // Chat Tab
                 LazyColumn(
                     modifier = Modifier
                         .weight(1f)
@@ -151,13 +160,15 @@ fun MessagesScreen(
                                 { timestamp -> FormatterClass.formatTimestamp(timestamp, true) }
                             }
                             is Task -> {
-                                CreatedTaskItem(item, user, viewModel::onCreatedTaskCLicked)
+                                if (!item.showAttendance) {
+                                    CreatedTaskItem(item, user, viewModel::onCreatedTaskCLicked)
+                                }
 
                                 if (item.showAttendance && (item.attendance[viewModel.currentUserId] == ATTENDANCE_NOT_DONE)) {
                                     AttendanceItem(
                                         task = item,
                                         onCLick = {
-                                            viewModel.onAttendanceItemClicked()
+                                            viewModel.onAttendanceItemClicked(item, chatId)
                                         },
                                         onYesClick = {
                                             viewModel.onAttendanceYesClicked(
@@ -174,18 +185,13 @@ fun MessagesScreen(
                                 if ((item.showAttendance) && (item.attendance[viewModel.currentUserId] == ATTENDANCE_YES)) {
                                     AttendanceYesItem(
                                         task = item,
-                                        user = viewModel.currentUser.value,
-                                        onCLick = {
-                                            viewModel.onAttendanceItemClicked()
-                                        })
+                                        user = viewModel.currentUser.value
+                                    )
                                 } else if (item.attendance[viewModel.currentUserId] == ATTENDANCE_NO) {
                                     AttendanceNoItem(
                                         task = item,
-                                        user = viewModel.currentUser.value,
-                                        onCLick = {
-                                            viewModel.onAttendanceItemClicked()
-
-                                        })
+                                        user = viewModel.currentUser.value
+                                    )
                                 }
                                 if ((item.showAttendance) &&
                                     (item.attendance[viewModel.chat.value.membersId.first { it != viewModel.currentUserId }]
@@ -193,25 +199,20 @@ fun MessagesScreen(
                                 ) {
                                     AttendanceYesItem(
                                         task = item,
-                                        user = viewModel.partnerObject.value,
-                                        onCLick = {
-                                            viewModel.onAttendanceItemClicked()
-
-                                        })
+                                        user = viewModel.partnerObject.value
+                                    )
                                 } else if ((item.showAttendance) && (item.attendance[viewModel.chat.value.membersId.first { it != viewModel.currentUserId }] == ATTENDANCE_NO)) {
                                     AttendanceNoItem(
                                         task = item,
-                                        user = viewModel.partnerObject.value,
-                                        onCLick = {
-                                            viewModel.onAttendanceItemClicked()
-                                        })
+                                        user = viewModel.partnerObject.value
+                                    )
                                 }
                                 // completion
                                 if (item.showCompletion && (item.completion[viewModel.currentUserId] == COMPLETION_NOT_DONE)) {
                                     CompletionItem(
                                         task = item,
                                         onCLick = {
-                                            viewModel.onCompletionItemClicked()
+                                            viewModel.onCompletionItemClicked(item, chatId)
                                         },
                                         onYesClick = {
                                             viewModel.onCompletionYesClicked(
@@ -228,18 +229,13 @@ fun MessagesScreen(
                                 if ((item.showCompletion) && (item.completion[viewModel.currentUserId] == COMPLETION_YES)) {
                                     CompletionYesItem(
                                         task = item,
-                                        user = viewModel.currentUser.value,
-                                        onCLick = {
-                                            viewModel.onCompletionItemClicked()
-                                        })
+                                        user = viewModel.currentUser.value
+                                    )
                                 } else if (item.completion[viewModel.currentUserId] == COMPLETION_NO) {
                                     CompletionNoItem(
                                         task = item,
-                                        user = viewModel.currentUser.value,
-                                        onCLick = {
-                                            viewModel.onCompletionItemClicked()
-
-                                        })
+                                        user = viewModel.currentUser.value
+                                    )
                                 }
                                 if ((item.showCompletion) &&
                                     (item.completion[viewModel.chat.value.membersId.first { it != viewModel.currentUserId }]
@@ -247,25 +243,19 @@ fun MessagesScreen(
                                 ) {
                                     CompletionYesItem(
                                         task = item,
-                                        user = viewModel.partnerObject.value,
-                                        onCLick = {
-                                            viewModel.onCompletionItemClicked()
-                                        })
+                                        user = viewModel.partnerObject.value
+                                    )
                                 } else if ((item.showCompletion) && (item.completion[viewModel.chat.value.membersId.first { it != viewModel.currentUserId }] == COMPLETION_NO)) {
                                     CompletionNoItem(
                                         task = item,
-                                        user = viewModel.partnerObject.value,
-                                        onCLick = {
-                                            viewModel.onCompletionItemClicked()
-                                        })
+                                        user = viewModel.partnerObject.value
+                                    )
                                 }
-
-
                             }
                         }
-
                     }
                 }
+
 
                 MessageInputField(
                     R.string.message,
@@ -280,14 +270,11 @@ fun MessagesScreen(
                     {
                         IconButton(
                             onClick = {
-
                                 coroutineScope.launch {
                                     viewModel.onSendClick(chatId, focusManager)
-                                    if (messages.isNotEmpty()) {
-                                        scrollState.animateScrollToItem(messages.size - 1)
-                                    }  else if (messagesWithTasks.isNotEmpty()) {
-                                        scrollState.animateScrollToItem(tasksWithUsers.first.size - 1)
-                                }
+                                    if (messagesWithTasks.isNotEmpty()) {
+                                        scrollToBottom()
+                                    }
                                 }
                             },
                             content = {
@@ -317,7 +304,7 @@ fun MessagesScreen(
                     ) {
                         item {
                             Text(
-                                text = stringResource(R.string.upcoming_tasks)
+                                text = stringResource(R.string.upcoming_tasks_sessions)
                             )
                         }
                         items(upcomingTasks) { (upcomingTasks, creator) ->
@@ -328,7 +315,7 @@ fun MessagesScreen(
 
                 if (completedTasks.isNotEmpty()) {
                     Text(
-                        text = stringResource(R.string.completed_tasks)
+                        text = stringResource(R.string.concluded_tasks_sessions)
                     )
 
                     LazyColumn(
@@ -342,7 +329,6 @@ fun MessagesScreen(
                     }
 
                     Spacer(modifier = Modifier.padding(10.dp))
-
                 }
 
             }

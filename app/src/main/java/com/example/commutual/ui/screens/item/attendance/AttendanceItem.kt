@@ -52,7 +52,7 @@ fun AttendanceItem(
                         modifier = Modifier.alignByBaseline()
                     )
                     Text(
-                        text = formatTimestamp(task.timestamp, true),
+                        text = formatTimestamp(task.showAttendanceTimestamp, true),
                         modifier = Modifier.alignByBaseline()
                     )
 

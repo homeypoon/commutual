@@ -102,25 +102,26 @@ class MessageViewModel @Inject constructor(
         setMessageTab(1)
     }
 
-    fun onAttendanceItemClicked() {
+    fun onAttendanceItemClicked(task: Task, chatId: String) {
         setMessageTab(1)
+
     }
 
-    fun onCompletionItemClicked() {
+    fun onCompletionItemClicked(task: Task, chatId: String) {
         setMessageTab(1)
     }
 
     fun onAttendanceYesClicked(task: Task, chatId: String) {
 
         launchCatching {
-            storageService.updateTask(task, chatId, ATTENDANCE_YES)
+            storageService.updateTaskType(task, chatId, ATTENDANCE_YES)
             storageService.incrementCommitCount(ATTENDANCE_YES_POINTS)
         }
     }
 
     fun onAttendanceNoClicked(task: Task, chatId: String) {
         launchCatching {
-            storageService.updateTask(task, chatId, ATTENDANCE_NO)
+            storageService.updateTaskType(task, chatId, ATTENDANCE_NO)
             storageService.incrementCommitCount(ATTENDANCE_NO_POINTS)
         }
     }
@@ -128,7 +129,7 @@ class MessageViewModel @Inject constructor(
 
     fun onCompletionYesClicked(task: Task, chatId: String) {
         launchCatching {
-            storageService.updateTask(task, chatId, COMPLETION_YES)
+            storageService.updateTaskType(task, chatId, COMPLETION_YES)
             storageService.incrementCommitCount(COMPLETION_YES_POINTS)
             storageService.incrementTasksCompleted()
         }
@@ -136,7 +137,7 @@ class MessageViewModel @Inject constructor(
 
     fun onCompletionNoClicked(task: Task, chatId: String) {
         launchCatching {
-            storageService.updateTask(task, chatId, COMPLETION_NO)
+            storageService.updateTaskType(task, chatId, COMPLETION_NO)
             storageService.incrementCommitCount(COMPLETION_NO_POINTS)
         }
     }
@@ -144,4 +145,6 @@ class MessageViewModel @Inject constructor(
     fun onAddTaskClick(openScreen: (String) -> Unit) {
         openScreen("$EDIT_TASK_SCREEN?$TASK_ID=$TASK_DEFAULT_ID?$CHAT_ID=${chat.value.chatId}?$SCREEN_TITLE=${ST_CREATE_TASK}")
     }
+
+
 }

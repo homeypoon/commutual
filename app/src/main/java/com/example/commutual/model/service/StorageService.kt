@@ -1,18 +1,4 @@
-/*
-Copyright 2022 Google LLC
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    https://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
- */
 
 package com.example.commutual.model.service
 
@@ -23,8 +9,7 @@ interface StorageService {
   val posts: Flow<List<Post>>
   val userPosts: Flow<List<Post>>
   val chats: Flow<List<Chat>>
-//  fun getSender(chatId: String): Flow<List<Message>>
-
+  val upcomingUserTasks: Flow<List<Task>>
   val chatsWithUsers: Flow<List<Pair<Chat, User>>>
   fun getMessagesWithUsers(chatId: String): Flow<List<Pair<Message, User>>>
 
@@ -49,6 +34,7 @@ interface StorageService {
   // User methods
   suspend fun saveUser(userId: String, user: User)
   suspend fun updateUser(user: User)
+  suspend fun updateCurrentUser(chatId: String, taskId: String)
   suspend fun deleteAllForUser(userId: String)
   suspend fun incrementCommitCount(incrementCommitCount: Long)
   suspend fun incrementTasksScheduled(membersId: Array<String>)
@@ -63,7 +49,8 @@ interface StorageService {
   // Task methods
   suspend fun getTask(taskId: String, chatId: String): Task?
   suspend fun saveTask(task: Task, chatId: String): String
-  suspend fun updateTask(task: Task, chatId: String, attendanceType: Int?)
+  suspend fun updateTask(task: Task, chatId: String)
+  suspend fun updateTaskType(task: Task, chatId: String, attendanceType: Int?)
   suspend fun updateTaskAM(task: Task, chatId: String, updateType: Int)
 
   suspend fun deleteTask(taskId: String, chatId: String)

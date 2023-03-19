@@ -52,7 +52,7 @@ fun CreatedTaskItem(
                         modifier = Modifier.alignByBaseline()
                     )
                     Text(
-                        text = formatTimestamp(task.timestamp, true),
+                        text = formatTimestamp(task.createTimestamp, true),
                         modifier = Modifier.alignByBaseline()
                     )
 

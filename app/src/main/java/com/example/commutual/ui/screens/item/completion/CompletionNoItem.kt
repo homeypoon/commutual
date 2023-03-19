@@ -1,4 +1,3 @@
-package com.example.commutual.ui.screens.item
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.*
@@ -21,13 +20,11 @@ import com.example.commutual.model.User
 fun CompletionNoItem(
     task: Task,
     user: User,
-    onCLick: () -> Unit
 ) {
 
     Row(modifier = Modifier.padding(8.dp)) {
 
         androidx.compose.material3.Surface(
-            onClick = onCLick,
             shape = MaterialTheme.shapes.medium,
             tonalElevation = 1.dp,
             shadowElevation = 1.dp,
@@ -52,7 +49,7 @@ fun CompletionNoItem(
                         modifier = Modifier.alignByBaseline()
                     )
                     Text(
-                        text = formatTimestamp(task.timestamp, true),
+                        text = formatTimestamp(task.showCompletionTimestamp, true),
                         modifier = Modifier.alignByBaseline()
                     )
                 }

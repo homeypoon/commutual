@@ -199,11 +199,13 @@ class EditTaskViewModel @Inject constructor(
             if (editedTask.taskId.isBlank()) {
                 val taskId: String = storageService.saveTask(editedTask, chatId)
                 Log.d("taskId", "taskId$taskId")
+
+                storageService.updateCurrentUser(chatId, taskId)
                 task.value = task.value.copy(
                     taskId = taskId
                 )
             } else {
-                storageService.updateTask(editedTask, chatId, null)
+                storageService.updateTaskType(editedTask, chatId, null)
             }
 
             val attendanceCalendar: Calendar = Calendar.getInstance()

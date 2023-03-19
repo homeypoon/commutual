@@ -21,13 +21,11 @@ import com.example.commutual.model.User
 fun AttendanceYesItem(
     task: Task,
     user: User,
-    onCLick: () -> Unit
 ) {
 
     Row(modifier = Modifier.padding(8.dp)) {
 
         androidx.compose.material3.Surface(
-            onClick = onCLick,
             shape = MaterialTheme.shapes.medium,
             tonalElevation = 1.dp,
             shadowElevation = 1.dp,
@@ -52,7 +50,7 @@ fun AttendanceYesItem(
                         modifier = Modifier.alignByBaseline()
                     )
                     Text(
-                        text = formatTimestamp(task.timestamp, true),
+                        text = formatTimestamp(task.showAttendanceTimestamp, true),
                         modifier = Modifier.alignByBaseline()
                     )
                 }

@@ -68,8 +68,8 @@
     <string name="send">send</string>
     <string name="tasks">Tasks</string>
 
-    <string name="upcoming_tasks">Upcoming Tasks</string>
-    <string name="completed_tasks">Completed Tasks</string>
+    <string name="upcoming_tasks_sessions">Upcoming Task Sessions</string>
+    <string name="concluded_tasks_sessions">Concluded Task Sessions</string>
 
     <string name="formatted_task_time">%1$s | %2$s-%3$s</string>
 <!--    no date-->

@@ -31,3 +31,7 @@ Login + Register Screens
 ------------------------------
 - There is a authentication system implemented so that each user will have their own account
 
+ADDITIONAL FEATURES
+------------------------------
+- Phone notifications are triggered when each task session starts and ends
+

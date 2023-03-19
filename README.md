@@ -24,5 +24,5 @@ Profile Screen
 - Displays posts created by the user
 
 Login + Register Screens
-- There is a authentication system implemented
+- There is a authentication system implemented so that each user will have their own account
 

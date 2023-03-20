@@ -24,7 +24,7 @@ Chat Screen
 Profile Screen
 ------------------------------
 - Displays the user's name, bio, total days they've been on the app, total meetings scheduled, and total meetings completed
-- Displays their "commit count", which is their accumulated points based on the number of sessions they have attended, completed, and missed
+- Displays their "commit count," which is their accumulated points based on the number of sessions they have attended, completed, and missed
 - Displays posts created by the user
 
 Login + Register Screens

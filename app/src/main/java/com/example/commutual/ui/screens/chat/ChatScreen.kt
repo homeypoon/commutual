@@ -22,7 +22,6 @@ import com.example.commutual.R
 import com.example.commutual.common.composable.BasicToolbar
 import com.example.commutual.ui.screens.item.ChatItem
 
-
 @Composable
 @ExperimentalMaterialApi
 fun ChatScreen(
@@ -31,9 +30,7 @@ fun ChatScreen(
     viewModel: ChatViewModel = hiltViewModel()
 ) {
 
-
     val scrollState = rememberScrollState()
-//    val chats = viewModel.chats.collectAsStateWithLifecycle(emptyList())
     val chatsWithUsers by viewModel.chatsWithUsers.collectAsState(emptyList())
 
     Column(

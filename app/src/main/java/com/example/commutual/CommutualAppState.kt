@@ -159,7 +159,6 @@ class CommutualAppState(
             attendancePendingIntent
         )
 
-
         val completionIntent = Intent(context, AlarmReceiver::class.java)
 
         completionIntent.putExtra("title", titleText)

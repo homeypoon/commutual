@@ -9,6 +9,11 @@ data class EditTaskUiState(
 
     val startTime: String = "",
     val endTime: String = "",
+
+    val year: Int = 0,
+    val month: Int = 0,
+    val day: Int = 0,
+
     val startHour: Int = 0,
     val startMin: Int = 0,
     val endHour: Int = 0,

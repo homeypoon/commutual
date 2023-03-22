@@ -56,7 +56,7 @@ class StorageServiceImpl
                 val currentUser = getUserById(auth.currentUserId)
                 currentUser.tasksMap.forEach { (taskId, chatId) ->
                     val task = getTask(taskId, chatId)
-                    if (task != null) {
+                    if (task != null && !task.showCompletion) {
                         tasksList.add(task)
                     }
                 }
@@ -64,21 +64,17 @@ class StorageServiceImpl
             }
         }
 
-//    @OptIn(ExperimentalCoroutinesApi::class)
-//    override val upcomingUserTasks: Flow<List<Task>>
-//        get() = auth.currentUser.flatMapLatest {
-//            val tasksList = mutableListOf<Task>()
-//            val currentUser = getUserById(auth.currentUserId)
-//            currentUser.tasksMap.forEach{(chatId, taskId) ->
-//                val task = getTask(taskId, chatId)
-//                if (task != null) {
-//                    tasksList.add(task)
-//                }
-//            }
-//
-//            return@flatMapLatest tasksList
-//
-//        }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun getCurrentUserFlow(): Flow<User?> {
+        return auth.currentUser.flatMapLatest {
+            currentUserCollection().document(auth.currentUserId)
+                .snapshots().map { snapshot ->
+                    snapshot.toObject<User>()
+                }
+        }
+    }
+
 
     override suspend fun getChatWithChatId(chatId: String): Chat? =
         currentChatCollection().document(chatId).get().await().toObject()
@@ -192,9 +188,9 @@ class StorageServiceImpl
 
     override suspend fun updateCurrentUser(chatId: String, taskId: String): Unit =
         trace(UPDATE_CURRENT_USER_TRACE) {
-        val tasksMap = mapOf("tasksMap.${taskId}" to chatId)
-        currentUserCollection().document(auth.currentUserId).update(tasksMap).await()
-    }
+            val tasksMap = mapOf("tasksMap.${taskId}" to chatId)
+            currentUserCollection().document(auth.currentUserId).update(tasksMap).await()
+        }
 
 
     override suspend fun incrementCommitCount(incrementCommitCount: Long) {

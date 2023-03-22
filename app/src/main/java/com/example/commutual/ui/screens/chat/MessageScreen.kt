@@ -76,10 +76,7 @@ fun MessagesScreen(
         }
     }
 
-    LaunchedEffect(messagesWithTasks.size) {
-        Log.d("messageswT", messagesWithTasks.toString())
-        scrollToBottom()
-    }
+
 
     androidx.compose.material.Scaffold(
 
@@ -256,6 +253,11 @@ fun MessagesScreen(
                     }
                 }
 
+                LaunchedEffect(messagesWithTasks.size) {
+                    Log.d("messageswT", messagesWithTasks.toString())
+                    scrollToBottom()
+                }
+
 
                 MessageInputField(
                     R.string.message,
@@ -295,13 +297,14 @@ fun MessagesScreen(
             } else {
                 // Tasks Tab
 
-                if (upcomingTasks.isNotEmpty()) {
 
-                    LazyColumn(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        contentPadding = PaddingValues(top = 8.dp, bottom = 8.dp)
-                    ) {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    contentPadding = PaddingValues(top = 8.dp, bottom = 8.dp)
+                ) {
+                    if (upcomingTasks.isNotEmpty()) {
+
                         item {
                             Text(
                                 text = stringResource(R.string.upcoming_tasks_sessions)
@@ -311,25 +314,27 @@ fun MessagesScreen(
                             TaskItem(task = upcomingTasks, creator = creator)
                         }
                     }
-                }
 
-                if (completedTasks.isNotEmpty()) {
-                    Text(
-                        text = stringResource(R.string.concluded_tasks_sessions)
-                    )
+                    item {
+                        Spacer(modifier = Modifier.padding(10.dp))
+                    }
 
-                    LazyColumn(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        contentPadding = PaddingValues(top = 8.dp, bottom = 8.dp)
-                    ) {
+                    if (completedTasks.isNotEmpty()) {
+                        item {
+                            Text(
+                                text = stringResource(R.string.previous_tasks_sessions)
+                            )
+                        }
+
                         items(completedTasks) { (completedTasks, creator) ->
                             TaskItem(task = completedTasks, creator = creator)
                         }
+
                     }
 
-                    Spacer(modifier = Modifier.padding(10.dp))
+
                 }
+
 
             }
         }

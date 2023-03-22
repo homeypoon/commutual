@@ -13,7 +13,11 @@ data class Task(
     val title: String = "",
     val details: String = "",
     val category: CategoryEnum = CategoryEnum.NONE,
+    val year: Int = 0,
+    val month: Int = 0,
+    val day: Int = 0,
     val date: Long = Timestamp.now().toDate().time,
+
     val startTime: String = "",
     val endTime: String = "",
 

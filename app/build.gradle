@@ -111,6 +111,10 @@ dependencies {
     androidTestImplementation "com.google.dagger:hilt-android-testing:2.43.2"
     androidTestImplementation "com.google.truth:truth:1.1.3"
 
+//    implementation "com.github.tehras:charts:$latest_release"
+    implementation "com.github.PhilJay:MPAndroidChart:v3.1.0"
+
+
 
     // Maven Flow Layouts for chips
     implementation "com.google.accompanist:accompanist-flowlayout:0.28.0"

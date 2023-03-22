@@ -6,16 +6,18 @@ import com.example.commutual.model.*
 import kotlinx.coroutines.flow.Flow
 
 interface StorageService {
+//  val user: Flow<List<User>>
+  fun getCurrentUserFlow(): Flow<User?>
   val posts: Flow<List<Post>>
   val userPosts: Flow<List<Post>>
   val chats: Flow<List<Chat>>
   val upcomingUserTasks: Flow<List<Task>>
   val chatsWithUsers: Flow<List<Pair<Chat, User>>>
+
   fun getMessagesWithUsers(chatId: String): Flow<List<Pair<Message, User>>>
 
   fun getTasksWithUsers(chatId: String): Flow<Pair<List<Pair<Task, User>>, List<Pair<Task, User>>>>
   fun getCompletedTasksWithUsers(chatId: String): Flow<List<Pair<Task, User>>>
-
 
   suspend fun searchedPosts(search: String): Flow<List<Post>>
   suspend fun filteredPosts(search: String, category: CategoryEnum): Flow<List<Post>>
@@ -28,7 +30,6 @@ interface StorageService {
   suspend fun getPartner(membersId: MutableList<String>): User?
   suspend fun getChatWithChatId(chatId: String): Chat?
   suspend fun getChatWithPostUserId(postUserId: String): Chat?
-
 
 
   // User methods

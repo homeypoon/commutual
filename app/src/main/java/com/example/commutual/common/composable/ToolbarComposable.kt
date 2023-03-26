@@ -23,7 +23,7 @@ fun BasicToolbar(title: String) {
     color = MaterialTheme.colorScheme.onSecondary,
     maxLines = 1,
     overflow = TextOverflow.Ellipsis,
-    style = MaterialTheme.typography.titleLarge) },
+    style = MaterialTheme.typography.displayLarge) },
     colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
       MaterialTheme.colorScheme.secondary),
   )
@@ -35,7 +35,7 @@ fun BasicToolbar(title: String) {
 fun ActionToolbar(
   title: String,
   @DrawableRes endActionIcon: Int,
-  modifier: Modifier,
+  modifier: Modifier = Modifier,
   endAction: () -> Unit
 ) {
   CenterAlignedTopAppBar(
@@ -43,7 +43,7 @@ fun ActionToolbar(
       Text(
         title,
         color = MaterialTheme.colorScheme.onSecondary,
-        style = MaterialTheme.typography.titleLarge,
+        style = MaterialTheme.typography.displayLarge,
         maxLines = 1,
         overflow = TextOverflow.Ellipsis
       )

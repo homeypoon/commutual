@@ -25,7 +25,6 @@ class HomeViewModel @Inject constructor(
     val upcomingUserTasks = storageService.upcomingUserTasks
 //    val user = mutableStateOf(User())
 
-
     var uiState = mutableStateOf(ProfileUiState())
         private set
 
@@ -36,7 +35,7 @@ class HomeViewModel @Inject constructor(
     init {
         viewModelScope.launch {
 
-            storageService.getCurrentUserFlow().collect { user ->
+            storageService.getFlowCurrentUser().collect { user ->
                 _user.value = user
             }
         }

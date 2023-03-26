@@ -49,7 +49,11 @@ fun BottomNavigationComposable(
                             contentDescription = stringResource(screen.resourceId)
                         )
                     },
-                    label = { Text(stringResource(id = screen.resourceId)) },
+                    selectedContentColor = MaterialTheme.colorScheme.primary,
+                    unselectedContentColor = MaterialTheme.colorScheme.tertiary,
+                    label = { Text(stringResource(id = screen.resourceId),
+                        style = MaterialTheme.typography.labelSmall
+                    ) },
                     selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                     onClick = {
                         navController.navigate(screen.route) {

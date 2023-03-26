@@ -12,7 +12,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
@@ -44,7 +43,6 @@ import com.example.commutual.ui.screens.item.PostItem
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLifecycleComposeApi::class)
 @Composable
-@ExperimentalMaterialApi
 fun ExploreScreen(
     openScreen: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -76,7 +74,7 @@ fun ExploreScreen(
         SearchField(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(4.dp),
+                .padding(12.dp, 8.dp),
             text = stringResource(R.string.search),
             value = viewModel.searchText,
             onNewValue = viewModel::onSearchTextChange,
@@ -110,6 +108,8 @@ fun ExploreScreen(
         }
 
         if (!viewModel.showProgressIndicator) {
+
+            Divider()
 
             LazyColumn(
                 Modifier

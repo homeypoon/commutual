@@ -73,12 +73,16 @@
 
     <string name="previous_tasks_sessions">Previous Task Sessions</string>
 
+    <string name="formatted_task">Task: %1$s</string>
     <string name="formatted_task_time">%1$s | %2$s-%3$s</string>
+
+
 <!--    no date-->
     <string name="formatted_task_time_nd">%1$s-%2$s</string>
 
     <string name="task_created">%1$s created a task</string>
     <string name="formatted_task_title">Task: %1$s</string>
+
 
 
     <!--  attendance  -->
@@ -88,10 +92,15 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
 
-    <string name="confirmed_attendance">%1$s is ready to work</string>
+    <string name="task_creation">Task Creation</string>
+    <string name="task_attendance">Task Attendance</string>
+    <string name="task_completion">Task Completion</string>
+
+
+    <string name="confirmed_attendance">%1$s Attended The Task Session</string>
     <string name="earned_attendance_points">+%1$s commit counters</string>
 
-    <string name="no_attendance">%1$s is not attending this session</string>
+    <string name="no_attendance">%1$s Didn\'t Attend The Task Session</string>
     <string name="lost_attendance_points">%1$s commit counters</string>
 
     <!--  completion  -->
@@ -99,10 +108,10 @@
 
     <string name="did_you_complete">Did you complete this task session?</string>
 
-    <string name="confirmed_completion">%1$s has completed this session</string>
+    <string name="confirmed_completion">%1$s Completed The Task Session</string>
     <string name="earned_completion_points">+%1$s commit counters</string>
 
-    <string name="no_completion">%1$s has not completed this session</string>
+    <string name="no_completion">%1$s Didn\'t Complete The Task Session</string>
     <string name="lost_completion_points">%1$s commit counters</string>
 
 
@@ -121,7 +130,11 @@
 
     <!-- Profile Screen -->
     <string name="profile">Profile</string>
-    <string name="days">%1$s days</string>
+    <string name="days_on_platform">%1$s Days on Commutual</string>
+    <string name="commit_count">Commit\nCount</string>
+    <string name="tasks_scheduled">Tasks\nScheduled</string>
+    <string name="tasks_completed">Tasks\nCompleted</string>
+
 
 
     <!-- Edit Profile Screen -->
@@ -150,8 +163,8 @@
     <string name="coding">Coding</string>
     <string name="health_and_wellness">Health &amp; Wellness</string>
     <string name="music">Music</string>
-    <string name="routine">Routine</string>
-    <string name="sports">Sports</string>
+    <string name="miscellaneous">Miscellaneous</string>
+    <string name="athletics">Athletics</string>
     <string name="work">Work</string>
 
     <!-- Button -->

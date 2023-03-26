@@ -1,8 +1,8 @@
-package com.example.commutual.ui.screens.item
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -15,17 +15,19 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.commutual.FormatterClass.Companion.formatTimestamp
 import com.example.commutual.R
+import com.example.commutual.model.AlarmReceiver.Companion.ATTENDANCE
 import com.example.commutual.model.Task
-import com.example.commutual.model.User
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreatedTaskItem(
+fun ConfirmationItem(
+    confirmationType: Int,
     task: Task,
-    creator: User,
-    onClick: () -> Unit
+    onCLick: () -> Unit,
+    onYesClick: () -> Unit,
+    onNoClick: () -> Unit
 ) {
-
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier =
@@ -33,9 +35,12 @@ fun CreatedTaskItem(
             .fillMaxWidth()
             .padding(20.dp, 8.dp)
     ) {
-
         Text(
-            text = formatTimestamp(task.createTimestamp, true),
+            text = if (confirmationType == ATTENDANCE) {
+                formatTimestamp(task.showAttendanceTimestamp, true)
+            } else {
+                formatTimestamp(task.showCompletionTimestamp, true)
+            },
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.labelSmall,
             modifier = Modifier
@@ -44,13 +49,13 @@ fun CreatedTaskItem(
         )
 
         androidx.compose.material3.Surface(
+            onClick = onCLick,
             shape = RoundedCornerShape(12.dp),
             tonalElevation = 1.dp,
-            // surfaceColor color will be changing gradually from primary to surface
             color = MaterialTheme.colorScheme.surface,
-            // animateContentSize will change the Surface size gradually
             modifier = Modifier
                 .animateContentSize()
+
         ) {
             Column(
                 Modifier
@@ -59,24 +64,16 @@ fun CreatedTaskItem(
             ) {
 
                 Text(
-                    text = stringResource(
-                        R.string.task_creation
-                    ),
+                    if (confirmationType == ATTENDANCE) {
+                        stringResource(R.string.task_starting)
+                    } else {
+                        stringResource(R.string.task_over)
+                    },
                     style = MaterialTheme.typography.headlineMedium,
                     color = MaterialTheme.colorScheme.onSurface,
                     textAlign = TextAlign.Center,
                     modifier = Modifier
-                        .padding(vertical = 4.dp)
-                        .fillMaxWidth()
-                )
-
-                Text(
-                    stringResource(R.string.task_created, creator.username),
-                    color = MaterialTheme.colorScheme.onSurface,
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.titleSmall,
-                    modifier = Modifier
-                        .padding(vertical = 4.dp)
+                        .padding(bottom = 4.dp)
                         .fillMaxWidth()
                 )
 
@@ -100,16 +97,70 @@ fun CreatedTaskItem(
                         task.startTime,
                         task.endTime
                     ),
-                    style = MaterialTheme.typography.labelMedium,
                     textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.labelMedium,
                     modifier = Modifier
-                        .padding(bottom = 4.dp)
+                        .padding(vertical = 4.dp)
                         .fillMaxWidth()
                 )
 
+                Text(
+                    text = if (confirmationType == ATTENDANCE) {
+                        stringResource(
+                            R.string.are_you_here
+                        )
+                    } else {
+                        stringResource(
+                            R.string.did_you_complete
+                        )
+                    },
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .padding(vertical = 4.dp)
+                        .fillMaxWidth()
+                )
+
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .padding(vertical = 4.dp, horizontal = 12.dp)
+                        .fillMaxWidth()
+                ) {
+                    Button(
+                        onClick = onYesClick,
+                        modifier = Modifier
+                            .padding(horizontal = 8.dp)
+                            .size(48.dp)
+                            .weight(1f)
+
+                    ) {
+                        Text(
+                            stringResource(R.string.yes),
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+
+                    Button(
+                        onClick = onNoClick,
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(horizontal = 8.dp)
+                            .size(64.dp, 48.dp)
+                    ) {
+                        Text(
+                            stringResource(R.string.no),
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                }
             }
         }
-
     }
-
 }
+
+
+
+
+

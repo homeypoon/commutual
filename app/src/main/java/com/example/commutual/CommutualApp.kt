@@ -1,5 +1,6 @@
 package com.example.commutual
 
+import ChatScreen
 import SettingsScreen
 import android.content.res.Resources
 import androidx.compose.foundation.layout.padding
@@ -19,7 +20,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.commutual.common.composable.BottomNavigationComposable
 import com.example.commutual.common.snackbar.SnackbarManager
-import com.example.commutual.ui.screens.chat.ChatScreen
 import com.example.commutual.ui.screens.chat.MessagesScreen
 import com.example.commutual.ui.screens.edit_post.EditPostScreen
 import com.example.commutual.ui.screens.edit_profile.EditProfileScreen

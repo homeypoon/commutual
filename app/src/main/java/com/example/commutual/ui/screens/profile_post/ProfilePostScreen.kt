@@ -1,18 +1,13 @@
-
-
-
-
 package com.example.commutual.ui.screens.profile_post
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -20,13 +15,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.commutual.R
-import com.example.commutual.common.composable.BasicIconButton
-import com.example.commutual.common.composable.BasicToolbar
-import com.example.commutual.common.ext.basicIconButton
+import com.example.commutual.common.composable.ActionToolbar
+import com.example.commutual.common.ext.categoryChip
 import com.example.commutual.ui.screens.item.BottomSheetOptionItem
-import com.example.commutual.R.string as AppText
 
 @Composable
 @ExperimentalMaterialApi
@@ -73,24 +67,39 @@ fun ProfilePostScreen(
         }
     ) {
 
+
         Column(
             modifier = modifier
                 .fillMaxWidth()
                 .fillMaxHeight()
         ) {
-            BasicToolbar(
-                stringResource(R.string.my_post)
+            ActionToolbar(
+                stringResource(R.string.my_post),
+                endActionIcon = R.drawable.ic_vertical_dots,
+                endAction = { viewModel.onIconClick(coroutineScope, bottomSheetState) }
             )
 
-            BasicIconButton(
-                imageVector = Icons.Default.MoreVert,
-                modifier = Modifier.basicIconButton(),
-                onIconClick = { viewModel.onIconClick(coroutineScope, bottomSheetState) },
-                contentDescription = AppText.more
-            )
 
-            Text(text = post.title, style = MaterialTheme.typography.titleMedium)
-            Text(text = post.description, style = MaterialTheme.typography.bodyMedium)
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(24.dp, 36.dp)
+            ) {
+
+                Text(
+                    stringResource(post.category.categoryStringRes),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.categoryChip(
+                        MaterialTheme.colorScheme.secondary
+                    )
+                )
+
+                Text(text = post.title,
+                    style = MaterialTheme.typography.headlineMedium)
+                Text(text = post.description,
+                    style = MaterialTheme.typography.bodyMedium)
+            }
         }
 
     }

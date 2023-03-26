@@ -16,7 +16,7 @@ class FormatterClass {
 
             if (hasYear) {
                 timeFormatter = SimpleDateFormat(
-                    "HH:mm MMM d yyyy",
+                    "HH:mm:ss MMM d yyyy",
                     Locale.getDefault()
                 )
             }

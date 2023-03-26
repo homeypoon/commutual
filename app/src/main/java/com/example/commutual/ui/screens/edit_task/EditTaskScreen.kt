@@ -13,6 +13,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -145,7 +146,8 @@ fun EditTaskScreen(
                         },
                         text = {
                             Text(
-                                text = stringResource(category.categoryStringRes)
+                                text = stringResource(category.categoryStringRes),
+                                style = MaterialTheme.typography.bodyMedium
                             )
                         }
                     )

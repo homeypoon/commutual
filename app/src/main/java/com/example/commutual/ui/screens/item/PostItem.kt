@@ -2,10 +2,7 @@ package com.example.commutual.ui.screens.item
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Text
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ListItem
-import androidx.compose.material3.ListItemDefaults
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -19,40 +16,44 @@ import com.example.commutual.model.Post
 fun PostItem(
     post: Post,
 ) {
-    ListItem(
-        colors = ListItemDefaults.colors(
-            MaterialTheme.colorScheme.surface
-        ),
-        headlineText = {
-            Text(
-                post.title,
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-        },
-        overlineText = {
-            Text(
-                stringResource(post.category.categoryStringRes),
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.categoryChip(
-                    MaterialTheme.colorScheme.secondary
-                )
-            )
-        },
-        supportingText = {
-            Column {
+    Column {
 
+        ListItem(
+            colors = ListItemDefaults.colors(
+                MaterialTheme.colorScheme.surface
+            ),
+            headlineText = {
                 Text(
-                    post.description,
-                    style = MaterialTheme.typography.bodyMedium,
+                    post.title,
+                    style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.onSurface
                 )
+            },
+            overlineText = {
+                Text(
+                    stringResource(post.category.categoryStringRes),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.categoryChip(
+                        MaterialTheme.colorScheme.secondary
+                    )
+                )
+            },
+            supportingText = {
+                Column {
+
+                    Text(
+                        post.description,
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
 
 
+                }
             }
-        }
-    )
+        )
+        Divider()
+    }
 }
 
 @Preview

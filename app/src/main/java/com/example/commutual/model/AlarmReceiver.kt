@@ -37,7 +37,6 @@ class AlarmReceiver(
         val membersId = intent?.getStringArrayExtra("membersId")
 
 
-
         val alarmType = intent?.getIntExtra("alarmType", COMPLETION)
 
         Log.d("alarm receiver", "alarm type:$alarmType")
@@ -63,6 +62,7 @@ class AlarmReceiver(
 
                     if (membersId != null) {
                         storageService.incrementTasksScheduled(membersId)
+                        storageService.incrementCategoryCount(membersId, task.category)
                     }
 
                     Log.d("attendance alarm r task", "chatid: $chatId")

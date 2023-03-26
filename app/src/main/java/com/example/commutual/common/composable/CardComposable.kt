@@ -41,7 +41,7 @@ fun RegularCardEditor(
   @DrawableRes icon: Int,
   content: String,
   modifier: Modifier,
-  onEditClick: () -> Unit
+  onEditClick: () -> Unit,
 ) {
   CardEditor(title, icon, content, onEditClick, modifier)
 }
@@ -69,7 +69,12 @@ private fun CardEditor(
       modifier = Modifier.fillMaxWidth().padding(16.dp)
     ) {
       Column(modifier = Modifier.weight(1f)) {
-        Text(stringResource(title), color = MaterialTheme.colorScheme.onSurface) }
+        Text(stringResource(title),
+          color = MaterialTheme.colorScheme.onSurface,
+          style = MaterialTheme.typography.headlineSmall,
+          modifier = Modifier.padding(16.dp, 0.dp)
+        )
+      }
 
       if (content.isNotBlank()) {
         Text(text = content, modifier = Modifier.padding(16.dp, 0.dp))

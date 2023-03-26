@@ -241,11 +241,15 @@ class EditTaskViewModel @Inject constructor(
                 completionCalendar,
                 chat.value.membersId.toTypedArray(),
                 task.value,
-                chatId)
+                chatId
+            )
 
             popUpScreen()
 
-            Log.d("chat.value.membersId.toTypedArray()", chat.value.membersId.toTypedArray().toString())
+            Log.d(
+                "chat.value.membersId.toTypedArray()",
+                chat.value.membersId.toTypedArray().toString()
+            )
         }
     }
 

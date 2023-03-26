@@ -66,7 +66,7 @@ class StorageServiceImpl
 
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun getCurrentUserFlow(): Flow<User?> {
+    override fun getFlowCurrentUser(): Flow<User?> {
         return auth.currentUser.flatMapLatest {
             currentUserCollection().document(auth.currentUserId)
                 .snapshots().map { snapshot ->
@@ -192,6 +192,10 @@ class StorageServiceImpl
             currentUserCollection().document(auth.currentUserId).update(tasksMap).await()
         }
 
+    override suspend fun incrementCategoryCount(membersId: Array<String>, category: CategoryEnum) {
+        val userRef = currentUserCollection().document(auth.currentUserId)
+        userRef.update("categoryCount.${category.name}", FieldValue.increment(1))
+    }
 
     override suspend fun incrementCommitCount(incrementCommitCount: Long) {
         val userRef = currentUserCollection().document(auth.currentUserId)

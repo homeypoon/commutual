@@ -1,5 +1,3 @@
-
-
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -9,6 +7,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -59,7 +58,12 @@ private fun SignOutCard(signOut: () -> Unit) {
 
     if (showWarningDialog) {
         AlertDialog(
-            title = { Text(stringResource(AppText.log_out)) },
+            title = {
+                Text(
+                    text = stringResource(AppText.log_out),
+                    style = MaterialTheme.typography.headlineMedium,
+                )
+            },
             text = { Text(stringResource(AppText.log_out_message)) },
             dismissButton = { DialogCancelButton(AppText.cancel) { showWarningDialog = false } },
             confirmButton = {
@@ -89,7 +93,12 @@ private fun DeleteMyAccountCard(deleteMyAccount: () -> Unit) {
 
     if (showWarningDialog) {
         AlertDialog(
-            title = { Text(stringResource(AppText.delete_account)) },
+            title = {
+                Text(
+                    stringResource(AppText.delete_account),
+                    style = MaterialTheme.typography.headlineMedium
+                )
+            },
             text = { Text(stringResource(AppText.delete_account_message)) },
             dismissButton = { DialogCancelButton(AppText.cancel) { showWarningDialog = false } },
             confirmButton = {

@@ -12,8 +12,8 @@ enum class CategoryEnum(@StringRes val categoryStringRes: Int) {
     CODING(R.string.coding),
     HEALTH_AND_WELLNESS(R.string.health_and_wellness),
     MUSIC(R.string.music),
-    ROUTINE(R.string.routine),
-    SPORTS(R.string.sports),
+    MISCELLANEOUS(R.string.miscellaneous),
+    ATHLETICS(R.string.athletics),
     WORK(R.string.work)
 }
 

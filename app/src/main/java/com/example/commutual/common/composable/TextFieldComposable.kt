@@ -6,6 +6,7 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
@@ -186,14 +187,13 @@ fun MessageInputField(
     @StringRes text: Int,
     value: String,
     onNewValue: (String) -> Unit,
-    leadingIcon: (@Composable () -> Unit),
     trailingIcon: (@Composable () -> Unit),
     maxLines: Int,
     modifier: Modifier = Modifier,
     focusManager: FocusManager
 ) {
     OutlinedTextField(
-        modifier = modifier,
+        modifier = modifier.padding(horizontal = 12.dp),
         value = value,
         maxLines = maxLines,
         onValueChange = { onNewValue(it) },
@@ -203,7 +203,6 @@ fun MessageInputField(
                 style = MaterialTheme.typography.bodyMedium
             )
         },
-        leadingIcon = leadingIcon,
         trailingIcon = trailingIcon,
         keyboardOptions = KeyboardOptions.Default.copy(
             keyboardType = KeyboardType.Text,

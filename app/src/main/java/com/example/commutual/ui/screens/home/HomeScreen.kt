@@ -5,19 +5,17 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -25,13 +23,16 @@ import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.commutual.R
 import com.example.commutual.common.composable.BasicToolbar
+import com.example.commutual.model.CategoryEnum
 import com.example.commutual.model.User
 import com.example.commutual.ui.screens.item.TaskItem
+import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.PieChart
-import com.github.mikephil.charting.data.PieData
-import com.github.mikephil.charting.data.PieDataSet
-import com.github.mikephil.charting.data.PieEntry
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.data.*
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
+import com.github.mikephil.charting.utils.ColorTemplate
 import java.text.DecimalFormat
 
 
@@ -58,7 +59,7 @@ fun HomeScreen(
                     Text(
                         text = stringResource(R.string.add_post),
                         color = MaterialTheme.colorScheme.onTertiary,
-                        style = MaterialTheme.typography.displayMedium
+                        style = MaterialTheme.typography.displaySmall
                     )
                 },
                 icon = {
@@ -75,67 +76,105 @@ fun HomeScreen(
     ) { padding ->
 
 
-        Column(
+        LazyColumn(
             modifier = modifier
                 .padding(padding)
-                .fillMaxSize()
-                .verticalScroll(scrollState),
+                .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-            BasicToolbar(
-                title = stringResource(R.string.home)
-            )
+        ) {
+            item {
+                BasicToolbar(
+                    title = stringResource(R.string.home)
+                )
+            }
+
 
             if (upcomingUserTasks.value.isNotEmpty()) {
 
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    userScrollEnabled = false,
-                    contentPadding = PaddingValues(top = 8.dp, bottom = 8.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    item {
-                        Text(
-                            text = stringResource(R.string.upcoming_tasks_sessions)
-                        )
-                    }
-                    items(upcomingUserTasks.value) { task ->
-                        TaskItem(task = task, creator = User())
-                    }
+                item {
+                    Text(
+                        text = stringResource(R.string.upcoming_tasks_sessions),
+                        style = MaterialTheme.typography.headlineLarge,
+                        modifier = Modifier.padding(vertical = 8.dp)
+                    )
                 }
-            } else {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = stringResource(R.string.upcoming_tasks_sessions)
-                    )
 
-                    Text(
-                        text = stringResource(R.string.no_upcoming_tasks_sessions)
-                    )
+                items(upcomingUserTasks.value) { task ->
+                    TaskItem(task = task, creator = User())
+                }
+
+
+            } else {
+                item {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                    ) {
+                        Text(
+                            text = stringResource(R.string.upcoming_tasks_sessions),
+                            style = MaterialTheme.typography.headlineLarge,
+                            modifier = Modifier
+                                .padding(vertical = 12.dp, horizontal = 18.dp),
+                        )
+
+                        Surface(
+                            color = MaterialTheme.colorScheme.surface,
+                            shadowElevation = 4.dp,
+                            modifier = Modifier
+                                .padding(horizontal = 18.dp)
+                                .fillMaxWidth()
+                        ) {
+                            Text(
+                                text = stringResource(R.string.no_upcoming_tasks_sessions),
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier
+                                    .padding(vertical = 24.dp)
+                                    .fillMaxWidth()
+                            )
+                        }
+
+                    }
                 }
 
             }
-
 
             // Pie Chart for Tasks Completed and Tasks Scheduled
-            Box(
-                modifier =
-                Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
 
-                user?.let {
-                    PieChart(
-                        it.tasksScheduled,
-                        it.tasksCompleted
-                    )
+            item {
+
+                Box(
+                    modifier =
+                    Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
+
+                    user?.let {
+                        BarGraph(
+                            it.categoryCount
+                        )
+                    }
+
                 }
+
+                if (user?.tasksScheduled != 0L || user?.tasksCompleted != 0L) {
+                    Box(
+                        modifier =
+                        Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+
+                        user?.let {
+                            PieChart(
+                                it.tasksScheduled,
+                                it.tasksCompleted
+                            )
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(72.dp))
             }
+
         }
     }
 }
@@ -172,6 +211,7 @@ fun PieChart(
     dataSet.valueLineWidth = 4f
     dataSet.valueLineColor = MaterialTheme.colorScheme.primaryContainer.toArgb()
 
+
 //    dataSet.valueFormatter = PercentFormatter()
     dataSet.valueFormatter = object : ValueFormatter() {
         override fun getFormattedValue(value: Float): String {
@@ -196,8 +236,12 @@ fun PieChart(
             PieChart(context).apply {
                 setUsePercentValues(true)
                 description.isEnabled = false
-                legend.isEnabled = false
+                legend.isEnabled = true
+                legend.textSize = 18f
                 data = pieData
+
+                setDrawEntryLabels(false)
+
                 animateY(500)
                 isDrawHoleEnabled = false
                 setEntryLabelTextSize(18f)
@@ -206,4 +250,65 @@ fun PieChart(
         }
     )
 
+}
+
+@Composable
+fun BarGraph(
+    categoryCount: Map<String, Int>
+) {
+
+    val entries = categoryCount.entries.mapIndexed { index, (category, count) ->
+        BarEntry(index.toFloat(), count.toFloat(), category)
+    }
+
+
+    val dataSet = BarDataSet(entries, "Task counts")
+
+    dataSet.setColors(ColorTemplate.VORDIPLOM_COLORS, 255)
+
+    val barChartData = BarData(dataSet)
+
+    AndroidView(
+        modifier = Modifier
+            .padding(18.dp)
+            .size(300.dp),
+        factory = { context ->
+            BarChart(context).apply {
+                data = barChartData
+                description.isEnabled = false
+                legend.isEnabled = false
+                dataSet.setDrawValues(false)
+                setDrawValueAboveBar(false)
+                setDrawBarShadow(false)
+                setPinchZoom(false)
+                setTouchEnabled(false)
+//                setFitBars(true)
+
+                xAxis.isEnabled = true
+                xAxis.setDrawGridLines(false)
+                axisLeft.isEnabled = true
+                axisRight.isEnabled = false
+                xAxis.position = XAxis.XAxisPosition.BOTTOM
+                xAxis.labelRotationAngle = -90f
+//
+//                axisLeft.valueFormatter = object : ValueFormatter() {
+//                    override fun getFormattedValue(value: Float): String {
+//                        return floor(value.toDouble()).toInt().toString()
+//                    }
+//                }
+
+                val categoryNames = categoryCount.keys.map {
+                    context.getString(CategoryEnum.valueOf(it).categoryStringRes)
+                }
+
+                xAxis.valueFormatter = IndexAxisValueFormatter(
+                    categoryNames.toList()
+                )
+
+                axisLeft.labelCount = barChartData.yMax.toInt()
+
+
+            }
+        }
+    )
 }

@@ -9,64 +9,108 @@ import androidx.compose.ui.unit.sp
 import com.example.commutual.R
 
 val OpenSans = FontFamily(
+    Font(R.font.open_sans_light, FontWeight.Light),
     Font(R.font.open_sans_regular),
+    Font(R.font.open_sans_medium, FontWeight.Medium),
+    Font(R.font.open_sans_semi_bold, FontWeight.SemiBold),
     Font(R.font.open_sans_bold, FontWeight.Bold),
-    Font(R.font.open_sans_light, FontWeight.Light)
-)
-val RobotoSlab = FontFamily(
-    Font(R.font.roboto_slab_medium, FontWeight.Medium),
-    Font(R.font.roboto_slab_bold, FontWeight.Bold)
-)
+    Font(R.font.open_sans_extra_bold, FontWeight.ExtraBold))
+
 
 // Set of Material typography styles to start with
 val Typography = Typography(
-    headlineLarge = TextStyle(
-        fontFamily = RobotoSlab,
-        fontWeight = FontWeight.Normal,
+    // Top bar title
+    displayLarge = TextStyle(
+        fontFamily = OpenSans,
+        fontWeight = FontWeight.Bold,
         fontSize = 30.sp
     ),
-    // Top bar title
-    titleLarge = TextStyle(
-        fontFamily = RobotoSlab,
-        fontWeight = FontWeight.Medium,
-        fontSize = 24.sp
+    // Username on profile page
+    displayMedium = TextStyle(
+        fontFamily = OpenSans,
+        fontWeight = FontWeight.Bold,
+        fontSize = 28.sp
     ),
-    // Title for posts, dialog title
-    titleMedium = TextStyle(
-        fontFamily = RobotoSlab,
+    // Extended FAB text, Message Screen Tabs
+    displaySmall = TextStyle(
+        fontFamily = OpenSans,
+        fontWeight = FontWeight.Bold,
+        fontSize = 18.sp
+    ),
+    // Large titles (e.g. upcoming task sessions & chart title)
+    headlineLarge = TextStyle(
+        fontFamily = OpenSans,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 20.sp
+    ),
+    // Confirmation messages headline, post details dialog, Log out dialog
+    headlineMedium = TextStyle(
+        fontFamily = OpenSans,
         fontWeight = FontWeight.Bold,
         fontSize = 20.sp
     ),
-    // Bottom Modal Text
+    // Task username, post detail username, no upcoming sessions text
+    // Log out & delete account item text, Chat Item Text
+    headlineSmall = TextStyle(
+        fontFamily = OpenSans,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 18.sp
+    ),
+    // Post title
+    titleLarge = TextStyle(
+        fontFamily = OpenSans,
+        fontWeight = FontWeight.Bold,
+        fontSize = 18.sp
+    ),
+    // Task item titles
+    titleMedium = TextStyle(
+        fontFamily = OpenSans,
+        fontWeight = FontWeight.Bold,
+        fontSize = 18.sp
+    ),
+    // Confirmation Result Item title, Bottom Modal Text,
     titleSmall = TextStyle(
-        fontFamily = RobotoSlab,
+        fontFamily = OpenSans,
         fontWeight = FontWeight.Medium,
-        fontSize = 20.sp
+        fontSize = 18.sp
+    ),
+    //
+    bodyLarge = TextStyle(
+        fontFamily = OpenSans,
+        fontWeight = FontWeight.Normal,
+        fontSize = 18.sp
     ),
     // body text, description, bio
-     bodyMedium = TextStyle(
+    bodyMedium = TextStyle(
         fontFamily = OpenSans,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp
     ),
-    // Username, caption
+    // Profile numbers
     labelLarge = TextStyle(
+        fontFamily = OpenSans,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 22.sp
+    ),
+    // Days on commutual, username
+    labelMedium = TextStyle(
         fontFamily = OpenSans,
         fontWeight = FontWeight.Light,
         fontSize = 16.sp
     ),
-    // Buttons
-    displayMedium = TextStyle(
-        fontFamily = RobotoSlab,
-        fontWeight = FontWeight.Bold,
-        fontSize = 16.sp
+    // Timestamp, username, bottom nav label
+    labelSmall = TextStyle(
+        fontFamily = OpenSans,
+        fontWeight = FontWeight.Light,
+        fontSize = 14.sp
     ),
-    // Extended FAB
-     displaySmall = TextStyle(
-        fontFamily = RobotoSlab,
-        fontWeight = FontWeight.Bold,
-        fontSize = 16.sp
-    )
+    // Buttons
+//    displayMedium = TextStyle(
+//        fontFamily = OpenSans,
+//        fontWeight = FontWeight.Bold,
+//        fontSize = 16.sp
+//    ),
+
     /* Other default text styles to override
 
     caption = TextStyle(

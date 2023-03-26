@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface StorageService {
 //  val user: Flow<List<User>>
-  fun getCurrentUserFlow(): Flow<User?>
+  fun getFlowCurrentUser(): Flow<User?>
   val posts: Flow<List<Post>>
   val userPosts: Flow<List<Post>>
   val chats: Flow<List<Chat>>
@@ -21,7 +21,6 @@ interface StorageService {
 
   suspend fun searchedPosts(search: String): Flow<List<Post>>
   suspend fun filteredPosts(search: String, category: CategoryEnum): Flow<List<Post>>
-
 
 //  val messages: Flow<List<Message>>
 
@@ -37,9 +36,11 @@ interface StorageService {
   suspend fun updateUser(user: User)
   suspend fun updateCurrentUser(chatId: String, taskId: String)
   suspend fun deleteAllForUser(userId: String)
+  suspend fun incrementCategoryCount(membersId: Array<String>, category: CategoryEnum)
   suspend fun incrementCommitCount(incrementCommitCount: Long)
   suspend fun incrementTasksScheduled(membersId: Array<String>)
   suspend fun incrementTasksCompleted()
+
 
   // Post methods
   suspend fun getPost(postId: String): Post?

@@ -9,6 +9,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -133,7 +134,8 @@ fun EditPostScreen(
                         },
                         text = {
                             Text(
-                                text = stringResource(category.categoryStringRes)
+                                text = stringResource(category.categoryStringRes),
+                                style = MaterialTheme.typography.bodyMedium
                             )
                         }
                     )

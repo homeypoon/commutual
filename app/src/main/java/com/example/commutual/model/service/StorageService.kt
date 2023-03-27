@@ -9,11 +9,10 @@ interface StorageService {
 //  val user: Flow<List<User>>
   fun getFlowCurrentUser(): Flow<User?>
   val posts: Flow<List<Post>>
-  val userPosts: Flow<List<Post>>
   val chats: Flow<List<Chat>>
   val upcomingUserTasks: Flow<List<Task>>
   val chatsWithUsers: Flow<List<Pair<Chat, User>>>
-
+  fun getUserPosts(userId: String): Flow<List<Post>>
   fun getMessagesWithUsers(chatId: String): Flow<List<Pair<Message, User>>>
 
   fun getTasksWithUsers(chatId: String): Flow<Pair<List<Pair<Task, User>>, List<Pair<Task, User>>>>
@@ -40,6 +39,7 @@ interface StorageService {
   suspend fun incrementCommitCount(incrementCommitCount: Long)
   suspend fun incrementTasksScheduled(membersId: Array<String>)
   suspend fun incrementTasksCompleted()
+  suspend fun incrementTasksMissed()
 
 
   // Post methods

@@ -1,9 +1,8 @@
 
-import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
 import androidx.compose.material.Text
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -51,10 +50,9 @@ fun ConfirmationItem(
         androidx.compose.material3.Surface(
             onClick = onCLick,
             shape = RoundedCornerShape(12.dp),
-            tonalElevation = 1.dp,
-            color = MaterialTheme.colorScheme.surface,
+            color = MaterialTheme.colorScheme.surfaceVariant,
+            contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier
-                .animateContentSize()
 
         ) {
             Column(
@@ -70,7 +68,7 @@ fun ConfirmationItem(
                         stringResource(R.string.task_over)
                     },
                     style = MaterialTheme.typography.headlineMedium,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .padding(bottom = 4.dp)
@@ -84,7 +82,7 @@ fun ConfirmationItem(
                         R.string.formatted_task_title, task.title
                     ),
                     style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .padding(vertical = 4.dp)
@@ -126,8 +124,13 @@ fun ConfirmationItem(
                         .padding(vertical = 4.dp, horizontal = 12.dp)
                         .fillMaxWidth()
                 ) {
-                    Button(
+                    androidx.compose.material3.Button(
                         onClick = onYesClick,
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.primaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                        ),
+                        shape = RoundedCornerShape(8.dp),
                         modifier = Modifier
                             .padding(horizontal = 8.dp)
                             .size(48.dp)
@@ -137,12 +140,16 @@ fun ConfirmationItem(
                         Text(
                             stringResource(R.string.yes),
                             style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.onSurface
                         )
                     }
 
-                    Button(
+                    androidx.compose.material3.Button(
                         onClick = onNoClick,
+                        shape = RoundedCornerShape(8.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.primaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                        ),
                         modifier = Modifier
                             .weight(1f)
                             .padding(horizontal = 8.dp)
@@ -151,7 +158,6 @@ fun ConfirmationItem(
                         Text(
                             stringResource(R.string.no),
                             style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 }

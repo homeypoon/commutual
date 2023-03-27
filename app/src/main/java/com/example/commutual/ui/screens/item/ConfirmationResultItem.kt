@@ -1,4 +1,4 @@
-import androidx.compose.animation.animateContentSize
+
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
@@ -52,12 +52,9 @@ fun ConfirmationResultItem(
 
         androidx.compose.material3.Surface(
             shape = RoundedCornerShape(12.dp),
-            tonalElevation = 1.dp,
-            // surfaceColor color will be changing gradually from primary to surface
-            color = MaterialTheme.colorScheme.surface,
-            // animateContentSize will change the Surface size gradually
+            color = MaterialTheme.colorScheme.surfaceVariant,
+            contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier
-                .animateContentSize()
         ) {
             Column(
                 Modifier
@@ -78,7 +75,7 @@ fun ConfirmationResultItem(
                         }
                     },
                     style = MaterialTheme.typography.headlineMedium,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .padding(vertical = 4.dp)
@@ -110,7 +107,7 @@ fun ConfirmationResultItem(
                         }
                     },
                     style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .padding(vertical = 4.dp)
@@ -124,7 +121,7 @@ fun ConfirmationResultItem(
                         R.string.formatted_task_title, task.title
                     ),
                     style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .padding(vertical = 4.dp)

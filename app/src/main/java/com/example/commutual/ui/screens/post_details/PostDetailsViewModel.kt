@@ -4,10 +4,7 @@ package com.example.commutual.ui.screens.post_details
 
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
-import com.example.commutual.CHAT_ID
-import com.example.commutual.MESSAGES_SCREEN
-import com.example.commutual.POST_DEFAULT_ID
-import com.example.commutual.R
+import com.example.commutual.*
 import com.example.commutual.common.ext.idFromParameter
 import com.example.commutual.model.Chat
 import com.example.commutual.model.Post
@@ -84,6 +81,10 @@ class PostDetailsViewModel @Inject constructor(
                 setShowRequestMatchCard(true)
             }
         }
+    }
+
+    fun onUsernameClick(openScreen: (String) -> Unit) {
+        openScreen("$PROFILE_SCREEN?$USER_ID=${user.value.userId}")
     }
 
     fun navigateToExistingChat(openScreen: (String) -> Unit) {

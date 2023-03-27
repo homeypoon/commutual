@@ -23,7 +23,12 @@ class SettingsViewModel @Inject constructor(
         launchCatching {
             Log.d("accountService.hasUser", accountService.hasUser.toString())
             Log.d("accountService.currentUser", accountService.currentUser.toString())
-            accountService.signOut()
+            try {
+                accountService.signOut()
+            } catch (e: Exception) {
+                // Handle the exception here, for example by logging an error message
+                Log.e("onSignOutClick", "Caught IllegalArgumentException: ${e.message}", e)
+            }
             restartApp(SPLASH_SCREEN)
         }
     }

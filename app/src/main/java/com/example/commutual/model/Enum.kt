@@ -8,12 +8,12 @@ enum class CategoryEnum(@StringRes val categoryStringRes: Int) {
     ANY(R.string.any),
     NONE(R.string.empty_string),
     ACADEMICS(R.string.academics),
+    ATHLETICS(R.string.athletics),
     ART(R.string.art),
     CODING(R.string.coding),
     HEALTH_AND_WELLNESS(R.string.health_and_wellness),
-    MUSIC(R.string.music),
     MISCELLANEOUS(R.string.miscellaneous),
-    ATHLETICS(R.string.athletics),
+    MUSIC(R.string.music),
     WORK(R.string.work)
 }
 

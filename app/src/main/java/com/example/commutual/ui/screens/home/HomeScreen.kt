@@ -1,10 +1,11 @@
 package com.example.commutual.ui.screens.home
 
-import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
@@ -13,6 +14,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -31,9 +33,7 @@ import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
-import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
-import java.text.DecimalFormat
 
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
@@ -49,6 +49,8 @@ fun HomeScreen(
     val scrollState = rememberScrollState()
     val uiState by viewModel.uiState
     val user by viewModel.user.collectAsState()
+
+    LaunchedEffect(Unit) { viewModel.initialize() }
 
 
     Scaffold(
@@ -95,7 +97,7 @@ fun HomeScreen(
                     Text(
                         text = stringResource(R.string.upcoming_tasks_sessions),
                         style = MaterialTheme.typography.headlineLarge,
-                        modifier = Modifier.padding(vertical = 8.dp)
+                        modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
                     )
                 }
 
@@ -137,6 +139,12 @@ fun HomeScreen(
                 }
 
             }
+            item {
+                Divider(
+                    modifier = Modifier
+                        .padding(top = 24.dp, bottom = 4.dp)
+                )
+            }
 
             // Pie Chart for Tasks Completed and Tasks Scheduled
 
@@ -147,32 +155,153 @@ fun HomeScreen(
                     Modifier.fillMaxWidth(),
                     contentAlignment = Alignment.Center
                 ) {
-
-                    user?.let {
-                        BarGraph(
-                            it.categoryCount
-                        )
-                    }
-
-                }
-
-                if (user?.tasksScheduled != 0L || user?.tasksCompleted != 0L) {
-                    Box(
-                        modifier =
-                        Modifier.fillMaxWidth(),
-                        contentAlignment = Alignment.Center
+                    Surface(
+                        color = MaterialTheme.colorScheme.surfaceVariant,
+                        shape = RoundedCornerShape(12.dp),
+                        shadowElevation = 4.dp,
+                        modifier = Modifier
+                            .padding(start = 18.dp, end = 18.dp, top = 20.dp)
+                            .fillMaxWidth()
                     ) {
+                        Column(
+                            modifier = Modifier
+                                .padding(horizontal = 8.dp)
+                                .fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
 
-                        user?.let {
-                            PieChart(
-                                it.tasksScheduled,
-                                it.tasksCompleted
+                            Text(
+                                text = stringResource(R.string.completion_graph_title),
+                                style = MaterialTheme.typography.headlineSmall,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier
+                                    .padding(top = 16.dp, bottom = 12.dp)
+                                    .fillMaxWidth()
                             )
+
+                            if (user?.tasksMissed != 0L || user?.tasksCompleted != 0L) {
+                                user?.let {
+                                    PieChart(
+                                        it.tasksMissed,
+                                        it.tasksCompleted
+                                    )
+                                }
+
+                                Column(
+                                    modifier = Modifier
+                                        .padding(horizontal = 8.dp)
+                                        .fillMaxWidth(),
+                                    verticalArrangement = Arrangement.Center,
+                                ) {
+
+                                    Row(
+                                        modifier = Modifier
+                                            .padding(
+                                                top = 8.dp,
+                                                bottom = 8.dp,
+                                                start = 24.dp,
+                                                end = 8.dp
+                                            )
+                                    ) {
+                                        Box(
+                                            modifier = Modifier
+                                                .size(20.dp)
+                                                .clip(RoundedCornerShape(6.dp))
+                                                .background(
+                                                    MaterialTheme.colorScheme.primaryContainer
+                                                )
+                                        )
+                                        Text(
+                                            text = stringResource(
+                                                R.string.uncompleted_sessions,
+                                                uiState.uncompletedTasksPercentage
+                                            ),
+                                            style = MaterialTheme.typography.bodyMedium,
+                                            modifier = Modifier
+                                                .padding(start = 8.dp)
+                                        )
+                                    }
+                                    Row(
+                                        modifier = Modifier
+                                            .padding(
+                                                top = 8.dp,
+                                                bottom = 20.dp,
+                                                start = 24.dp,
+                                                end = 8.dp
+                                            )
+                                    ) {
+                                        Box(
+                                            modifier = Modifier
+                                                .size(20.dp)
+                                                .clip(RoundedCornerShape(6.dp))
+                                                .background(
+                                                    MaterialTheme.colorScheme.primary,
+                                                )
+                                                .padding(end = 8.dp)
+                                        )
+                                        Text(
+                                            text = stringResource(
+                                                R.string.completed_sessions,
+                                                uiState.completedTasksPercentage
+                                            ),
+                                            style = MaterialTheme.typography.bodyMedium,
+                                            modifier = Modifier
+                                                .padding(start = 8.dp)
+                                        )
+                                    }
+                                }
+                            }
                         }
+
+                    }
+                }
+            }
+
+            item {
+
+                Box(
+                    modifier =
+                    Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Surface(
+                        color = MaterialTheme.colorScheme.surfaceVariant,
+                        shape = RoundedCornerShape(12.dp),
+                        shadowElevation = 4.dp,
+                        modifier = Modifier
+                            .padding(start = 18.dp, end = 18.dp, top = 20.dp)
+                            .fillMaxWidth()
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .padding(horizontal = 8.dp)
+                                .fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+
+                            Text(
+                                text = stringResource(R.string.tasks_per_category_graph_title),
+                                style = MaterialTheme.typography.headlineSmall,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier
+                                    .padding(top = 16.dp, bottom = 4.dp)
+                                    .fillMaxWidth()
+                            )
+
+                            user?.let {
+                                BarGraph(
+                                    it.categoryCount
+                                )
+                            }
+                        }
+
+
                     }
                 }
 
-                Spacer(modifier = Modifier.height(72.dp))
+
+
+                Spacer(modifier = Modifier.height(84.dp))
             }
 
         }
@@ -185,66 +314,35 @@ fun PieChart(
     totalTasksScheduled: Long,
     totalTasksCompleted: Long
 ) {
+    val tasksUncompletedColor = MaterialTheme.colorScheme.primaryContainer
     val tasksCompletedColor = MaterialTheme.colorScheme.primary
-    val tasksScheduledColor = MaterialTheme.colorScheme.secondary
-    val onTasksCompletedColor = MaterialTheme.colorScheme.tertiary
-    val onTasksScheduledColor = MaterialTheme.colorScheme.tertiary
 
 
     val entries = listOf(
-        PieEntry(totalTasksScheduled.toFloat(), "Scheduled"),
-        PieEntry(totalTasksCompleted.toFloat(), "Completed")
+        PieEntry(totalTasksScheduled.toFloat(), "Uncompleted Tasks"),
+        PieEntry(totalTasksCompleted.toFloat(), "Completed Tasks")
     )
-
-
-    Log.d("user.tasksCompleted", totalTasksCompleted.toFloat().toString())
-    Log.d("user.tasksScheduled", totalTasksScheduled.toFloat().toString())
 
 
     val dataSet = PieDataSet(entries, "Tasks")
-    dataSet.colors = listOf(tasksCompletedColor.toArgb(), tasksScheduledColor.toArgb())
-    dataSet.valueTextSize = 32f
+    dataSet.setDrawValues(false)
+    dataSet.colors = listOf(tasksCompletedColor.toArgb(), tasksUncompletedColor.toArgb())
 
-    dataSet.yValuePosition = PieDataSet.ValuePosition.OUTSIDE_SLICE
-    dataSet.valueLinePart1Length = 0.4f
-    dataSet.valueLinePart2Length = 0.7f
-    dataSet.valueLineWidth = 4f
-    dataSet.valueLineColor = MaterialTheme.colorScheme.primaryContainer.toArgb()
-
-
-//    dataSet.valueFormatter = PercentFormatter()
-    dataSet.valueFormatter = object : ValueFormatter() {
-        override fun getFormattedValue(value: Float): String {
-            return (DecimalFormat("##0.0%")).format(value.toDouble() / 100)
-        }
-    }
-
-    dataSet.setValueTextColors(
-        listOf(
-            onTasksCompletedColor.toArgb(),
-            onTasksScheduledColor.toArgb()
-        )
-    )
 
     val pieData = PieData(dataSet)
 
     AndroidView(
         modifier = Modifier
-            .padding(18.dp)
-            .size(300.dp),
+            .padding(start = 18.dp, end = 12.dp, bottom = 18.dp)
+            .size(240.dp),
         factory = { context ->
             PieChart(context).apply {
-                setUsePercentValues(true)
-                description.isEnabled = false
-                legend.isEnabled = true
-                legend.textSize = 18f
                 data = pieData
-
+                setUsePercentValues(false)
                 setDrawEntryLabels(false)
-
-                animateY(500)
-                isDrawHoleEnabled = false
-                setEntryLabelTextSize(18f)
+                description.isEnabled = false
+                legend.isEnabled = false
+                isDrawHoleEnabled = true
             }
 
         }
@@ -270,7 +368,7 @@ fun BarGraph(
 
     AndroidView(
         modifier = Modifier
-            .padding(18.dp)
+            .padding(top = 18.dp, start = 18.dp, end = 18.dp,bottom = 24.dp)
             .size(300.dp),
         factory = { context ->
             BarChart(context).apply {
@@ -282,20 +380,18 @@ fun BarGraph(
                 setDrawBarShadow(false)
                 setPinchZoom(false)
                 setTouchEnabled(false)
-//                setFitBars(true)
 
                 xAxis.isEnabled = true
                 xAxis.setDrawGridLines(false)
-                axisLeft.isEnabled = true
-                axisRight.isEnabled = false
                 xAxis.position = XAxis.XAxisPosition.BOTTOM
                 xAxis.labelRotationAngle = -90f
-//
-//                axisLeft.valueFormatter = object : ValueFormatter() {
-//                    override fun getFormattedValue(value: Float): String {
-//                        return floor(value.toDouble()).toInt().toString()
-//                    }
-//                }
+
+                axisLeft.isEnabled = true
+                axisLeft.granularity = 1.0f
+                axisLeft.axisMinimum = 0f
+                axisLeft.axisMaximum = barChartData.yMax
+                axisRight.isEnabled = false
+
 
                 val categoryNames = categoryCount.keys.map {
                     context.getString(CategoryEnum.valueOf(it).categoryStringRes)

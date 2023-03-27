@@ -10,6 +10,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.commutual.FormatterClass
 import com.example.commutual.R
@@ -37,9 +38,7 @@ fun TaskItem(
                     modifier = Modifier.categoryChip(
                         MaterialTheme.colorScheme.secondary
                     )
-
                 )
-
             }
 
 
@@ -48,7 +47,8 @@ fun TaskItem(
             Text(
                 stringResource(R.string.formatted_task, task.title),
                 style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.padding(top = 4.dp, bottom = 2.dp)
             )
         },
         supportingText = {
@@ -57,7 +57,9 @@ fun TaskItem(
                 Text(
                     task.details,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onSurface,
+                    maxLines = 3,
+                    overflow = TextOverflow.Ellipsis,
                 )
                 Text(
                     stringResource(
@@ -67,6 +69,8 @@ fun TaskItem(
                         task.endTime
                     ),
                     style = MaterialTheme.typography.labelSmall,
+                    modifier = Modifier.padding(top = 6.dp)
+
                 )
             }
         },

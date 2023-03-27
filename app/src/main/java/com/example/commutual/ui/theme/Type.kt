@@ -14,7 +14,8 @@ val OpenSans = FontFamily(
     Font(R.font.open_sans_medium, FontWeight.Medium),
     Font(R.font.open_sans_semi_bold, FontWeight.SemiBold),
     Font(R.font.open_sans_bold, FontWeight.Bold),
-    Font(R.font.open_sans_extra_bold, FontWeight.ExtraBold))
+    Font(R.font.open_sans_extra_bold, FontWeight.ExtraBold)
+)
 
 
 // Set of Material typography styles to start with
@@ -23,7 +24,7 @@ val Typography = Typography(
     displayLarge = TextStyle(
         fontFamily = OpenSans,
         fontWeight = FontWeight.Bold,
-        fontSize = 30.sp
+        fontSize = 28.sp
     ),
     // Username on profile page
     displayMedium = TextStyle(
@@ -31,7 +32,7 @@ val Typography = Typography(
         fontWeight = FontWeight.Bold,
         fontSize = 28.sp
     ),
-    // Extended FAB text, Message Screen Tabs
+    // Extended FAB text
     displaySmall = TextStyle(
         fontFamily = OpenSans,
         fontWeight = FontWeight.Bold,
@@ -50,7 +51,7 @@ val Typography = Typography(
         fontSize = 20.sp
     ),
     // Task username, post detail username, no upcoming sessions text
-    // Log out & delete account item text, Chat Item Text
+    // Chat Item Text, Message Screen Tabs, Charts titles
     headlineSmall = TextStyle(
         fontFamily = OpenSans,
         fontWeight = FontWeight.SemiBold,
@@ -80,11 +81,12 @@ val Typography = Typography(
         fontWeight = FontWeight.Normal,
         fontSize = 18.sp
     ),
-    // body text, description, bio
+    // body text, description, bio, card text, text field text
     bodyMedium = TextStyle(
         fontFamily = OpenSans,
         fontWeight = FontWeight.Normal,
-        fontSize = 16.sp
+        fontSize = 16.sp,
+        lineHeight = 20.sp
     ),
     // Profile numbers
     labelLarge = TextStyle(

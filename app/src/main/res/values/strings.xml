@@ -10,7 +10,6 @@
     <string name="generic_error">Something went wrong. Please try again!</string>
     <string name="try_again">Try again!</string>
 
-
     <!-- Login Screen -->
     <string name="log_in">Log In</string>
     <string name="register">Register</string>
@@ -28,6 +27,12 @@
     <!-- Home Screen -->
     <string name="home">Home</string>
     <string name="add_post">ADD POST</string>
+
+    <string name="completion_graph_title">Percentage of Task Completion</string>
+    <string name="tasks_per_category_graph_title">Number of Categories Per Category</string>
+
+    <string name="uncompleted_sessions">Uncompleted Sessions: %1$s</string>
+    <string name="completed_sessions">Completed Sessions: %1$s</string>
 
     <!-- Explore Screen -->
     <string name="explore">Explore</string>
@@ -130,10 +135,10 @@
 
     <!-- Profile Screen -->
     <string name="profile">Profile</string>
-    <string name="days_on_platform">%1$s Days on Commutual</string>
+    <string name="days_on_platform">~ %1$s Days on Commutual</string>
     <string name="commit_count">Commit\nCount</string>
     <string name="tasks_scheduled">Tasks\nScheduled</string>
-    <string name="tasks_completed">Tasks\nCompleted</string>
+    <string name="completion_rate">Completion\nRate</string>
 
 
 

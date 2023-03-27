@@ -123,6 +123,7 @@ class MessageViewModel @Inject constructor(
         launchCatching {
             storageService.updateTaskType(task, chatId, ATTENDANCE_NO)
             storageService.incrementCommitCount(ATTENDANCE_NO_POINTS)
+            storageService.incrementTasksMissed()
         }
     }
 
@@ -139,6 +140,7 @@ class MessageViewModel @Inject constructor(
         launchCatching {
             storageService.updateTaskType(task, chatId, COMPLETION_NO)
             storageService.incrementCommitCount(COMPLETION_NO_POINTS)
+            storageService.incrementTasksMissed()
         }
     }
 

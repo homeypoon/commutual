@@ -32,7 +32,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.commutual.FormatterClass
 import com.example.commutual.R
 import com.example.commutual.common.composable.*
-import com.example.commutual.common.ext.card
 import com.example.commutual.common.ext.fieldModifier
 import com.example.commutual.common.ext.spacer
 import com.example.commutual.common.ext.toolbarActions
@@ -189,17 +188,16 @@ fun CardEditors(
     RegularCardEditor(
         R.string.date,
         R.drawable.ic_calendar,
-        FormatterClass.formatDate(task.date),
-        Modifier.card()
+        FormatterClass.formatDate(task.date)
     ) {
         showDatePicker(activity, onDateChange)
     }
 
-    RegularCardEditor(R.string.start_time, R.drawable.ic_time, startTime, Modifier.card()) {
+    RegularCardEditor(R.string.start_time, R.drawable.ic_time, startTime) {
         showTimePicker(activity, onStartTimeChange)
     }
 
-    RegularCardEditor(R.string.end_time, R.drawable.ic_time, endTime, Modifier.card()) {
+    RegularCardEditor(R.string.end_time, R.drawable.ic_time, endTime) {
         showTimePicker(activity, onEndTimeChange)
     }
 }

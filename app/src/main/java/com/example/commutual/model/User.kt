@@ -1,12 +1,16 @@
 package com.example.commutual.model
 
+import com.example.commutual.model.CategoryEnum
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.DocumentId
 
 data class User(
+    @DocumentId val userId: String = "",
     val username: String = "",
     val bio: String = "",
     val commitCount: Long = 0,
     val tasksScheduled: Long = 0,
+    val tasksMissed: Long = 0,
     val tasksCompleted: Long = 0,
     val signUpTimestamp: Timestamp = Timestamp.now(),
 
@@ -20,5 +24,5 @@ data class User(
         CategoryEnum.ATHLETICS.name to 0,
         CategoryEnum.WORK.name to 0,
     ),
-    val tasksMap: Map<String, String> = emptyMap() // Map<task id, chat id>,
+    val tasksMap: Map<String, String> = emptyMap() // Map<task id, chat id>
 )

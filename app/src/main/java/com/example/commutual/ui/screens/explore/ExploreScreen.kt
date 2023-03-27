@@ -2,6 +2,7 @@
 
 package com.example.commutual.ui.screens.explore
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
@@ -49,7 +50,13 @@ fun ExploreScreen(
     viewModel: ExploreViewModel = hiltViewModel()
 ) {
 
+
     val posts = viewModel.posts.collectAsStateWithLifecycle(emptyList())
+
+    Log.d("posts", viewModel.posts.toString())
+    Log.d("viewModel.posts.hLifecycl", viewModel.posts.collectAsStateWithLifecycle(emptyList()).toString())
+
+
     val focusManager = LocalFocusManager.current
 
     val scrollState = rememberScrollState()
@@ -91,7 +98,10 @@ fun ExploreScreen(
                 item {
                     AssistChip(
                         onClick = { },
-                        label = { Text(stringResource(viewModel.filterChipCategory.categoryStringRes)) },
+                        label = { Text(
+                            stringResource(viewModel.filterChipCategory.categoryStringRes),
+                            style = MaterialTheme.typography.labelMedium
+                        ) },
                         trailingIcon = {
                             IconButton(
                                 onClick = { viewModel.onCloseFilterChipClick(focusManager) },

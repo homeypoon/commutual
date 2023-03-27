@@ -53,6 +53,7 @@ class ExploreViewModel @Inject constructor(
 
     fun onCategorySelected(category: CategoryEnum) {
         uiState.value = uiState.value.copy(selectedCategory = category)
+
     }
 
     fun setShowFiltersDialog(showFiltersDialog: Boolean) {

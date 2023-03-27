@@ -209,6 +209,17 @@ fun NavGraphBuilder.commutualGraph(appState: CommutualAppState) {
     }
 
     composable(
+        route = "$PROFILE_SCREEN$USER_ID_ARG",
+        arguments = listOf(navArgument(USER_ID) { defaultValue = USER_DEFAULT_ID })
+    ) {
+
+        ProfileScreen(
+            openScreen = { route -> appState.navigate(route) },
+            userId = it.arguments?.getString(USER_ID) ?: USER_DEFAULT_ID,
+        )
+    }
+
+    composable(
         route = "$EDIT_TASK_SCREEN$TASK_ID_ARG$CHAT_ID_ARG$SCREEN_TITLE_ARG",
         arguments = listOf(
             navArgument(TASK_ID) { defaultValue = TASK_DEFAULT_ID },
@@ -252,10 +263,7 @@ fun NavGraphBuilder.commutualGraph(appState: CommutualAppState) {
             openScreen = { route -> appState.navigate(route) })
     }
 
-    composable(PROFILE_SCREEN) {
-        ProfileScreen(
-            openScreen = { route -> appState.navigate(route) })
-    }
+
 
     composable(SETTINGS_SCREEN) {
         SettingsScreen(

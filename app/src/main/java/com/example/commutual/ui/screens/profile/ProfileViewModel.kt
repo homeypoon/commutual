@@ -1,5 +1,3 @@
-
-
 package com.example.commutual.ui.screens.profile
 
 import androidx.compose.runtime.mutableStateOf
@@ -13,29 +11,36 @@ import com.example.commutual.model.service.StorageService
 import com.example.commutual.ui.screens.CommutualViewModel
 import com.google.firebase.Timestamp
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.text.DecimalFormat
 import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     logService: LogService,
-    private val storageService: StorageService,
-    private val accountService: AccountService,
+    val storageService: StorageService,
+    val accountService: AccountService,
     private val configurationService: ConfigurationService
 ) : CommutualViewModel(logService) {
 
     var uiState = mutableStateOf(ProfileUiState())
         private set
 
-    val userPosts = storageService.userPosts
     val user = mutableStateOf(User())
 
-    fun initialize() {
+    fun initialize(userId: String) {
+
         launchCatching {
-            user.value = storageService.getUser(accountService.currentUserId) ?: User()
+            if (userId != TASK_DEFAULT_ID) {
+                user.value = storageService.getUser(userId) ?: User()
+            } else {
+                user.value = storageService.getUser(accountService.currentUserId) ?: User()
+            }
             uiState.value = uiState.value.copy(
                 totalTasksScheduled = user.value.tasksScheduled,
-                totalTasksCompleted = user.value.tasksCompleted
+                totalTasksCompleted = user.value.tasksCompleted,
             )
+
+            calculateCompletionRate(user.value.tasksMissed, user.value.tasksCompleted)
             calculateUserTime()
         }
     }
@@ -53,12 +58,30 @@ class ProfileViewModel @Inject constructor(
         )
     }
 
+    private fun calculateCompletionRate(tasksMissed: Long, tasksCompleted: Long) {
+        val decimalFormatter = DecimalFormat("##0.00%")
+        decimalFormatter.minimumFractionDigits = 0
+
+        val completedTasksRate =
+            tasksCompleted.toDouble() / (tasksMissed + tasksCompleted).toDouble()
+
+        if ((tasksMissed + tasksCompleted) != 0L) {
+            uiState.value = uiState.value.copy(
+                completionRate = decimalFormatter.format(completedTasksRate)
+            )
+        }
+    }
+
     fun onEditProfileClick(openScreen: (String) -> Unit) {
         openScreen("$EDIT_PROFILE_SCREEN?$SCREEN_TITLE=$ST_EDIT_PROFILE")
     }
 
-    fun onPostClick(openScreen: (String) -> Unit, post: Post) {
+    fun onOwnPostClick(openScreen: (String) -> Unit, post: Post) {
         openScreen("$PROFILE_POST_SCREEN?$POST_ID={${post.postId}}")
+    }
+
+    fun onOtherPostClick(openScreen: (String) -> Unit, post: Post) {
+        openScreen("$POST_DETAILS_SCREEN?$POST_ID={${post.postId}}")
     }
 
     fun onSettingsClick(openScreen: (String) -> Unit) {

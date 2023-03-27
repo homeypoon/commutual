@@ -34,12 +34,20 @@ class StorageServiceImpl
             }
         }
 
+//    @OptIn(ExperimentalCoroutinesApi::class)
+//    override val userPosts: Flow<List<Post>>
+//        get() = auth.currentUser.flatMapLatest {
+//            currentPostCollection().whereEqualTo(USER_ID, auth.currentUserId).snapshots()
+//                .map { snapshot -> snapshot.toObjects() }
+//        }
+
     @OptIn(ExperimentalCoroutinesApi::class)
-    override val userPosts: Flow<List<Post>>
-        get() = auth.currentUser.flatMapLatest {
-            currentPostCollection().whereEqualTo(USER_ID, auth.currentUserId).snapshots()
+    override fun getUserPosts(userId: String): Flow<List<Post>> {
+        return auth.currentUser.flatMapLatest {
+            currentPostCollection().whereEqualTo(USER_ID, userId).snapshots()
                 .map { snapshot -> snapshot.toObjects() }
         }
+    }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override val chats: Flow<List<Chat>>
@@ -116,19 +124,6 @@ class StorageServiceImpl
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun getCompletedTasksWithUsers(chatId: String): Flow<List<Pair<Task, User>>> {
-        return auth.currentUser.flatMapLatest {
-            currentTaskCollection(chatId).whereEqualTo(COMPLETED_FIELD, true)
-                .orderBy(TIMESTAMP_FIELD, Query.Direction.ASCENDING).snapshots().map { snapshot ->
-                    snapshot.toObjects<Task>().map { task ->
-                        val sender = getUserById(task.creatorId)
-                        task to sender
-                    }
-                }
-        }
-    }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
     override fun getTasksWithUsers(chatId: String): Flow<Pair<List<Pair<Task, User>>, List<Pair<Task, User>>>> {
         return auth.currentUser.flatMapLatest {
             currentTaskCollection(chatId).orderBy(DATE_FIELD, Query.Direction.ASCENDING).snapshots()
@@ -142,6 +137,22 @@ class StorageServiceImpl
                 }
         }
     }
+
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun getCompletedTasksWithUsers(chatId: String): Flow<List<Pair<Task, User>>> {
+        return auth.currentUser.flatMapLatest {
+            currentTaskCollection(chatId).whereEqualTo(COMPLETED_FIELD, true)
+                .orderBy(TIMESTAMP_FIELD, Query.Direction.ASCENDING).snapshots().map { snapshot ->
+                    snapshot.toObjects<Task>().map { task ->
+                        val sender = getUserById(task.creatorId)
+                        task to sender
+                    }
+                }
+        }
+    }
+
+
 
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -215,6 +226,10 @@ class StorageServiceImpl
         userRef.update("tasksCompleted", FieldValue.increment(1))
     }
 
+    override suspend fun incrementTasksMissed() {
+        val userRef = currentUserCollection().document(auth.currentUserId)
+        userRef.update("tasksMissed", FieldValue.increment(1))
+    }
 
     override suspend fun getPost(postId: String): Post? =
         currentPostCollection().document(postId).get().await().toObject()

@@ -1,7 +1,8 @@
+
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.AlertDialog
@@ -12,11 +13,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.commutual.R
 import com.example.commutual.common.composable.*
-import com.example.commutual.common.ext.card
-import com.example.commutual.common.ext.spacer
 import com.example.commutual.ui.screens.settings.SettingsViewModel
 import com.example.commutual.R.drawable as AppIcon
 import com.example.commutual.R.string as AppText
@@ -40,10 +40,11 @@ fun SettingsScreen(
     ) {
         BasicToolbar(stringResource(R.string.settings))
 
+        Column(modifier = Modifier.fillMaxWidth().padding(24.dp, 0.dp)) {
+            SignOutCard { viewModel.onSignOutClick(restartApp) }
+            DeleteMyAccountCard { viewModel.onDeleteMyAccountClick(restartApp) }
+        }
 
-        Spacer(modifier = Modifier.spacer())
-        SignOutCard { viewModel.onSignOutClick(restartApp) }
-        DeleteMyAccountCard { viewModel.onDeleteMyAccountClick(restartApp) }
     }
 }
 
@@ -52,7 +53,7 @@ fun SettingsScreen(
 private fun SignOutCard(signOut: () -> Unit) {
     var showWarningDialog by remember { mutableStateOf(false) }
 
-    RegularCardEditor(AppText.log_out, AppIcon.ic_log_out, "", Modifier.card()) {
+    RegularCardEditor(AppText.log_out, AppIcon.ic_log_out, "") {
         showWarningDialog = true
     }
 
@@ -86,7 +87,6 @@ private fun DeleteMyAccountCard(deleteMyAccount: () -> Unit) {
         AppText.delete_account,
         AppIcon.ic_delete_account,
         "",
-        Modifier.card()
     ) {
         showWarningDialog = true
     }

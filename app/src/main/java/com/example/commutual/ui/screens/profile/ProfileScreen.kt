@@ -23,8 +23,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.commutual.R
+import com.example.commutual.TASK_DEFAULT_ID
 import com.example.commutual.common.composable.ActionToolbar
 import com.example.commutual.common.composable.BasicButton
+import com.example.commutual.common.composable.BasicToolbar
 import com.example.commutual.ui.screens.item.PostItem
 import com.example.commutual.R.string as AppText
 
@@ -34,14 +36,21 @@ import com.example.commutual.R.string as AppText
 @ExperimentalMaterialApi
 fun ProfileScreen(
     openScreen: (String) -> Unit,
+    userId: String,
     modifier: Modifier = Modifier,
     viewModel: ProfileViewModel = hiltViewModel()
 ) {
 
-    LaunchedEffect(Unit) { viewModel.initialize() }
+    LaunchedEffect(Unit) { viewModel.initialize(userId) }
 
     val uiState by viewModel.uiState
-    val userPosts = viewModel.userPosts.collectAsStateWithLifecycle(emptyList())
+    val posts = if (userId != TASK_DEFAULT_ID) {
+        viewModel.storageService.getUserPosts(userId)
+    } else {
+        viewModel.storageService.getUserPosts(viewModel.accountService.currentUserId)
+    }
+
+    val userPosts = posts.collectAsStateWithLifecycle(emptyList())
     val user by viewModel.user
 
     Column(
@@ -49,23 +58,29 @@ fun ProfileScreen(
             .fillMaxHeight()
             .fillMaxWidth()
     ) {
-        ActionToolbar(
-            title = stringResource(AppText.profile),
-            endActionIcon = R.drawable.ic_settings,
-            endAction = { viewModel.onSettingsClick(openScreen) },
-            modifier = modifier
-        )
+        if (userId != TASK_DEFAULT_ID) {
+            BasicToolbar(
+                title = stringResource(AppText.profile)
+            )
+        } else {
+            ActionToolbar(
+                title = stringResource(AppText.profile),
+                endActionIcon = R.drawable.ic_settings,
+                endAction = { viewModel.onSettingsClick(openScreen) },
+                modifier = modifier
+            )
+        }
 
         LazyColumn(
             Modifier
                 .weight(1f)
                 .fillMaxWidth()
-                .padding(4.dp)
 //                    .wrapContentHeight()
         ) {
             item {
                 Column(
                     modifier = Modifier
+                        .padding(top = 24.dp)
                         .fillMaxWidth()
                 ) {
 
@@ -83,7 +98,9 @@ fun ProfileScreen(
                         ),
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.labelMedium,
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
                     )
 
                     Box(
@@ -115,6 +132,7 @@ fun ProfileScreen(
                         horizontalArrangement = Arrangement.Center,
                         modifier = Modifier
                             .fillMaxWidth()
+                            .padding(top = 12.dp)
                             .height(IntrinsicSize.Min)
 //                            .align(Alignment.Center)
                     ) {
@@ -123,13 +141,14 @@ fun ProfileScreen(
                             modifier = Modifier
                                 .padding(4.dp, 0.dp)
                                 .weight(1f)
+                                .weight(1f)
                         ) {
                             Text(
                                 text = user.commitCount.toString(),
                                 style = MaterialTheme.typography.labelLarge,
                                 textAlign = TextAlign.Center,
                                 modifier = Modifier
-                                    .padding(vertical = 4.dp)
+                                    .padding(top = 4.dp)
                                     .fillMaxWidth()
                             )
                             Text(
@@ -185,7 +204,7 @@ fun ProfileScreen(
                                 .weight(1f)
                         ) {
                             Text(
-                                text = uiState.totalTasksCompleted.toString(),
+                                text = uiState.completionRate,
                                 style = MaterialTheme.typography.labelLarge,
                                 textAlign = TextAlign.Center,
                                 modifier = Modifier
@@ -193,7 +212,7 @@ fun ProfileScreen(
                                     .fillMaxWidth()
                             )
                             Text(
-                                text = stringResource(R.string.tasks_completed),
+                                text = stringResource(R.string.completion_rate),
                                 style = MaterialTheme.typography.labelMedium,
                                 textAlign = TextAlign.Center,
                                 modifier = Modifier
@@ -204,20 +223,25 @@ fun ProfileScreen(
                     }
                 }
 
-
-                BasicButton(
-                    AppText.edit_profile,
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp, 16.dp, 16.dp, bottom = 20.dp)
-                ) { viewModel.onEditProfileClick(openScreen) }
-
-                Divider()
+                if (userId == TASK_DEFAULT_ID) {
+                    BasicButton(
+                        AppText.edit_profile,
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp, 16.dp, 16.dp, bottom = 12.dp)
+                    ) { viewModel.onEditProfileClick(openScreen) }
+                }
+                Divider(modifier = Modifier.padding(0.dp, 4.dp))
             }
 
             items(userPosts.value, key = { it.postId }) { postItem ->
+
                 Surface(modifier = Modifier.clickable {
-                    viewModel.onPostClick(openScreen, postItem)
+                    if (userId != TASK_DEFAULT_ID) {
+                        viewModel.onOtherPostClick(openScreen, postItem)
+                    } else {
+                        viewModel.onOwnPostClick(openScreen, postItem)
+                    }
                 }) {
                     PostItem(
                         post = postItem

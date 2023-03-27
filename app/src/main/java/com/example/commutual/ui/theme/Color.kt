@@ -19,10 +19,15 @@ val md_theme_light_onError = Color(0xFFFFFFFF)
 val md_theme_light_onErrorContainer = Color(0xFF410002)
 val md_theme_light_background = Color(0xFFFBFCFE)
 val md_theme_light_onBackground = Color(0xFF191C1D)
+
+// message & task item surface
 val md_theme_light_surface = Color(0xFFF7F9FC)
 val md_theme_light_onSurface = Color(0xFF191C1D)
-val md_theme_light_surfaceVariant = Color(0xFFDBE4E8)
+
+// graph surface
+val md_theme_light_surfaceVariant = Color(0xFFEDF5F3)
 val md_theme_light_onSurfaceVariant = Color(0xFF40484C)
+
 val md_theme_light_outline = Color(0xFF70787C)
 val md_theme_light_inverseOnSurface = Color(0xFFEFF1F2)
 val md_theme_light_inverseSurface = Color(0xFF2E3132)

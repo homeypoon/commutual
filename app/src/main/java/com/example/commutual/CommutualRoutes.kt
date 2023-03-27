@@ -43,6 +43,9 @@ const val ST_EDIT_TASK = "Edit Task"
 
 const val SCREEN_TITLE_ARG = "?$SCREEN_TITLE={$SCREEN_TITLE}"
 
+const val USER_ID = "userId"
+const val USER_DEFAULT_ID = "-1"
+const val USER_ID_ARG = "?$USER_ID={$USER_ID}"
 
 const val CHAT_ID = "chatId"
 const val CHAT_DEFAULT_ID = "-1"

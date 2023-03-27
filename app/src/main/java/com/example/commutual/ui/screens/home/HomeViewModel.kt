@@ -1,5 +1,6 @@
 package com.example.commutual.ui.screens.home
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.example.commutual.*
@@ -8,11 +9,11 @@ import com.example.commutual.model.service.AccountService
 import com.example.commutual.model.service.LogService
 import com.example.commutual.model.service.StorageService
 import com.example.commutual.ui.screens.CommutualViewModel
-import com.example.commutual.ui.screens.profile.ProfileUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.text.DecimalFormat
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,13 +21,15 @@ class HomeViewModel @Inject constructor(
     logService: LogService,
     private val storageService: StorageService,
     private val accountService: AccountService,
-): CommutualViewModel(logService) {
+) : CommutualViewModel(logService) {
 
     val upcomingUserTasks = storageService.upcomingUserTasks
 //    val user = mutableStateOf(User())
 
-    var uiState = mutableStateOf(ProfileUiState())
+    var uiState = mutableStateOf(HomeUiState())
         private set
+
+    private val currentUser = mutableStateOf(User())
 
     private val _user = MutableStateFlow<User?>(null)
 
@@ -38,25 +41,42 @@ class HomeViewModel @Inject constructor(
             storageService.getFlowCurrentUser().collect { user ->
                 _user.value = user
             }
+
         }
     }
 
-//    fun initialize() {
-//        launchCatching {
-//            user.value = storageService.getUser(accountService.currentUserId) ?: User()
-//            uiState.value = uiState.value.copy(
-//                totalTasksScheduled = user.value.tasksScheduled,
-//                totalTasksCompleted = user.value.tasksCompleted
-//            )
-//        }
-//    }
+    fun initialize() {
+        launchCatching {
+            currentUser.value = storageService.getUser(accountService.currentUserId) ?: User()
+
+            calculateCompletionRate(currentUser.value.tasksMissed, currentUser.value.tasksCompleted)
+        }
+    }
+
+    private fun calculateCompletionRate(tasksMissed: Long, tasksCompleted: Long) {
+
+        if ((tasksMissed + tasksCompleted) != 0L) {
+            val decimalFormatter = DecimalFormat("##0.00%")
+            decimalFormatter.minimumFractionDigits = 0
+
+
+            val uncompletedTasksPercentage = tasksMissed.toDouble() / (tasksMissed + tasksCompleted).toDouble()
+            val completedTasksPercentage = tasksCompleted.toFloat() / (tasksMissed + tasksCompleted).toFloat()
+
+            uiState.value = uiState.value.copy(
+                uncompletedTasksPercentage = decimalFormatter.format(uncompletedTasksPercentage),
+                completedTasksPercentage = decimalFormatter.format(completedTasksPercentage)
+            )
+            Log.d("uiState.value.completedTasksPercentage", uiState.value.completedTasksPercentage)
+        }
+    }
 
 
 
     // Navigate to EditPost Screen when user clicks on FAB
     fun onAddClick(openScreen: (String) -> Unit) =
 //        openScreen("$EDIT_POST_SCREEN?$SCREEN_TITLE={$ST_EDIT_POST}")
-    openScreen("$EDIT_POST_SCREEN?$POST_ID=$POST_DEFAULT_ID?$SCREEN_TITLE=${ST_CREATE_POST}")
+        openScreen("$EDIT_POST_SCREEN?$POST_ID=$POST_DEFAULT_ID?$SCREEN_TITLE=${ST_CREATE_POST}")
 
 //    openScreen("$EDIT_POST_SCREEN?$POST_ID={$}?$SCREEN_TITLE=${ST_EDIT_POST}")
 

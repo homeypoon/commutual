@@ -1,5 +1,3 @@
-
-
 package com.example.commutual.common.composable
 
 import androidx.annotation.StringRes
@@ -46,7 +44,13 @@ fun BasicField(
         modifier = modifier,
         value = value,
         onValueChange = { onNewValue(it) },
-        placeholder = { Text(stringResource(text)) },
+        placeholder = {
+            Text(
+                stringResource(text),
+                style = MaterialTheme.typography.bodyMedium,
+            )
+        },
+        textStyle = MaterialTheme.typography.bodyMedium,
         keyboardOptions = KeyboardOptions.Default.copy(
             keyboardType = KeyboardType.Text,
             imeAction = imeAction,
@@ -76,9 +80,10 @@ fun DescriptionField(
         placeholder = {
             Text(
                 stringResource(text),
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
             )
         },
+        textStyle = MaterialTheme.typography.bodyMedium,
         keyboardOptions = KeyboardOptions.Default.copy(
             keyboardType = KeyboardType.Text,
             autoCorrect = true,
@@ -103,6 +108,7 @@ fun SearchField(
 ) {
     androidx.compose.material3.OutlinedTextField(
         modifier = modifier,
+        textStyle = MaterialTheme.typography.bodyMedium,
         value = value,
         maxLines = 1,
         onValueChange = { onNewValue(it) },
@@ -154,6 +160,7 @@ fun DropDownField(
     OutlinedTextField(
         modifier = modifier,
         value = value,
+        textStyle = MaterialTheme.typography.bodyMedium,
         onValueChange = { onValueChange(it) },
         label = {
             Text(
@@ -194,6 +201,7 @@ fun MessageInputField(
 ) {
     OutlinedTextField(
         modifier = modifier.padding(horizontal = 12.dp),
+        textStyle = MaterialTheme.typography.bodyMedium,
         value = value,
         maxLines = maxLines,
         onValueChange = { onNewValue(it) },
@@ -276,6 +284,7 @@ fun EmailField(
 ) {
     OutlinedTextField(
         singleLine = true,
+        textStyle = MaterialTheme.typography.bodyMedium,
         modifier = modifier,
         value = value,
         onValueChange = { onNewValue(it) },
@@ -334,6 +343,7 @@ private fun PasswordField(
 
     OutlinedTextField(
         modifier = modifier,
+        textStyle = MaterialTheme.typography.bodyMedium,
         value = value,
         onValueChange = { onNewValue(it) },
         placeholder = { Text(text = stringResource(placeholder)) },

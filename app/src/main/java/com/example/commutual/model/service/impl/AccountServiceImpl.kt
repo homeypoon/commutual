@@ -2,20 +2,18 @@
 
 package com.example.commutual.model.service.impl
 
-import android.util.Log
 import com.example.commutual.model.User
 import com.example.commutual.model.service.AccountService
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-class AccountServiceImpl @Inject constructor(private val firestore: FirebaseFirestore, private val auth: FirebaseAuth) : AccountService {
-
+class AccountServiceImpl @Inject constructor(private val auth: FirebaseAuth, private val firestore: FirebaseFirestore) : AccountService {
 
   // Get current UserId
   override val currentUserId: String
@@ -30,12 +28,35 @@ class AccountServiceImpl @Inject constructor(private val firestore: FirebaseFire
     get() = callbackFlow {
       val listener =
         FirebaseAuth.AuthStateListener { auth ->
-          auth.currentUser?.let { currentUserCollection().document(it.uid).get() }
-//          this.trySend(auth.currentUser?.let { User(it.uid) } ?: User())
+          launch {
+            try {
+              auth.currentUser?.let { user ->
+                val docRef = firestore.collection("users").document(user.uid)
+                val document = docRef.get().await()
+                if (document.exists()) {
+                  val user = document.toObject(User::class.java)
+                  user?.let { this@callbackFlow.trySend(it) }
+                } else {
+                  this@callbackFlow.trySend(User(user.uid))
+                }
+              }
+            } catch (e: Exception) {
+              // handle the error here, e.g. log it or show a toast message
+            }
+          }
         }
       auth.addAuthStateListener(listener)
       awaitClose { auth.removeAuthStateListener(listener) }
     }
+
+//    get() = callbackFlow {
+//      val listener =
+//        FirebaseAuth.AuthStateListener { auth ->
+//          this.trySend(auth.currentUser?.let { User(it.uid) } ?: User())
+//        }
+//      auth.addAuthStateListener(listener)
+//      awaitClose { auth.removeAuthStateListener(listener) }
+//    }
 
   override suspend fun sendRecoveryEmail(email: String) {
     auth.sendPasswordResetEmail(email).await()
@@ -58,12 +79,8 @@ class AccountServiceImpl @Inject constructor(private val firestore: FirebaseFire
   }
 
   override suspend fun signOut() {
-    Log.d("Auth", "Current user ID: ${auth.currentUser?.uid}")
     auth.signOut()
   }
-
-  private fun currentUserCollection(): CollectionReference = firestore.collection("users")
-
 
   companion object {
     private const val LINK_ACCOUNT_TRACE = "linkAccount"

@@ -2,7 +2,6 @@ package com.example.commutual.ui.screens.chat
 
 import ConfirmationItem
 import ConfirmationResultItem
-import android.util.Log
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -48,13 +47,13 @@ fun MessagesScreen(
     viewModel: MessageViewModel = hiltViewModel()
 ) {
 
-
     val scrollState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
     val focusManager = LocalFocusManager.current
     val uiState by viewModel.uiState
 
     val messages by viewModel.getMessagesWithUsers(chatId).collectAsState(emptyList())
+
 
     val tasksWithUsers by viewModel.getTasksWithUsers(chatId)
         .collectAsState(Pair(emptyList(), emptyList()))
@@ -78,6 +77,7 @@ fun MessagesScreen(
 
     LaunchedEffect(Unit) {
         viewModel.getSender(chatId)
+        delay(500)
     }
     androidx.compose.material.Scaffold(
 
@@ -128,6 +128,7 @@ fun MessagesScreen(
                         text = {
                             Text(
                                 text = stringResource(tab.tabStringRes),
+                                style = MaterialTheme.typography.headlineSmall,
                                 maxLines = 2,
                                 overflow = TextOverflow.Ellipsis
                             )
@@ -154,216 +155,216 @@ fun MessagesScreen(
                     contentPadding = PaddingValues(top = 8.dp, bottom = 8.dp)
                 ) {
 
-                    Log.d("", messagesWithTasks.toString())
                     if (messagesWithTasks.isNotEmpty()) {
                         items(messagesWithTasks) { (item, user) ->
-                            when (item) {
-                                is Message -> {
-                                    MessageItem(item, user)
-                                    { timestamp -> FormatterClass.formatTimestamp(timestamp, true) }
+                            if (item is Message) {
+                                MessageItem(item, user)
+                                { timestamp -> FormatterClass.formatTimestamp(timestamp, true) }
+                            } else if (item is Task) {
+
+                                if (!item.showAttendance) {
+                                    CreatedTaskItem(item, user, viewModel::onCreatedTaskCLicked)
                                 }
-                                is Task -> {
-                                    if (!item.showAttendance) {
-                                        CreatedTaskItem(item, user, viewModel::onCreatedTaskCLicked)
-                                    }
 
-                                    if (item.showAttendance && (item.attendance[viewModel.currentUserId] == ATTENDANCE_NOT_DONE)) {
-                                        ConfirmationItem(
-                                            confirmationType = AlarmReceiver.ATTENDANCE,
-                                            task = item,
-                                            onCLick = {
-                                                viewModel.onAttendanceItemClicked(item, chatId)
-                                            },
-                                            onYesClick = {
-                                                viewModel.onAttendanceYesClicked(
-                                                    item,
-                                                    chatId
-                                                )
-                                            },
-                                            onNoClick = {
-                                                viewModel.onAttendanceNoClicked(item, chatId)
-                                            }
-                                        )
-                                    }
+                                if (item.showAttendance && (item.attendance[viewModel.currentUserId] == ATTENDANCE_NOT_DONE)) {
+                                    ConfirmationItem(
+                                        confirmationType = AlarmReceiver.ATTENDANCE,
+                                        task = item,
+                                        onCLick = {
+                                            viewModel.onAttendanceItemClicked(item, chatId)
+                                        },
+                                        onYesClick = {
+                                            viewModel.onAttendanceYesClicked(
+                                                item,
+                                                chatId
+                                            )
+                                        },
+                                        onNoClick = {
+                                            viewModel.onAttendanceNoClicked(item, chatId)
+                                        }
+                                    )
+                                }
 
-                                    if ((item.showAttendance) && (item.attendance[viewModel.currentUserId] == ATTENDANCE_YES)) {
-                                        ConfirmationResultItem(
-                                            resultType = ATTENDANCE_YES,
-                                            task = item,
-                                            user = viewModel.currentUser.value
-                                        )
-                                    } else if (item.attendance[viewModel.currentUserId] == ATTENDANCE_NO) {
-                                        ConfirmationResultItem(
-                                            resultType = ATTENDANCE_NO,
-                                            task = item,
-                                            user = viewModel.currentUser.value
-                                        )
-                                    }
-                                    if ((item.showAttendance) &&
-                                        (item.attendance[viewModel.chat.value.membersId.first { it != viewModel.currentUserId }]
-                                                == ATTENDANCE_YES)
-                                    ) {
-                                        ConfirmationResultItem(
-                                            resultType = ATTENDANCE_YES,
-                                            task = item,
-                                            user = viewModel.partnerObject.value
-                                        )
-                                    } else if ((item.showAttendance) && (item.attendance[viewModel.chat.value.membersId.first { it != viewModel.currentUserId }] == ATTENDANCE_NO)) {
-                                        ConfirmationResultItem(
-                                            resultType = ATTENDANCE_NO,
-                                            task = item,
-                                            user = viewModel.partnerObject.value
-                                        )
-                                    }
-                                    // completion
-                                    if (item.showCompletion && (item.completion[viewModel.currentUserId] == COMPLETION_NOT_DONE)) {
-                                        ConfirmationItem(
-                                            confirmationType = AlarmReceiver.COMPLETION,
-                                            task = item,
-                                            onCLick = {
-                                                viewModel.onCompletionItemClicked(item, chatId)
-                                            },
-                                            onYesClick = {
-                                                viewModel.onCompletionYesClicked(
-                                                    item,
-                                                    chatId
-                                                )
-                                            },
-                                            onNoClick = {
-                                                viewModel.onCompletionNoClicked(item, chatId)
-                                            }
-                                        )
-                                    }
+                                if ((item.showAttendance) && (item.attendance[viewModel.currentUserId] == ATTENDANCE_YES)) {
+                                    ConfirmationResultItem(
+                                        resultType = ATTENDANCE_YES,
+                                        task = item,
+                                        user = viewModel.currentUser.value
+                                    )
+                                } else if (item.attendance[viewModel.currentUserId] == ATTENDANCE_NO) {
+                                    ConfirmationResultItem(
+                                        resultType = ATTENDANCE_NO,
+                                        task = item,
+                                        user = viewModel.currentUser.value
+                                    )
+                                }
+                                if ((item.showAttendance) &&
+                                    (item.attendance[viewModel.chat.value.membersId.first { it != viewModel.currentUserId }]
+                                            == ATTENDANCE_YES)
+                                ) {
+                                    ConfirmationResultItem(
+                                        resultType = ATTENDANCE_YES,
+                                        task = item,
+                                        user = viewModel.partnerObject.value
+                                    )
+                                } else if ((item.showAttendance) && (item.attendance[viewModel.chat.value.membersId.first { it != viewModel.currentUserId }] == ATTENDANCE_NO)) {
+                                    ConfirmationResultItem(
+                                        resultType = ATTENDANCE_NO,
+                                        task = item,
+                                        user = viewModel.partnerObject.value
+                                    )
+                                }
+                                // completion
+                                if (item.showCompletion && !(item.attendance[viewModel.currentUserId] == ATTENDANCE_NO) && (item.completion[viewModel.currentUserId] == COMPLETION_NOT_DONE)) {
+                                    ConfirmationItem(
+                                        confirmationType = AlarmReceiver.COMPLETION,
+                                        task = item,
+                                        onCLick = {
+                                            viewModel.onCompletionItemClicked(item, chatId)
+                                        },
+                                        onYesClick = {
+                                            viewModel.onCompletionYesClicked(
+                                                item,
+                                                chatId
+                                            )
+                                        },
+                                        onNoClick = {
+                                            viewModel.onCompletionNoClicked(item, chatId)
+                                        }
+                                    )
+                                }
 
-                                    if ((item.showCompletion) && (item.completion[viewModel.currentUserId] == COMPLETION_YES)) {
-                                        ConfirmationResultItem(
-                                            resultType = COMPLETION_YES,
-                                            task = item,
-                                            user = viewModel.currentUser.value
-                                        )
-                                    } else if (item.completion[viewModel.currentUserId] == COMPLETION_NO) {
-                                        ConfirmationResultItem(
-                                            resultType = COMPLETION_NO,
-                                            task = item,
-                                            user = viewModel.currentUser.value
-                                        )
-                                    }
-                                    if ((item.showCompletion) &&
-                                        (item.completion[viewModel.chat.value.membersId.first { it != viewModel.currentUserId }]
-                                                == COMPLETION_YES)
-                                    ) {
-                                        ConfirmationResultItem(
-                                            resultType = COMPLETION_YES,
-                                            task = item,
-                                            user = viewModel.partnerObject.value
-                                        )
-                                    } else if ((item.showCompletion) && (item.completion[viewModel.chat.value.membersId.first { it != viewModel.currentUserId }] == COMPLETION_NO)) {
-                                        ConfirmationResultItem(
-                                            resultType = COMPLETION_NO,
-                                            task = item,
-                                            user = viewModel.partnerObject.value
-                                        )
-                                    }
+                                if ((item.showCompletion) && (item.completion[viewModel.currentUserId] == COMPLETION_YES)) {
+                                    ConfirmationResultItem(
+                                        resultType = COMPLETION_YES,
+                                        task = item,
+                                        user = viewModel.currentUser.value
+                                    )
+                                } else if (item.completion[viewModel.currentUserId] == COMPLETION_NO) {
+                                    ConfirmationResultItem(
+                                        resultType = COMPLETION_NO,
+                                        task = item,
+                                        user = viewModel.currentUser.value
+                                    )
+                                }
+                                if ((item.showCompletion) &&
+                                    (item.completion[viewModel.chat.value.membersId.first { it != viewModel.currentUserId }]
+                                            == COMPLETION_YES)
+                                ) {
+                                    ConfirmationResultItem(
+                                        resultType = COMPLETION_YES,
+                                        task = item,
+                                        user = viewModel.partnerObject.value
+                                    )
+                                } else if ((item.showCompletion) && (item.completion[viewModel.chat.value.membersId.first { it != viewModel.currentUserId }] == COMPLETION_NO)) {
+                                    ConfirmationResultItem(
+                                        resultType = COMPLETION_NO,
+                                        task = item,
+                                        user = viewModel.partnerObject.value
+                                    )
                                 }
                             }
 
-
                         }
+
 
                     }
 
                 }
 
 
-                MessageInputField(
-                    R.string.message,
-                    uiState.messageText,
-                    viewModel::onMessageTextChange,
-                    {
-                        IconButton(
-                            onClick = {
-                                coroutineScope.launch {
-                                    viewModel.onSendClick(chatId, focusManager)
-                                    scrollToBottom()
 
-                                }
-                            },
-                            content = {
-                                Icon(
-                                    painter = painterResource(R.drawable.ic_send),
-                                    contentDescription = stringResource(R.string.send)
-                                )
+            MessageInputField(
+                R.string.message,
+                uiState.messageText,
+                viewModel::onMessageTextChange,
+                {
+                    IconButton(
+                        onClick = {
+                            coroutineScope.launch {
+                                viewModel.onSendClick(chatId, focusManager)
+                                scrollToBottom()
+
                             }
-                        )
-                    },
-                    4,
-                    Modifier
-                        .padding(2.dp, 8.dp)
-                        .fillMaxWidth(),
-                    focusManager
-                )
-
-            } else {
-                // Tasks Tab
-
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    contentPadding = PaddingValues(top = 8.dp, bottom = 8.dp)
-                ) {
-                    if (upcomingTasks.isNotEmpty()) {
-
-                        item {
-                            Text(
-                                text = stringResource(R.string.upcoming_tasks_sessions),
-                                style = MaterialTheme.typography.headlineLarge,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(vertical = 10.dp)
+                        },
+                        content = {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_send),
+                                contentDescription = stringResource(R.string.send)
                             )
                         }
-                        items(upcomingTasks) { (upcomingTasks, creator) ->
-                            TaskItem(task = upcomingTasks, creator = creator)
-                        }
-                    }
+                    )
+                },
+                4,
+                Modifier
+                    .padding(2.dp, 8.dp)
+                    .fillMaxWidth(),
+                focusManager
+            )
+
+        } else {
+        // Tasks Tab
+
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth(),
+            contentPadding = PaddingValues(top = 8.dp, bottom = 8.dp)
+        ) {
+            if (upcomingTasks.isNotEmpty()) {
+
+                item {
+                    Text(
+                        text = stringResource(R.string.upcoming_tasks_sessions),
+                        style = MaterialTheme.typography.headlineLarge,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 10.dp)
+                    )
+                }
+                items(upcomingTasks) { (upcomingTasks, creator) ->
+                    TaskItem(task = upcomingTasks, creator = creator)
+                }
+            }
 
 
-                    if (upcomingTasks.isNotEmpty() && completedTasks.isNotEmpty()) {
-                        item {
-                            Divider( modifier = Modifier
-                                .padding(top = 32.dp, bottom = 20.dp))
-                        }
-                    }
+            if (upcomingTasks.isNotEmpty() && completedTasks.isNotEmpty()) {
+                item {
+                    Divider(
+                        modifier = Modifier
+                            .padding(top = 32.dp, bottom = 20.dp)
+                    )
+                }
+            }
 
-                    if (completedTasks.isNotEmpty()) {
-                        item {
-                            Text(
-                                text = stringResource(R.string.previous_tasks_sessions),
-                                style = MaterialTheme.typography.headlineLarge,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(bottom = 10.dp)
-                            )
-                        }
+            if (completedTasks.isNotEmpty()) {
+                item {
+                    Text(
+                        text = stringResource(R.string.previous_tasks_sessions),
+                        style = MaterialTheme.typography.headlineLarge,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 10.dp)
+                    )
+                }
 
-                        items(completedTasks) { (completedTasks, creator) ->
-                            TaskItem(task = completedTasks, creator = creator)
-                        }
-
-                    }
-
-                    item {
-                        Spacer(modifier = Modifier.padding(32.dp))
-                    }
-
+                items(completedTasks) { (completedTasks, creator) ->
+                    TaskItem(task = completedTasks, creator = creator)
                 }
 
             }
+
+            item {
+                Spacer(modifier = Modifier.padding(32.dp))
+            }
+
         }
 
     }
+    }
+
+}
 }
 
 

@@ -45,10 +45,8 @@ fun CreatedTaskItem(
 
         androidx.compose.material3.Surface(
             shape = RoundedCornerShape(12.dp),
-            tonalElevation = 1.dp,
-            // surfaceColor color will be changing gradually from primary to surface
-            color = MaterialTheme.colorScheme.surface,
-            // animateContentSize will change the Surface size gradually
+            color = MaterialTheme.colorScheme.surfaceVariant,
+            contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier
                 .animateContentSize()
         ) {
@@ -63,7 +61,7 @@ fun CreatedTaskItem(
                         R.string.task_creation
                     ),
                     style = MaterialTheme.typography.headlineMedium,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .padding(vertical = 4.dp)
@@ -72,7 +70,7 @@ fun CreatedTaskItem(
 
                 Text(
                     stringResource(R.string.task_created, creator.username),
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.titleSmall,
                     modifier = Modifier
@@ -87,7 +85,7 @@ fun CreatedTaskItem(
                         R.string.formatted_task_title, task.title
                     ),
                     style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .padding(vertical = 4.dp)

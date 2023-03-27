@@ -5,6 +5,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
@@ -18,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -58,27 +60,39 @@ fun PostDetailsScreen(
         ) {
 
 
-            Text(
-                text = user.username,
+            ClickableText(
+                text = AnnotatedString(
+                    user.username
+                ),
+                onClick = { viewModel.onUsernameClick(openScreen) },
                 style = MaterialTheme.typography.labelMedium,
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 
+
             androidx.compose.material3.Surface(
-                shape = RoundedCornerShape(6.dp),
-                color = MaterialTheme.colorScheme.surface,
-                modifier = Modifier.fillMaxWidth()
+                shape = RoundedCornerShape(10.dp),
+                color = MaterialTheme.colorScheme.surfaceVariant,
+                shadowElevation = 4.dp,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
             ) {
 
-                Column(Modifier.fillMaxWidth()) {
+                Column(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(top = 20.dp, bottom = 22.dp, start = 0.dp, end = 0.dp)
+                ) {
 
                     Text(
                         text = post.title,
                         style = MaterialTheme.typography.headlineMedium,
                         modifier = Modifier
-                            .padding(vertical = 8.dp)
+                            .padding(vertical = 12.dp)
                             .fillMaxWidth(),
                         textAlign = TextAlign.Center,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
 
                     Box(
@@ -90,14 +104,14 @@ fun PostDetailsScreen(
                         Text(
                             stringResource(post.category.categoryStringRes),
                             style = MaterialTheme.typography.labelMedium,
-                            color = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier
                                 .border(
                                     width = 1.dp,
                                     color = MaterialTheme.colorScheme.secondary,
                                     shape = RoundedCornerShape(5.dp)
                                 )
-                                .padding(horizontal = 8.dp, vertical = 4.dp)
+                                .padding(horizontal = 8.dp, vertical = 4.dp),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
 
@@ -107,7 +121,8 @@ fun PostDetailsScreen(
                     Text(
                         text = post.description,
                         style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp)
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
 
                     ChattingButton(

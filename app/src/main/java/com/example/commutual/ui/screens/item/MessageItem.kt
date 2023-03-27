@@ -21,8 +21,7 @@ fun MessageItem(
     formatTimestamp: (Timestamp) -> String
 ) {
     Row(
-        modifier =
-        Modifier
+        modifier = Modifier
             .padding(all = 8.dp)
             .fillMaxWidth()
     ) {
@@ -46,9 +45,7 @@ fun MessageItem(
             Surface(
                 shape = MaterialTheme.shapes.small,
                 elevation = 1.dp,
-                // surfaceColor color will be changing gradually from primary to surface
                 color = MaterialTheme.colorScheme.surface,
-                // animateContentSize will change the Surface size gradually
                 modifier = Modifier
                     .animateContentSize()
                     .defaultMinSize(minWidth = 64.dp)

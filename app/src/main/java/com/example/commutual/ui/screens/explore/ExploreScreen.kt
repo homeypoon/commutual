@@ -1,5 +1,3 @@
-
-
 package com.example.commutual.ui.screens.explore
 
 import android.util.Log
@@ -12,6 +10,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -54,7 +53,10 @@ fun ExploreScreen(
     val posts = viewModel.posts.collectAsStateWithLifecycle(emptyList())
 
     Log.d("posts", viewModel.posts.toString())
-    Log.d("viewModel.posts.hLifecycl", viewModel.posts.collectAsStateWithLifecycle(emptyList()).toString())
+    Log.d(
+        "viewModel.posts.hLifecycl",
+        viewModel.posts.collectAsStateWithLifecycle(emptyList()).toString()
+    )
 
 
     val focusManager = LocalFocusManager.current
@@ -97,11 +99,14 @@ fun ExploreScreen(
             LazyRow {
                 item {
                     AssistChip(
+                        shape = RoundedCornerShape(6.dp),
                         onClick = { },
-                        label = { Text(
-                            stringResource(viewModel.filterChipCategory.categoryStringRes),
-                            style = MaterialTheme.typography.labelMedium
-                        ) },
+                        label = {
+                            Text(
+                                stringResource(viewModel.filterChipCategory.categoryStringRes),
+                                style = MaterialTheme.typography.labelSmall
+                            )
+                        },
                         trailingIcon = {
                             IconButton(
                                 onClick = { viewModel.onCloseFilterChipClick(focusManager) },
@@ -111,7 +116,10 @@ fun ExploreScreen(
                                     contentDescription = null,
                                 )
                             }
-                        }
+                        },
+                        modifier = Modifier
+                            .padding(start = 8.dp, end = 8.dp, bottom = 8.dp)
+
                     )
                 }
             }
@@ -138,8 +146,7 @@ fun ExploreScreen(
                 }
 
             }
-        }
-        else {
+        } else {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator(color = MaterialTheme.colorScheme.onBackground)
             }

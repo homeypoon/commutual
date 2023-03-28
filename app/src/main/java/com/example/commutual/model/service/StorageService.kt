@@ -16,7 +16,8 @@ interface StorageService {
   fun getMessagesWithUsers(chatId: String): Flow<List<Pair<Message, User>>>
   fun getMessagesAndTasksWithUsers(chatId: String): Flow<List<Pair<Any, User>>>
   fun getAllTasksWithUsers(chatId: String): Flow<List<Pair<Task, User>>>
-  fun getTasksWithUsers(chatId: String): Flow<Pair<List<Pair<Task, User>>, List<Pair<Task, User>>>>
+  fun getTasks(chatId: String): Flow<List<Task>>
+//  fun getTasks(chatId: String): Flow<Pair<List<Pair<Task, User>>, List<Pair<Task, User>>>>
   fun getCompletedTasksWithUsers(chatId: String): Flow<List<Pair<Task, User>>>
 
   suspend fun searchedPosts(search: String): Flow<List<Post>>

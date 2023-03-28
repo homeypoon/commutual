@@ -31,7 +31,7 @@ fun ChatItem(
                     user.username,
                     style = MaterialTheme.typography.headlineLarge,
                     color = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.padding(vertical = 14.dp),
+                    modifier = Modifier.padding(horizontal = 4.dp, vertical = 14.dp)
                 )
             },
         )

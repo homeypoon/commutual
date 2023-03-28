@@ -16,14 +16,11 @@ import com.example.commutual.FormatterClass
 import com.example.commutual.R
 import com.example.commutual.common.ext.categoryChip
 import com.example.commutual.model.Task
-import com.example.commutual.model.User
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TaskItem(
-    task: Task,
-    creator: User,
-) {
+    task: Task) {
     ListItem(
         colors = ListItemDefaults.colors(
             MaterialTheme.colorScheme.surface

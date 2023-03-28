@@ -29,6 +29,8 @@ class HomeViewModel @Inject constructor(
     var uiState = mutableStateOf(HomeUiState())
         private set
 
+    val currentUserId = accountService.currentUserId
+
     private val currentUser = mutableStateOf(User())
 
     private val _user = MutableStateFlow<User?>(null)

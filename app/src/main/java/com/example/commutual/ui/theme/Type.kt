@@ -32,7 +32,7 @@ val Typography = Typography(
         fontWeight = FontWeight.SemiBold,
         fontSize = 22.sp
     ),
-    // Extended FAB text
+    // Extended FAB text, basic buttons
     displaySmall = TextStyle(
         fontFamily = OpenSans,
         fontWeight = FontWeight.Bold,

@@ -1,6 +1,7 @@
 package com.example.commutual.common.composable
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.*
 import androidx.compose.material3.MaterialTheme
@@ -20,14 +21,19 @@ fun BasicTextButton(@StringRes text: Int, modifier: Modifier, action: () -> Unit
 fun BasicButton(@StringRes text: Int, modifier: Modifier, onClick: () -> Unit) {
     Button(
         onClick = onClick,
-        modifier = modifier,
+        modifier = modifier.defaultMinSize(minHeight = 48.dp),
         colors =
         ButtonDefaults.buttonColors(
             backgroundColor = MaterialTheme.colorScheme.primaryContainer,
             contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
         )
     ) {
-        Text(text = stringResource(text), fontSize = 16.sp)
+        Text(
+            text = stringResource(text).uppercase(),
+            fontSize = 16.sp,
+            letterSpacing = 1.5.sp,
+            style = MaterialTheme.typography.displaySmall
+        )
     }
 }
 
@@ -51,34 +57,28 @@ fun BasicIconButton(
 
 @Composable
 fun DialogConfirmButton(@StringRes text: Int, action: () -> Unit) {
-    Button(
+
+    TextButton(
         onClick = action,
-        colors =
-        ButtonDefaults.buttonColors(
-            backgroundColor = MaterialTheme.colorScheme.tertiaryContainer,
-            contentColor = MaterialTheme.colorScheme.onTertiaryContainer
-        )
     ) {
         Text(
             text = stringResource(text),
-            style = MaterialTheme.typography.titleSmall
+            style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.primary
         )
     }
 }
 
 @Composable
 fun DialogCancelButton(@StringRes text: Int, action: () -> Unit) {
-    Button(
+    TextButton(
         onClick = action,
-        colors =
-        ButtonDefaults.buttonColors(
-            backgroundColor = MaterialTheme.colorScheme.errorContainer,
-            contentColor = MaterialTheme.colorScheme.onErrorContainer
-        )
     ) {
         Text(
             text = stringResource(text),
-            style = MaterialTheme.typography.titleSmall
+            style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.primary
         )
     }
+
 }

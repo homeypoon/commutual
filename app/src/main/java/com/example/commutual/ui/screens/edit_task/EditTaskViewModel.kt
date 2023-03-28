@@ -161,23 +161,6 @@ class EditTaskViewModel @Inject constructor(
         datePicker.show()
 
 
-//
-//        val datePicker = MaterialDatePicker.Builder.datePicker()
-//            .setSelection(uiState.value.date).build()
-//
-//        datePicker.minDate = calendar.timeInMillis
-//
-//
-//        activity?.let {
-//            datePicker.show(it.supportFragmentManager, datePicker.toString())
-//
-//            datePicker.addOnPositiveButtonClickListener {
-//
-//                    timeInMillis ->
-//                onDateChange(timeInMillis)
-//                Log.d("", timeInMillis.toString())
-//            }
-//        }
     }
 
     fun showTimePicker(activity: AppCompatActivity?, onTimeChange: (Int, Int) -> Unit) {

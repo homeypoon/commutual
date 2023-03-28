@@ -25,6 +25,7 @@ fun ConfirmationResultItem(
     resultType: Int,
     task: Task,
     user: User,
+    onClick: () -> Unit,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -51,6 +52,7 @@ fun ConfirmationResultItem(
         )
 
         androidx.compose.material3.Surface(
+            onClick = onClick,
             shape = RoundedCornerShape(12.dp),
             color = MaterialTheme.colorScheme.surfaceVariant,
             contentColor = MaterialTheme.colorScheme.onSurfaceVariant,

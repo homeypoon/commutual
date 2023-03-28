@@ -2,7 +2,6 @@ package com.example.commutual.ui.screens.chat
 
 import ConfirmationItem
 import ConfirmationResultItem
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
@@ -22,6 +21,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.commutual.FormatterClass
 import com.example.commutual.R
 import com.example.commutual.common.composable.MessageInputField
@@ -39,7 +40,7 @@ import com.example.commutual.ui.screens.item.MessageItem
 import com.example.commutual.ui.screens.item.TaskItem
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLifecycleComposeApi::class)
 @Composable
 fun MessagesScreen(
     openScreen: (String) -> Unit,
@@ -53,22 +54,15 @@ fun MessagesScreen(
     val focusManager = LocalFocusManager.current
     val uiState by viewModel.uiState
 
-    val messages by viewModel.getMessagesWithUsers(chatId).collectAsState(emptyList())
+
+    val tasks by viewModel.getTasks(chatId).collectAsStateWithLifecycle(emptyList())
+    val upcomingTasks = tasks.filter { !it.showAttendance && !it.showCompletion  }
+    val inProgressTasks = tasks.filter { it.showAttendance && !it.showCompletion && (it.attendance[viewModel.currentUserId] != ATTENDANCE_NO) }
+    val previousTasks = tasks.filter { (it.showCompletion) || (it.attendance[viewModel.currentUserId] == ATTENDANCE_NO) }
 
 
-    val tasksWithUsers by viewModel.getTasksWithUsers(chatId)
-        .collectAsState(Pair(emptyList(), emptyList()))
-    val (completedTasks, upcomingTasks) = tasksWithUsers
-
-    val messagesWithTasks by viewModel.getMessagesAndTasksWithUsers(chatId).collectAsState(emptyList())
-
-
-//    // Sort messages and tasks by timestamp
-//    val messagesWithTasks = (messages.map { Pair(it.first.timestamp, it) } +
-//            upcomingTasks.map { Pair(it.first.showAttendanceTimestamp, it) } +
-//            completedTasks.map { Pair(it.first.showCompletionTimestamp, it) })
-//        .sortedBy { it.first }
-//        .map { it.second }
+    val messagesWithTasks by viewModel.getMessagesAndTasksWithUsers(chatId)
+        .collectAsState(emptyList())
 
     /**
      * Scroll to bottom of chat
@@ -178,8 +172,6 @@ fun MessagesScreen(
                                 { timestamp -> FormatterClass.formatTimestamp(timestamp, true) }
                             } else if (item is Task) {
 
-                                Log.d("task", item.title)
-
                                 if (!item.showAttendance) {
                                     CreatedTaskItem(item, user, viewModel::onCreatedTaskCLicked)
                                 }
@@ -189,7 +181,7 @@ fun MessagesScreen(
                                         confirmationType = AlarmReceiver.ATTENDANCE,
                                         task = item,
                                         onCLick = {
-                                            viewModel.onAttendanceItemClicked(item, chatId)
+                                            viewModel.onConfirmationItemClicked()
                                         },
                                         onYesClick = {
                                             viewModel.onAttendanceYesClicked(
@@ -207,13 +199,15 @@ fun MessagesScreen(
                                     ConfirmationResultItem(
                                         resultType = ATTENDANCE_YES,
                                         task = item,
-                                        user = viewModel.currentUser.value
+                                        user = viewModel.currentUser.value,
+                                        viewModel::onConfirmationItemClicked
                                     )
                                 } else if (item.attendance[viewModel.currentUserId] == ATTENDANCE_NO) {
                                     ConfirmationResultItem(
                                         resultType = ATTENDANCE_NO,
                                         task = item,
-                                        user = viewModel.currentUser.value
+                                        user = viewModel.currentUser.value,
+                                        viewModel::onConfirmationItemClicked
                                     )
                                 }
                                 if ((item.showAttendance) &&
@@ -223,13 +217,15 @@ fun MessagesScreen(
                                     ConfirmationResultItem(
                                         resultType = ATTENDANCE_YES,
                                         task = item,
-                                        user = viewModel.partnerObject.value
+                                        user = viewModel.partnerObject.value,
+                                        viewModel::onConfirmationItemClicked
                                     )
                                 } else if ((item.showAttendance) && (item.attendance[viewModel.chat.value.membersId.first { it != viewModel.currentUserId }] == ATTENDANCE_NO)) {
                                     ConfirmationResultItem(
                                         resultType = ATTENDANCE_NO,
                                         task = item,
-                                        user = viewModel.partnerObject.value
+                                        user = viewModel.partnerObject.value,
+                                        viewModel::onConfirmationItemClicked
                                     )
                                 }
                                 // completion
@@ -238,7 +234,7 @@ fun MessagesScreen(
                                         confirmationType = AlarmReceiver.COMPLETION,
                                         task = item,
                                         onCLick = {
-                                            viewModel.onCompletionItemClicked(item, chatId)
+                                            viewModel.onConfirmationItemClicked()
                                         },
                                         onYesClick = {
                                             viewModel.onCompletionYesClicked(
@@ -256,13 +252,15 @@ fun MessagesScreen(
                                     ConfirmationResultItem(
                                         resultType = COMPLETION_YES,
                                         task = item,
-                                        user = viewModel.currentUser.value
+                                        user = viewModel.currentUser.value,
+                                        viewModel::onConfirmationItemClicked
                                     )
                                 } else if (item.completion[viewModel.currentUserId] == COMPLETION_NO) {
                                     ConfirmationResultItem(
                                         resultType = COMPLETION_NO,
                                         task = item,
-                                        user = viewModel.currentUser.value
+                                        user = viewModel.currentUser.value,
+                                        viewModel::onConfirmationItemClicked
                                     )
                                 }
                                 if ((item.showCompletion) &&
@@ -272,13 +270,15 @@ fun MessagesScreen(
                                     ConfirmationResultItem(
                                         resultType = COMPLETION_YES,
                                         task = item,
-                                        user = viewModel.partnerObject.value
+                                        user = viewModel.partnerObject.value,
+                                        viewModel::onConfirmationItemClicked
                                     )
                                 } else if ((item.showCompletion) && (item.completion[viewModel.chat.value.membersId.first { it != viewModel.currentUserId }] == COMPLETION_NO)) {
                                     ConfirmationResultItem(
                                         resultType = COMPLETION_NO,
                                         task = item,
-                                        user = viewModel.partnerObject.value
+                                        user = viewModel.partnerObject.value,
+                                        viewModel::onConfirmationItemClicked
                                     )
                                 }
                             }
@@ -291,97 +291,143 @@ fun MessagesScreen(
 
 
 
-            MessageInputField(
-                R.string.message,
-                uiState.messageText,
-                viewModel::onMessageTextChange,
-                {
-                    IconButton(
-                        onClick = {
-                            coroutineScope.launch {
-                                viewModel.onSendClick(chatId, focusManager)
-                                scrollToBottom()
+                MessageInputField(
+                    R.string.message,
+                    uiState.messageText,
+                    viewModel::onMessageTextChange,
+                    {
+                        IconButton(
+                            onClick = {
+                                coroutineScope.launch {
+                                    viewModel.onSendClick(chatId, focusManager)
+                                    scrollToBottom()
 
+                                }
+                            },
+                            content = {
+                                Icon(
+                                    painter = painterResource(R.drawable.ic_send),
+                                    contentDescription = stringResource(R.string.send)
+                                )
                             }
-                        },
-                        content = {
-                            Icon(
-                                painter = painterResource(R.drawable.ic_send),
-                                contentDescription = stringResource(R.string.send)
+                        )
+                    },
+                    4,
+                    Modifier
+                        .padding(2.dp, 8.dp)
+                        .fillMaxWidth(),
+                    focusManager
+                )
+
+            } else {
+                // Tasks Tab
+
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    contentPadding = PaddingValues(top = 18.dp, bottom = 8.dp)
+                ) {
+
+                    if (inProgressTasks.isNotEmpty()) {
+                        item {
+                            Text(
+                                text = stringResource(R.string.in_progress_tasks_sessions),
+                                style = MaterialTheme.typography.headlineLarge,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(bottom = 10.dp)
                             )
                         }
-                    )
-                },
-                4,
-                Modifier
-                    .padding(2.dp, 8.dp)
-                    .fillMaxWidth(),
-                focusManager
-            )
 
-        } else {
-        // Tasks Tab
+                        items(inProgressTasks) { inProgressTask ->
+                            TaskItem(task = inProgressTask)
+                        }
 
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth(),
-            contentPadding = PaddingValues(top = 8.dp, bottom = 8.dp)
-        ) {
-            if (upcomingTasks.isNotEmpty()) {
+                    }
 
-                item {
-                    Text(
-                        text = stringResource(R.string.upcoming_tasks_sessions),
-                        style = MaterialTheme.typography.headlineLarge,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 10.dp)
-                    )
+                    if (inProgressTasks.isNotEmpty() && upcomingTasks.isNotEmpty() && previousTasks.isNotEmpty()) {
+                        item {
+                            Divider(
+                                modifier = Modifier
+                                    .padding(top = 32.dp, bottom = 20.dp)
+                            )
+                        }
+                    }
+
+                    if (upcomingTasks.isNotEmpty()) {
+
+                        item {
+                            Text(
+                                text = stringResource(R.string.upcoming_tasks_sessions),
+                                style = MaterialTheme.typography.headlineLarge,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(bottom = 10.dp)
+                            )
+                        }
+                        items(upcomingTasks) { upcomingTask ->
+                            TaskItem(task = upcomingTask)
+                        }
+                    }
+
+                    // Display divider if needed
+                    if (inProgressTasks.isNotEmpty() && upcomingTasks.isNotEmpty() && previousTasks.isNotEmpty()) {
+                        item {
+                            Divider(
+                                modifier = Modifier
+                                    .padding(top = 32.dp, bottom = 20.dp)
+                            )
+                        }
+                    } else if (
+                        (inProgressTasks.isNotEmpty() && upcomingTasks.isEmpty() && previousTasks.isNotEmpty())
+                    ) {
+                        item {
+                            Divider(
+                                modifier = Modifier
+                                    .padding(top = 32.dp, bottom = 20.dp)
+                            )
+                        }
+                    } else if (
+                        (inProgressTasks.isEmpty() && upcomingTasks.isNotEmpty() && previousTasks.isNotEmpty())
+                    ) {
+                        item {
+                            Divider(
+                                modifier = Modifier
+                                    .padding(top = 32.dp, bottom = 20.dp)
+                            )
+                        }
+                    }
+
+                    if (previousTasks.isNotEmpty()) {
+                        item {
+                            Text(
+                                text = stringResource(R.string.previous_tasks_sessions),
+                                style = MaterialTheme.typography.headlineLarge,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(bottom = 10.dp)
+                            )
+                        }
+
+                        items(previousTasks) { previousTask ->
+                            TaskItem(task = previousTask)
+                        }
+
+                    }
+
+                    item {
+                        Spacer(modifier = Modifier.padding(32.dp))
+                    }
+
                 }
-                items(upcomingTasks) { (upcomingTasks, creator) ->
-                    TaskItem(task = upcomingTasks, creator = creator)
-                }
+
             }
-
-
-            if (upcomingTasks.isNotEmpty() && completedTasks.isNotEmpty()) {
-                item {
-                    Divider(
-                        modifier = Modifier
-                            .padding(top = 32.dp, bottom = 20.dp)
-                    )
-                }
-            }
-
-            if (completedTasks.isNotEmpty()) {
-                item {
-                    Text(
-                        text = stringResource(R.string.previous_tasks_sessions),
-                        style = MaterialTheme.typography.headlineLarge,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 10.dp)
-                    )
-                }
-
-                items(completedTasks) { (completedTasks, creator) ->
-                    TaskItem(task = completedTasks, creator = creator)
-                }
-
-            }
-
-            item {
-                Spacer(modifier = Modifier.padding(32.dp))
-            }
-
         }
 
     }
-    }
-
-}
 }
 
 

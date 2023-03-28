@@ -2,8 +2,7 @@
 <resources>
 
     <style name="Theme.Commutual" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="android:statusBarColor">@color/purple_700</item>
-        <item name="colorSurface">@color/surface_color</item>
-
+        <item name="colorSecondary">@color/date_picker_header_color</item> <!-- date picker -->
+        <item name="colorPrimary">@color/button_color</item> <!-- button text color -->
     </style>
 </resources>

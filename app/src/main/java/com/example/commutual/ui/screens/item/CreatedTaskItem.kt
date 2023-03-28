@@ -45,6 +45,7 @@ fun CreatedTaskItem(
         )
 
         androidx.compose.material3.Surface(
+            onClick = onClick,
             shape = RoundedCornerShape(12.dp),
             color = MaterialTheme.colorScheme.surfaceVariant,
             contentColor = MaterialTheme.colorScheme.onSurfaceVariant,

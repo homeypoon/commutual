@@ -157,8 +157,6 @@ fun PostDetailsScreen(
 
 @ExperimentalMaterialApi
 @Composable
-//private fun com.example.commutual.ui.screens.post_details.ChattingButton(onRequestMessageChange: (String) -> Unit, viewModel: PostDetailsViewModel) {
-
 private fun ChattingButton(
     openScreen: (String) -> Unit,
     viewModel: PostDetailsViewModel,
@@ -180,14 +178,14 @@ private fun ChattingButton(
     if (uiState.showStartChattingCard) {
 
         androidx.compose.material3.AlertDialog(
-            containerColor = MaterialTheme.colorScheme.onError,
-
+            containerColor = MaterialTheme.colorScheme.background,
             text = {
                 Text(
                     text = stringResource(R.string.start_chatting_with, user.username),
                     overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.headlineMedium,
-                    modifier = Modifier.padding(4.dp, 20.dp)
+                    modifier = Modifier.padding(4.dp, 20.dp),
+                    color = MaterialTheme.colorScheme.onBackground
                 )
             },
             dismissButton = {
@@ -206,6 +204,7 @@ private fun ChattingButton(
                 )
             },
             onDismissRequest = { viewModel.setShowRequestMatchCard(false) },
+            shape = MaterialTheme.shapes.medium
         )
     }
 

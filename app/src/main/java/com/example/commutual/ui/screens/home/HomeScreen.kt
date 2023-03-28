@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
@@ -27,7 +26,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.commutual.R
 import com.example.commutual.common.composable.BasicToolbar
 import com.example.commutual.model.CategoryEnum
-import com.example.commutual.model.User
+import com.example.commutual.model.Task
 import com.example.commutual.ui.screens.item.TaskItem
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.PieChart
@@ -45,9 +44,11 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel()
 ) {
 
+    val tasks by viewModel.upcomingUserTasks.collectAsStateWithLifecycle(emptyList())
+    val upcomingTasks = tasks.filter { !it.showAttendance && !it.showCompletion }
+    val inProgressTasks =
+        tasks.filter { it.showAttendance && !it.showCompletion && (it.attendance[viewModel.currentUserId] != Task.ATTENDANCE_NO) }
 
-    val upcomingUserTasks = viewModel.upcomingUserTasks.collectAsStateWithLifecycle(emptyList())
-    val scrollState = rememberScrollState()
     val uiState by viewModel.uiState
     val user by viewModel.user.collectAsState()
 
@@ -89,24 +90,54 @@ fun HomeScreen(
                 BasicToolbar(
                     title = stringResource(R.string.home)
                 )
+
+                if (inProgressTasks.isNotEmpty() || upcomingTasks.isNotEmpty()) {
+                    Spacer(modifier = Modifier.padding(vertical = 12.dp))
+                }
             }
 
+            if (inProgressTasks.isNotEmpty()) {
+                item {
+                    Text(
+                        text = stringResource(R.string.in_progress_tasks_sessions),
+                        style = MaterialTheme.typography.headlineLarge,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 10.dp)
+                    )
+                }
 
-            if (upcomingUserTasks.value.isNotEmpty()) {
+                items(inProgressTasks) { inProgressTask ->
+                    TaskItem(task = inProgressTask)
+                }
+
+            }
+
+            if (inProgressTasks.isNotEmpty()) {
+                item {
+                    Divider(
+                        modifier = Modifier
+                            .padding(top = 32.dp, bottom = 4.dp)
+                    )
+                }
+            }
+
+            if (upcomingTasks.isNotEmpty()) {
 
                 item {
                     Text(
                         text = stringResource(R.string.upcoming_tasks_sessions),
                         style = MaterialTheme.typography.headlineLarge,
-                        modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 10.dp)
                     )
                 }
-
-                items(upcomingUserTasks.value) { task ->
-                    TaskItem(task = task, creator = User())
+                items(upcomingTasks) { upcomingTask ->
+                    TaskItem(task = upcomingTask)
                 }
-
-
             } else {
                 item {
                     Column(

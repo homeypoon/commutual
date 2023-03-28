@@ -49,6 +49,17 @@ class StorageServiceImpl
         }
 
     @OptIn(ExperimentalCoroutinesApi::class)
+    override fun getTasks(chatId: String): Flow<List<Task>> {
+        return auth.currentUser.flatMapLatest {
+            currentTaskCollection(chatId).orderBy(CREATE_TIMESTAMP_FIELD, Query.Direction.ASCENDING)
+                .snapshots().map { snapshot ->
+                    snapshot.toObjects()
+
+                }
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
     override val upcomingUserTasks: Flow<List<Task>>
         get() = auth.currentUser.flatMapLatest {
             flow {
@@ -56,13 +67,29 @@ class StorageServiceImpl
                 val currentUser = getUserById(auth.currentUserId)
                 currentUser.tasksMap.forEach { (taskId, chatId) ->
                     val task = getTask(taskId, chatId)
-                    if (task != null && !task.showCompletion) {
+                    if (task != null) {
                         tasksList.add(task)
                     }
                 }
                 emit(tasksList)
             }
         }
+
+//    @OptIn(ExperimentalCoroutinesApi::class)
+//    override val upcomingUserTasks: Flow<List<Task>>
+//        get() = auth.currentUser.flatMapLatest {
+//            flow {
+//                val tasksList = mutableListOf<Task>()
+//                val currentUser = getUserById(auth.currentUserId)
+//                currentUser.tasksMap.forEach { (taskId, chatId) ->
+//                    val task = getTask(taskId, chatId)
+//                    if (task != null && !task.showCompletion) {
+//                        tasksList.add(task)
+//                    }
+//                }
+//                emit(tasksList)
+//            }
+//        }
 
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -115,21 +142,22 @@ class StorageServiceImpl
         }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    override fun getTasksWithUsers(chatId: String): Flow<Pair<List<Pair<Task, User>>, List<Pair<Task, User>>>> {
-        return auth.currentUser.flatMapLatest {
-            currentTaskCollection(chatId).orderBy(CREATE_TIMESTAMP_FIELD, Query.Direction.ASCENDING)
-                .snapshots()
-                .map { snapshot ->
-                    val pairs = snapshot.toObjects<Task>().map { message ->
-                        val sender = getUserById(message.creatorId)
-                        message to sender
-                    }
-                    val (completedTasks, upcomingTasks) = pairs.partition { it.first.taskCompleted }
-                    completedTasks to upcomingTasks
-                }
-        }
-    }
+
+//    @OptIn(ExperimentalCoroutinesApi::class)
+//    override fun getTasks(chatId: String): Flow<Pair<List<Pair<Task, User>>, List<Pair<Task, User>>>> {
+//        return auth.currentUser.flatMapLatest {
+//            currentTaskCollection(chatId).orderBy(CREATE_TIMESTAMP_FIELD, Query.Direction.ASCENDING)
+//                .snapshots()
+//                .map { snapshot ->
+//                    val pairs = snapshot.toObjects<Task>().map { message ->
+//                        val sender = getUserById(message.creatorId)
+//                        message to sender
+//                    }
+//                    val (completedTasks, upcomingTasks) = pairs.partition { it.first.taskCompleted }
+//                    completedTasks to upcomingTasks
+//                }
+//        }
+//    }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun getAllTasksWithUsers(chatId: String): Flow<List<Pair<Task, User>>> {
@@ -137,12 +165,12 @@ class StorageServiceImpl
 
             currentTaskCollection(chatId).orderBy(CREATE_TIMESTAMP_FIELD, Query.Direction.ASCENDING)
                 .snapshots().map { snapshot ->
-                snapshot.toObjects<Task>().map { task ->
-                    val sender =
-                        getUserById(task.creatorId)
-                    task to sender
+                    snapshot.toObjects<Task>().map { task ->
+                        val sender =
+                            getUserById(task.creatorId)
+                        task to sender
+                    }
                 }
-            }
         }
     }
 
@@ -180,29 +208,6 @@ class StorageServiceImpl
                 }
             }
     }
-//    @OptIn(ExperimentalCoroutinesApi::class)
-//    override fun getMessagesAndTasksWithUsers(chatId: String): Flow<List<Pair<Any, User>>> {
-//        val messagesFlow = getMessagesWithUsers(chatId)
-//        val tasksFlow = getTasksWithUsers(chatId)
-//
-//        return messagesFlow.flatMapLatest {
-//            messagesFlow.combine(tasksFlow) { messages, tasks ->
-//
-//
-//
-//                val combinedList =
-//                    (messages.map { it.first to it.second } + tasks.first.map { it.first to it.second })
-//                combinedList.sortedBy { pair ->
-//                    when (pair.first) {
-//                        is Message -> (pair.first as Message).timestamp
-//                        is Task -> (pair.first as Task).showAttendanceTimestamp
-//                        else -> throw IllegalArgumentException("Invalid object type")
-//                    }
-//                }
-//            }
-//        }
-//    }
-
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun filteredPosts(search: String, category: CategoryEnum): Flow<List<Post>> {
@@ -258,8 +263,15 @@ class StorageServiceImpl
     }
 
     override suspend fun incrementCommitCount(incrementCommitCount: Long) {
+        val user: User = getUser(auth.currentUserId) ?: User()
         val userRef = currentUserCollection().document(auth.currentUserId)
-        userRef.update("commitCount", FieldValue.increment(incrementCommitCount))
+
+
+        if (user.commitCount + incrementCommitCount >= 0) {
+            userRef.update("commitCount", FieldValue.increment(incrementCommitCount))
+        } else {
+            userRef.update("commitCount", 0)
+        }
     }
 
     override suspend fun incrementTasksScheduled(membersId: Array<String>) {
@@ -362,17 +374,18 @@ class StorageServiceImpl
             when (updateType) {
                 ATTENDANCE -> {
                     currentTaskCollection(chatId).document(task.taskId).update(
-                        "showAttendanceTimestamp", Timestamp.now(), "showAttendance", true
+                        "showAttendanceTimestamp", Timestamp.now(),
+                        "createTimestamp", Timestamp.now(),
+                        "showAttendance", true
                     ).await()
                 }
                 COMPLETION -> {
                     currentTaskCollection(chatId).document(task.taskId).update(
                         "showCompletionTimestamp",
                         Timestamp.now(),
-                        "showCompletion",
-                        true,
-                        "taskCompleted",
-                        true
+                        "createTimestamp", Timestamp.now(),
+                        "showCompletion", true,
+                        "taskCompleted", true
                     ).await()
                 }
                 else -> {}

@@ -26,7 +26,7 @@ val md_theme_light_onSurface = Color(0xFF191C1D)
 
 // graph surface
 val md_theme_light_surfaceVariant = Color(0xFFEDF5F3)
-val md_theme_light_onSurfaceVariant = Color(0xFF40484C)
+val md_theme_light_onSurfaceVariant = Color(0xFF2E3235)
 
 val md_theme_light_outline = Color(0xFF70787C)
 val md_theme_light_inverseOnSurface = Color(0xFFEFF1F2)

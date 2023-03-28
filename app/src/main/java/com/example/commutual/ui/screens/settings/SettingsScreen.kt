@@ -40,7 +40,9 @@ fun SettingsScreen(
     ) {
         BasicToolbar(stringResource(R.string.settings))
 
-        Column(modifier = Modifier.fillMaxWidth().padding(24.dp, 0.dp)) {
+        Column(modifier = Modifier
+            .fillMaxWidth()
+            .padding(24.dp, 0.dp)) {
             SignOutCard { viewModel.onSignOutClick(restartApp) }
             DeleteMyAccountCard { viewModel.onDeleteMyAccountClick(restartApp) }
         }
@@ -65,10 +67,12 @@ private fun SignOutCard(signOut: () -> Unit) {
                     style = MaterialTheme.typography.headlineMedium,
                 )
             },
-            text = { Text(
-                stringResource(AppText.log_out_message),
-                style = MaterialTheme.typography.bodyMedium
-            ) },
+            text = {
+                Text(
+                    stringResource(AppText.log_out_message),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            },
             dismissButton = { DialogCancelButton(AppText.cancel) { showWarningDialog = false } },
             confirmButton = {
                 DialogConfirmButton(AppText.log_out) {
@@ -102,7 +106,11 @@ private fun DeleteMyAccountCard(deleteMyAccount: () -> Unit) {
                     style = MaterialTheme.typography.headlineMedium
                 )
             },
-            text = { Text(stringResource(AppText.delete_account_message)) },
+            text = {
+                Text(
+                    stringResource(AppText.delete_account_message)
+                )
+            },
             dismissButton = { DialogCancelButton(AppText.cancel) { showWarningDialog = false } },
             confirmButton = {
                 DialogConfirmButton(AppText.delete_account) {
@@ -110,7 +118,8 @@ private fun DeleteMyAccountCard(deleteMyAccount: () -> Unit) {
                     showWarningDialog = false
                 }
             },
-            onDismissRequest = { showWarningDialog = false }
+            onDismissRequest = { showWarningDialog = false },
+            shape = MaterialTheme.shapes.medium
         )
     }
 }

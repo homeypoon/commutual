@@ -33,16 +33,13 @@ class MessageViewModel @Inject constructor(
     val messageTabs = enumValues<MessageTabEnum>()
 //    var tasks = storageService.tasks
 
-    fun getMessagesWithUsers(chatId: String): Flow<List<Pair<Message, User>>> {
-        return storageService.getMessagesWithUsers(chatId)
-    }
 
     fun getMessagesAndTasksWithUsers(chatId: String): Flow<List<Pair<Any, User>>> {
         return storageService.getMessagesAndTasksWithUsers(chatId)
     }
 
-    fun getTasksWithUsers(chatId: String): Flow<Pair<List<Pair<Task, User>>, List<Pair<Task, User>>>> {
-        return storageService.getTasksWithUsers(chatId)
+    fun getTasks(chatId: String): Flow<List<Task>> {
+        return storageService.getTasks(chatId)
     }
 
     var uiState = mutableStateOf(MessageUiState())
@@ -106,13 +103,9 @@ class MessageViewModel @Inject constructor(
         setMessageTab(1)
     }
 
-    fun onAttendanceItemClicked(task: Task, chatId: String) {
+    fun onConfirmationItemClicked() {
         setMessageTab(1)
 
-    }
-
-    fun onCompletionItemClicked(task: Task, chatId: String) {
-        setMessageTab(1)
     }
 
     fun onAttendanceYesClicked(task: Task, chatId: String) {

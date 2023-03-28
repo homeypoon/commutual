@@ -29,7 +29,6 @@ data class Task(
 
     // created task timestamp
     val createTimestamp: Timestamp = Timestamp.now(),
-    val taskCompleted: Boolean = false,
 
     val attendance: Map<String, Int> = emptyMap(),
     val completion: Map<String, Int> = emptyMap(),

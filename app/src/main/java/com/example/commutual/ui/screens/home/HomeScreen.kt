@@ -147,7 +147,9 @@ fun HomeScreen(
                         Text(
                             text = stringResource(R.string.upcoming_tasks_sessions),
                             style = MaterialTheme.typography.headlineLarge,
+                            textAlign = TextAlign.Center,
                             modifier = Modifier
+                                .fillMaxWidth()
                                 .padding(vertical = 12.dp, horizontal = 18.dp),
                         )
 

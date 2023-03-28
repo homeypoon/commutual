@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.commutual.FormatterClass
 import com.example.commutual.FormatterClass.Companion.formatTimestamp
 import com.example.commutual.R
 import com.example.commutual.model.Task
@@ -94,7 +95,11 @@ fun CreatedTaskItem(
 
                 Text(
                     stringResource(
-                        R.string.formatted_task_time_nd,
+                        R.string.formatted_task_time,
+                        FormatterClass.formatDate(selectedYear = task.year,
+                            selectedMonth = task.month,
+                            selectedDay = task.day
+                        ),
                         task.startTime,
                         task.endTime
                     ),

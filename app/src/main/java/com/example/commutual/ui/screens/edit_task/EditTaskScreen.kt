@@ -38,6 +38,7 @@ import com.example.commutual.common.ext.toolbarActions
 import com.example.commutual.model.CategoryEnum
 import com.example.commutual.model.Task
 import java.util.*
+import kotlin.reflect.KFunction1
 import kotlin.reflect.KFunction5
 import kotlin.reflect.KFunction8
 import com.example.commutual.R.drawable as AppIcon
@@ -90,7 +91,16 @@ fun EditTaskScreen(
             title = screenTitle,
             modifier = Modifier.toolbarActions(),
             endActionIcon = AppIcon.ic_check,
-            endAction = { viewModel.onDoneClick(chatId, popUpScreen, focusManager, context, showReminderNotification, setAlarmManager) }
+            endAction = {
+                viewModel.onDoneClick(
+                    chatId,
+                    popUpScreen,
+                    focusManager,
+                    context,
+                    showReminderNotification,
+                    setAlarmManager
+                )
+            }
         )
 
         Spacer(modifier = Modifier.spacer())
@@ -157,6 +167,10 @@ fun EditTaskScreen(
                 task = task,
                 startTime = viewModel.startTime,
                 endTime = viewModel.endTime,
+                year = viewModel.year,
+                month = viewModel.month,
+                day = viewModel.day,
+                context = context,
                 viewModel::showDatePicker,
                 viewModel::showTimePicker,
                 viewModel::onDateChange,
@@ -177,20 +191,28 @@ fun CardEditors(
     task: Task,
     startTime: String,
     endTime: String,
-    showDatePicker: (AppCompatActivity?, (Long) -> Unit) -> Unit,
+    year: Int,
+    month: Int,
+    day: Int,
+    context: Context,
+    showDatePicker: KFunction1<Context, Unit>,
     showTimePicker: (AppCompatActivity?, (Int, Int) -> Unit) -> Unit,
     onDateChange: (Long) -> Unit,
     onStartTimeChange: (Int, Int) -> Unit,
     onEndTimeChange: (Int, Int) -> Unit
 ) {
     val activity = LocalContext.current as AppCompatActivity
+    val context = LocalContext.current
 
     RegularCardEditor(
         R.string.date,
         R.drawable.ic_calendar,
-        FormatterClass.formatDate(task.date)
+        FormatterClass.formatDate(selectedYear = year,
+            selectedMonth = month,
+            selectedDay = day
+        )
     ) {
-        showDatePicker(activity, onDateChange)
+        showDatePicker(context)
     }
 
     RegularCardEditor(R.string.start_time, R.drawable.ic_time, startTime) {

@@ -1,7 +1,9 @@
 package com.example.commutual.ui.screens.edit_task
 
+import android.app.DatePickerDialog
 import android.content.Context
 import android.util.Log
+import android.widget.DatePicker
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.focus.FocusManager
@@ -19,7 +21,6 @@ import com.example.commutual.model.service.AccountService
 import com.example.commutual.model.service.LogService
 import com.example.commutual.model.service.StorageService
 import com.example.commutual.ui.screens.CommutualViewModel
-import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -48,6 +49,15 @@ class EditTaskViewModel @Inject constructor(
 
     val endTime
         get() = uiState.value.endTime
+
+    val year
+        get() = uiState.value.selectedYear
+
+    val month
+        get() = uiState.value.selectedMonth
+
+    val day
+        get() = uiState.value.selectedDay
 
     val startHour
         get() = uiState.value.startHour
@@ -122,20 +132,52 @@ class EditTaskViewModel @Inject constructor(
         task.value = task.value.copy(endTime = formatTime(hour, minute, true))
     }
 
-    fun showDatePicker(activity: AppCompatActivity?, onDateChange: (Long) -> Unit) {
-        val picker = MaterialDatePicker.Builder.datePicker()
-            .setSelection(uiState.value.date).build()
+    fun showDatePicker(context: Context) {
 
-        activity?.let {
-            picker.show(it.supportFragmentManager, picker.toString())
+        val calendar = Calendar.getInstance()
+        val year = calendar[Calendar.YEAR]
+        val month = calendar[Calendar.MONTH]
+        val dayOfMonth = calendar[Calendar.DAY_OF_MONTH]
 
-            picker.addOnPositiveButtonClickListener {
+        val datePicker = DatePickerDialog(
+            context,
+            { _: DatePicker, selectedYear: Int, selectedMonth: Int, selectedDayOfMonth: Int ->
+                task.value = task.value.copy(
+                    year = selectedYear,
+                    month = selectedMonth,
+                    day = selectedDayOfMonth
+                )
+                uiState.value = uiState.value.copy(
+                    selectedDateText = "$selectedDayOfMonth/${selectedMonth + 1}/$selectedYear",
+                    selectedDay = selectedDayOfMonth,
+                    selectedMonth = selectedMonth,
+                    selectedYear = selectedYear
+                )
 
-                    timeInMillis ->
-                onDateChange(timeInMillis)
-                Log.d("", timeInMillis.toString())
-            }
-        }
+            }, year, month, dayOfMonth
+        )
+
+        datePicker.datePicker.minDate = calendar.timeInMillis
+        datePicker.show()
+
+
+//
+//        val datePicker = MaterialDatePicker.Builder.datePicker()
+//            .setSelection(uiState.value.date).build()
+//
+//        datePicker.minDate = calendar.timeInMillis
+//
+//
+//        activity?.let {
+//            datePicker.show(it.supportFragmentManager, datePicker.toString())
+//
+//            datePicker.addOnPositiveButtonClickListener {
+//
+//                    timeInMillis ->
+//                onDateChange(timeInMillis)
+//                Log.d("", timeInMillis.toString())
+//            }
+//        }
     }
 
     fun showTimePicker(activity: AppCompatActivity?, onTimeChange: (Int, Int) -> Unit) {
@@ -159,13 +201,18 @@ class EditTaskViewModel @Inject constructor(
         focusManager.clearFocus()
 
         if (task.value.title.isBlank()) {
-            SnackbarManager.showMessage(R.string.empty_title_error)
+            SnackbarManager.showMessage(R.string.task_empty_title_error)
             return
         }
 
 
         if (task.value.category == CategoryEnum.NONE) {
-            SnackbarManager.showMessage(R.string.empty_category_error)
+            SnackbarManager.showMessage(R.string.task_empty_category_error)
+            return
+        }
+
+        if (uiState.value.selectedYear == 0 && uiState.value.selectedMonth == 0 && uiState.value.selectedDay == 0) {
+            SnackbarManager.showMessage(R.string.task_empty_date_error)
             return
         }
 
@@ -174,7 +221,7 @@ class EditTaskViewModel @Inject constructor(
             || ((uiState.value.endHour - uiState.value.startHour) == 0) &&
             (uiState.value.endMin - uiState.value.startMin) <= 0
         ) {
-            SnackbarManager.showMessage(R.string.invalid_time)
+            SnackbarManager.showMessage(R.string.task_invalid_time)
             return
         }
 
@@ -211,9 +258,9 @@ class EditTaskViewModel @Inject constructor(
             val attendanceCalendar: Calendar = Calendar.getInstance()
 
             attendanceCalendar.set(
-                attendanceCalendar.get(Calendar.YEAR),
-                attendanceCalendar.get(Calendar.MONTH),
-                attendanceCalendar.get(Calendar.DAY_OF_MONTH),
+                uiState.value.selectedYear,
+                uiState.value.selectedMonth,
+                uiState.value.selectedDay,
                 uiState.value.startHour,
                 uiState.value.startMin,
                 0
@@ -223,9 +270,9 @@ class EditTaskViewModel @Inject constructor(
 
             val completionCalendar: Calendar = Calendar.getInstance()
             completionCalendar.set(
-                completionCalendar.get(Calendar.YEAR),
-                completionCalendar.get(Calendar.MONTH),
-                completionCalendar.get(Calendar.DAY_OF_MONTH),
+                uiState.value.selectedYear,
+                uiState.value.selectedMonth,
+                uiState.value.selectedDay,
                 uiState.value.endHour,
                 uiState.value.endMin,
                 0

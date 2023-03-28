@@ -62,7 +62,13 @@
     <string name="empty_title_error">Please enter a title for your post!</string>
     <string name="empty_description_error">Please enter a description for your post!</string>
     <string name="empty_category_error">Please choose a category for your post!</string>
-    <string name="invalid_time">Invalid time! Please ensure the end time is after the start time!</string>
+
+    <string name="task_empty_title_error">Please enter a title for your task!</string>
+    <string name="task_empty_description_error">Please enter a description for your task!</string>
+    <string name="task_empty_category_error">Please choose a category for your task!</string>
+
+    <string name="task_empty_date_error">Please choose a date for your task!</string>
+    <string name="task_invalid_time">Invalid time! Please ensure the end time is after the start time!</string>
 
     <!-- Chat Screen -->
     <string name="chat">Chat</string>
@@ -83,7 +89,7 @@
 
 
 <!--    no date-->
-    <string name="formatted_task_time_nd">%1$s -%2$s</string>
+    <string name="formatted_task_time_nd">%1$s - %2$s</string>
 
     <string name="task_created">%1$s created a task</string>
     <string name="formatted_task_title">Task: %1$s</string>

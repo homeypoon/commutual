@@ -37,6 +37,32 @@ class FormatterClass {
             return timeFormatter.format(timestamp)
         }
 
+        fun formatDate(
+            selectedYear: Int, selectedMonth: Int, selectedDay: Int,
+        ): String {
+
+            if (selectedYear != 0 && selectedMonth != 0 && selectedDay != 0) {
+                val calendar = Calendar.getInstance().apply {
+                    set(Calendar.YEAR, selectedYear)
+                    set(Calendar.MONTH, selectedMonth)
+                    set(Calendar.DAY_OF_MONTH, selectedDay)
+                }
+
+                val timeFormatter = SimpleDateFormat(
+                    "MMM d yyyy",
+                    Locale.getDefault()
+                ).apply {
+                    timeZone = TimeZone.getTimeZone("UTC")
+                }
+
+                return timeFormatter.format(calendar.time)
+            }
+
+            return ""
+
+        }
+
+
         fun formatTime(hour: Int, minute: Int, timeStyle24: Boolean): String {
 
             val calendar = Calendar.getInstance().apply {

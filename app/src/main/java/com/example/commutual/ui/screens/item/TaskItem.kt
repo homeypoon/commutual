@@ -53,18 +53,23 @@ fun TaskItem(
         },
         supportingText = {
             Column {
+                if (!task.details.isEmpty()) {
+                    Text(
+                        task.details,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        maxLines = 3,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
 
-                Text(
-                    task.details,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    maxLines = 3,
-                    overflow = TextOverflow.Ellipsis,
-                )
                 Text(
                     stringResource(
                         R.string.formatted_task_time,
-                        FormatterClass.formatDate(task.date),
+                        FormatterClass.formatDate(selectedYear = task.year,
+                            selectedMonth = task.month,
+                            selectedDay = task.day
+                        ),
                         task.startTime,
                         task.endTime
                     ),

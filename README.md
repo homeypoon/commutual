@@ -9,8 +9,7 @@ Home Screen
 - Displays upcoming meets
 - Displays a pie chart and a bar graph that displays activity data  
 - Has an "ADD POST" button that allows users to create a post and post it to make it available for other users to view
-
-<img width="254" alt="Screen Shot 2023-03-28 at 12 12 15 AM" src="https://user-images.githubusercontent.com/98489847/228135441-9be3c5bd-a966-4ef0-9d04-e1b5c479b6a2.png">    <img width="248" alt="Screen Shot 2023-03-28 at 1 15 38 AM" src="https://user-images.githubusercontent.com/98489847/228135206-49ff4c39-6879-4fad-9269-4318a7ed6b2e.png"> <img width="250" alt="Screen Shot 2023-03-28 at 1 15 55 AM" src="https://user-images.githubusercontent.com/98489847/228135231-1c3e2c7f-c80f-42b8-9b4b-60e3a97595c8.png">
+<img width="248" alt="Screen Shot 2023-03-28 at 1 17 33 AM" src="https://user-images.githubusercontent.com/98489847/228140900-9e86df4d-817f-4805-b456-a6b7f5f90edc.png"><img width="248" alt="Screen Shot 2023-03-28 at 1 15 38 AM" src="https://user-images.githubusercontent.com/98489847/228135206-49ff4c39-6879-4fad-9269-4318a7ed6b2e.png"> <img width="250" alt="Screen Shot 2023-03-28 at 1 15 55 AM" src="https://user-images.githubusercontent.com/98489847/228135231-1c3e2c7f-c80f-42b8-9b4b-60e3a97595c8.png">
 
 
 Explore Screen

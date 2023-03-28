@@ -65,7 +65,10 @@ private fun SignOutCard(signOut: () -> Unit) {
                     style = MaterialTheme.typography.headlineMedium,
                 )
             },
-            text = { Text(stringResource(AppText.log_out_message)) },
+            text = { Text(
+                stringResource(AppText.log_out_message),
+                style = MaterialTheme.typography.bodyMedium
+            ) },
             dismissButton = { DialogCancelButton(AppText.cancel) { showWarningDialog = false } },
             confirmButton = {
                 DialogConfirmButton(AppText.log_out) {

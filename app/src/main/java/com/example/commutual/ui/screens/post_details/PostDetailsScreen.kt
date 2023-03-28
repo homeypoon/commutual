@@ -2,10 +2,10 @@ package com.example.commutual.ui.screens.post_details
 
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
@@ -14,13 +14,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -57,17 +58,33 @@ fun PostDetailsScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(24.dp, 36.dp)
+
         ) {
 
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp),
+            ) {
+                Text(
+                    text = AnnotatedString(
+                        user.username,
+                        SpanStyle(
+                            textDecoration = TextDecoration.Underline,
+                            color = MaterialTheme.colorScheme.inversePrimary
+                        ),
 
-            ClickableText(
-                text = AnnotatedString(
-                    user.username
-                ),
-                onClick = { viewModel.onUsernameClick(openScreen) },
-                style = MaterialTheme.typography.labelMedium,
-                modifier = Modifier.padding(bottom = 16.dp)
-            )
+                        ),
+                    style = MaterialTheme.typography.displayLarge,
+                    modifier = Modifier
+                        .clickable {
+                            viewModel.onUsernameClick(openScreen)
+                        }
+                )
+
+            }
+
 
 
             androidx.compose.material3.Surface(
@@ -148,10 +165,9 @@ private fun ChattingButton(
     user: User,
     modifier: Modifier
 ) {
-//    var showStartChattingCard by remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
     val uiState by viewModel.uiState
-    val coroutineScope = rememberCoroutineScope()
+
     Box(
         modifier = Modifier.fillMaxWidth(),
         contentAlignment = Alignment.Center
@@ -164,6 +180,8 @@ private fun ChattingButton(
     if (uiState.showStartChattingCard) {
 
         androidx.compose.material3.AlertDialog(
+            containerColor = MaterialTheme.colorScheme.onError,
+
             text = {
                 Text(
                     text = stringResource(R.string.start_chatting_with, user.username),
@@ -179,11 +197,13 @@ private fun ChattingButton(
                 }
             },
             confirmButton = {
-                DialogConfirmButton(R.string.start_chatting) {
-                    viewModel.setShowRequestMatchCard(false)
-                    focusManager.clearFocus()
-                    viewModel.onStartChattingClick(openScreen)
-                }
+                DialogConfirmButton(R.string.start_chatting,
+                    action = {
+                        viewModel.setShowRequestMatchCard(false)
+                        focusManager.clearFocus()
+                        viewModel.onStartChattingClick(openScreen)
+                    }
+                )
             },
             onDismissRequest = { viewModel.setShowRequestMatchCard(false) },
         )

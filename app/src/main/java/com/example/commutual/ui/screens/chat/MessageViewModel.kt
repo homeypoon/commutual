@@ -37,6 +37,10 @@ class MessageViewModel @Inject constructor(
         return storageService.getMessagesWithUsers(chatId)
     }
 
+    fun getMessagesAndTasksWithUsers(chatId: String): Flow<List<Pair<Any, User>>> {
+        return storageService.getMessagesAndTasksWithUsers(chatId)
+    }
+
     fun getTasksWithUsers(chatId: String): Flow<Pair<List<Pair<Task, User>>, List<Pair<Task, User>>>> {
         return storageService.getTasksWithUsers(chatId)
     }
@@ -142,6 +146,10 @@ class MessageViewModel @Inject constructor(
             storageService.incrementCommitCount(COMPLETION_NO_POINTS)
             storageService.incrementTasksMissed()
         }
+    }
+
+    fun onUsernameClick(openScreen: (String) -> Unit) {
+        openScreen("$PROFILE_SCREEN?$USER_ID=${partnerObject.value.userId}")
     }
 
     fun onAddTaskClick(openScreen: (String) -> Unit) {

@@ -79,11 +79,11 @@
     <string name="previous_tasks_sessions">Previous Task Sessions</string>
 
     <string name="formatted_task">Task: %1$s</string>
-    <string name="formatted_task_time">%1$s | %2$s-%3$s</string>
+    <string name="formatted_task_time">%1$s | %2$s -%3$s</string>
 
 
 <!--    no date-->
-    <string name="formatted_task_time_nd">%1$s-%2$s</string>
+    <string name="formatted_task_time_nd">%1$s -%2$s</string>
 
     <string name="task_created">%1$s created a task</string>
     <string name="formatted_task_title">Task: %1$s</string>

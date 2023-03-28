@@ -1,6 +1,5 @@
 package com.example.commutual.model.service.impl
 
-import android.util.Log
 import com.example.commutual.model.*
 import com.example.commutual.model.AlarmReceiver.Companion.ATTENDANCE
 import com.example.commutual.model.AlarmReceiver.Companion.COMPLETION
@@ -33,13 +32,6 @@ class StorageServiceImpl
                 snapshot.toObjects<Post>().filter { it.userId != auth.currentUserId }
             }
         }
-
-//    @OptIn(ExperimentalCoroutinesApi::class)
-//    override val userPosts: Flow<List<Post>>
-//        get() = auth.currentUser.flatMapLatest {
-//            currentPostCollection().whereEqualTo(USER_ID, auth.currentUserId).snapshots()
-//                .map { snapshot -> snapshot.toObjects() }
-//        }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun getUserPosts(userId: String): Flow<List<Post>> {
@@ -126,7 +118,8 @@ class StorageServiceImpl
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun getTasksWithUsers(chatId: String): Flow<Pair<List<Pair<Task, User>>, List<Pair<Task, User>>>> {
         return auth.currentUser.flatMapLatest {
-            currentTaskCollection(chatId).orderBy(DATE_FIELD, Query.Direction.ASCENDING).snapshots()
+            currentTaskCollection(chatId).orderBy(CREATE_TIMESTAMP_FIELD, Query.Direction.ASCENDING)
+                .snapshots()
                 .map { snapshot ->
                     val pairs = snapshot.toObjects<Task>().map { message ->
                         val sender = getUserById(message.creatorId)
@@ -135,6 +128,21 @@ class StorageServiceImpl
                     val (completedTasks, upcomingTasks) = pairs.partition { it.first.taskCompleted }
                     completedTasks to upcomingTasks
                 }
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun getAllTasksWithUsers(chatId: String): Flow<List<Pair<Task, User>>> {
+        return auth.currentUser.flatMapLatest {
+
+            currentTaskCollection(chatId).orderBy(CREATE_TIMESTAMP_FIELD, Query.Direction.ASCENDING)
+                .snapshots().map { snapshot ->
+                snapshot.toObjects<Task>().map { task ->
+                    val sender =
+                        getUserById(task.creatorId)
+                    task to sender
+                }
+            }
         }
     }
 
@@ -152,7 +160,48 @@ class StorageServiceImpl
         }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun getMessagesAndTasksWithUsers(chatId: String): Flow<List<Pair<Any, User>>> {
+        val messagesFlow = getMessagesWithUsers(chatId)
+        val tasksFlow = getAllTasksWithUsers(chatId)
 
+        return messagesFlow
+            .flatMapLatest { messages ->
+                tasksFlow.map { tasks ->
+
+                    val combinedList = (messages + tasks).map { Pair(it.first, it.second) }
+                    combinedList.sortedBy { pair ->
+                        when (pair.first) {
+                            is Message -> (pair.first as Message).timestamp
+                            is Task -> (pair.first as Task).createTimestamp
+                            else -> throw IllegalArgumentException("Invalid object type")
+                        }.toDate()
+                    }
+                }
+            }
+    }
+//    @OptIn(ExperimentalCoroutinesApi::class)
+//    override fun getMessagesAndTasksWithUsers(chatId: String): Flow<List<Pair<Any, User>>> {
+//        val messagesFlow = getMessagesWithUsers(chatId)
+//        val tasksFlow = getTasksWithUsers(chatId)
+//
+//        return messagesFlow.flatMapLatest {
+//            messagesFlow.combine(tasksFlow) { messages, tasks ->
+//
+//
+//
+//                val combinedList =
+//                    (messages.map { it.first to it.second } + tasks.first.map { it.first to it.second })
+//                combinedList.sortedBy { pair ->
+//                    when (pair.first) {
+//                        is Message -> (pair.first as Message).timestamp
+//                        is Task -> (pair.first as Task).showAttendanceTimestamp
+//                        else -> throw IllegalArgumentException("Invalid object type")
+//                    }
+//                }
+//            }
+//        }
+//    }
 
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -261,7 +310,6 @@ class StorageServiceImpl
     override suspend fun updateTask(task: Task, chatId: String): Unit =
         trace(UPDATE_TASK) {
             currentTaskCollection(chatId).document(task.taskId).set(task).await()
-            Log.d("attendance", "taskid:${task.taskId}, chatid:${chatId}")
         }
 
     override suspend fun updateTaskType(task: Task, chatId: String, attendanceType: Int?): Unit =
@@ -270,11 +318,11 @@ class StorageServiceImpl
             if (attendanceType != null) {
 
                 if (attendanceType == Task.ATTENDANCE_YES || attendanceType == Task.ATTENDANCE_NO) {
-                    Log.d("attendance", "taskid:${task.taskId}, chatid:${chatId}")
                     currentTaskCollection(chatId).document(task.taskId).set(
                         task.copy(
                             creatorId = auth.currentUserId,
-                            showAttendanceTimestamp = Timestamp.now()
+                            showAttendanceTimestamp = Timestamp.now(),
+                            createTimestamp = Timestamp.now()
                         )
                     ).await()
 
@@ -282,11 +330,11 @@ class StorageServiceImpl
 
                     currentTaskCollection(chatId).document(task.taskId).update(attendanceMap)
                 } else if (attendanceType == Task.COMPLETION_YES || attendanceType == Task.COMPLETION_NO) {
-                    Log.d("attendance", "taskid:${task.taskId}, chatid:${chatId}")
                     currentTaskCollection(chatId).document(task.taskId).set(
                         task.copy(
                             creatorId = auth.currentUserId,
-                            showCompletionTimestamp = Timestamp.now()
+                            showCompletionTimestamp = Timestamp.now(),
+                            createTimestamp = Timestamp.now()
                         )
                     ).await()
 
@@ -297,7 +345,6 @@ class StorageServiceImpl
 
 
             } else {
-                Log.d("not attendance", "taskid:${task.taskId}, chatid:${chatId}")
                 currentTaskCollection(chatId).document(task.taskId).set(
                     task.copy(
                         createTimestamp = Timestamp.now(), creatorId = auth.currentUserId
@@ -314,8 +361,6 @@ class StorageServiceImpl
         trace(UPDATE_TASK_TRACE_AM) {
             when (updateType) {
                 ATTENDANCE -> {
-                    Log.d("attendance", "taskid:${task.taskId}, chatid:${chatId}")
-
                     currentTaskCollection(chatId).document(task.taskId).update(
                         "showAttendanceTimestamp", Timestamp.now(), "showAttendance", true
                     ).await()
@@ -333,20 +378,6 @@ class StorageServiceImpl
                 else -> {}
             }
         }
-
-
-
-        Log.d("check", "taskid:${task.taskId}, chatid:${chatId}")
-
-
-        Log.d(
-            "d", task.copy(
-                showAttendanceTimestamp = Timestamp.now(),
-                showAttendance = false,
-                taskCompleted = true
-            ).toString()
-        )
-
     }
 
     override suspend fun deleteTask(taskId: String, chatId: String) {
@@ -445,7 +476,7 @@ class StorageServiceImpl
         private const val INTERESTS_FIELD = "interests"
         private const val MEMBERS_ID_FIELD = "membersId"
         private const val TIMESTAMP_FIELD = "timestamp"
-        private const val DATE_FIELD = "date"
+        private const val CREATE_TIMESTAMP_FIELD = "createTimestamp"
         private const val COMPLETED_FIELD = "taskCompleted"
 
 

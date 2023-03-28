@@ -2,6 +2,8 @@ package com.example.commutual.ui.screens.chat
 
 import ConfirmationItem
 import ConfirmationResultItem
+import android.util.Log
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -22,7 +24,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.commutual.FormatterClass
 import com.example.commutual.R
-import com.example.commutual.common.composable.BasicToolbar
 import com.example.commutual.common.composable.MessageInputField
 import com.example.commutual.model.AlarmReceiver
 import com.example.commutual.model.Message
@@ -36,9 +37,9 @@ import com.example.commutual.model.Task.Companion.COMPLETION_YES
 import com.example.commutual.ui.screens.item.CreatedTaskItem
 import com.example.commutual.ui.screens.item.MessageItem
 import com.example.commutual.ui.screens.item.TaskItem
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MessagesScreen(
     openScreen: (String) -> Unit,
@@ -59,12 +60,15 @@ fun MessagesScreen(
         .collectAsState(Pair(emptyList(), emptyList()))
     val (completedTasks, upcomingTasks) = tasksWithUsers
 
-    // Sort messages and tasks by timestamp
-    val messagesWithTasks = (messages.map { Pair(it.first.timestamp, it) } +
-            upcomingTasks.map { Pair(it.first.showAttendanceTimestamp, it) } +
-            completedTasks.map { Pair(it.first.showCompletionTimestamp, it) })
-        .sortedBy { it.first }
-        .map { it.second }
+    val messagesWithTasks by viewModel.getMessagesAndTasksWithUsers(chatId).collectAsState(emptyList())
+
+
+//    // Sort messages and tasks by timestamp
+//    val messagesWithTasks = (messages.map { Pair(it.first.timestamp, it) } +
+//            upcomingTasks.map { Pair(it.first.showAttendanceTimestamp, it) } +
+//            completedTasks.map { Pair(it.first.showCompletionTimestamp, it) })
+//        .sortedBy { it.first }
+//        .map { it.second }
 
     /**
      * Scroll to bottom of chat
@@ -77,8 +81,8 @@ fun MessagesScreen(
 
     LaunchedEffect(Unit) {
         viewModel.getSender(chatId)
-        delay(500)
     }
+
     androidx.compose.material.Scaffold(
 
         floatingActionButton = {
@@ -116,8 +120,22 @@ fun MessagesScreen(
                     })
                 }
         ) {
-            BasicToolbar(
-                title = (uiState.partner.username)
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(
+                        uiState.partner.username,
+                        color = MaterialTheme.colorScheme.onSecondary,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        style = MaterialTheme.typography.displayLarge,
+                        modifier = Modifier.clickable {
+                            viewModel.onUsernameClick(openScreen)
+                        }
+                    )
+                },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    MaterialTheme.colorScheme.secondary
+                ),
             )
 
             TabRow(selectedTabIndex = viewModel.tabIndex) {
@@ -140,9 +158,7 @@ fun MessagesScreen(
 
             if (viewModel.tabIndex == 0) {
 
-
-                LaunchedEffect(Unit) {
-                    delay(200)
+                LaunchedEffect(messagesWithTasks.size) {
                     scrollToBottom()
                 }
 
@@ -161,6 +177,8 @@ fun MessagesScreen(
                                 MessageItem(item, user)
                                 { timestamp -> FormatterClass.formatTimestamp(timestamp, true) }
                             } else if (item is Task) {
+
+                                Log.d("task", item.title)
 
                                 if (!item.showAttendance) {
                                     CreatedTaskItem(item, user, viewModel::onCreatedTaskCLicked)
@@ -266,7 +284,6 @@ fun MessagesScreen(
                             }
 
                         }
-
 
                     }
 

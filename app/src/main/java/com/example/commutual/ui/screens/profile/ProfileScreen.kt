@@ -86,7 +86,7 @@ fun ProfileScreen(
 
                     Text(
                         text = user.username,
-                        style = MaterialTheme.typography.displayMedium,
+                        style = MaterialTheme.typography.displayLarge,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -228,10 +228,10 @@ fun ProfileScreen(
                         AppText.edit_profile,
                         Modifier
                             .fillMaxWidth()
-                            .padding(16.dp, 16.dp, 16.dp, bottom = 12.dp)
+                            .padding(16.dp, 16.dp, 16.dp, bottom = 4.dp)
                     ) { viewModel.onEditProfileClick(openScreen) }
                 }
-                Divider(modifier = Modifier.padding(0.dp, 4.dp))
+                Divider(modifier = Modifier.padding(top = 12.dp))
             }
 
             items(userPosts.value, key = { it.postId }) { postItem ->

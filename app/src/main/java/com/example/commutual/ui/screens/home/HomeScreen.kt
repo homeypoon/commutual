@@ -20,6 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.res.ResourcesCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -147,39 +148,42 @@ fun HomeScreen(
             }
 
             // Pie Chart for Tasks Completed and Tasks Scheduled
+            if (user?.tasksMissed != 0L || user?.tasksCompleted != 0L) {
 
-            item {
+                item {
 
-                Box(
-                    modifier =
-                    Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Surface(
-                        color = MaterialTheme.colorScheme.surfaceVariant,
-                        shape = RoundedCornerShape(12.dp),
-                        shadowElevation = 4.dp,
-                        modifier = Modifier
-                            .padding(start = 18.dp, end = 18.dp, top = 20.dp)
-                            .fillMaxWidth()
+                    Box(
+                        modifier =
+                        Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.Center
                     ) {
-                        Column(
+                        Surface(
+                            color = MaterialTheme.colorScheme.surfaceVariant,
+                            shape = RoundedCornerShape(12.dp),
+                            shadowElevation = 4.dp,
                             modifier = Modifier
-                                .padding(horizontal = 8.dp)
-                                .fillMaxWidth(),
-                            horizontalAlignment = Alignment.CenterHorizontally
+                                .padding(start = 24.dp, end = 24.dp, top = 28.dp)
+                                .fillMaxWidth()
                         ) {
 
-                            Text(
-                                text = stringResource(R.string.completion_graph_title),
-                                style = MaterialTheme.typography.headlineSmall,
-                                textAlign = TextAlign.Center,
+                            Column(
                                 modifier = Modifier
-                                    .padding(top = 16.dp, bottom = 12.dp)
-                                    .fillMaxWidth()
-                            )
+                                    .padding(horizontal = 8.dp)
+                                    .fillMaxWidth(),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
 
-                            if (user?.tasksMissed != 0L || user?.tasksCompleted != 0L) {
+                                Text(
+                                    text = stringResource(R.string.completion_graph_title),
+                                    style = MaterialTheme.typography.headlineSmall,
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier
+                                        .padding(top = 16.dp, bottom = 12.dp)
+                                        .fillMaxWidth()
+                                )
+
+
+
                                 user?.let {
                                     PieChart(
                                         it.tasksMissed,
@@ -269,7 +273,7 @@ fun HomeScreen(
                         shape = RoundedCornerShape(12.dp),
                         shadowElevation = 4.dp,
                         modifier = Modifier
-                            .padding(start = 18.dp, end = 18.dp, top = 20.dp)
+                            .padding(start = 24.dp, end = 24.dp, top = 32.dp)
                             .fillMaxWidth()
                     ) {
                         Column(
@@ -368,7 +372,7 @@ fun BarGraph(
 
     AndroidView(
         modifier = Modifier
-            .padding(top = 18.dp, start = 18.dp, end = 18.dp,bottom = 24.dp)
+            .padding(top = 18.dp, start = 18.dp, end = 18.dp, bottom = 24.dp)
             .size(300.dp),
         factory = { context ->
             BarChart(context).apply {
@@ -383,15 +387,20 @@ fun BarGraph(
 
                 xAxis.isEnabled = true
                 xAxis.setDrawGridLines(false)
+                xAxis.setDrawAxisLine(true)
+                xAxis.textSize = 14f
+                xAxis.typeface = ResourcesCompat.getFont(context, R.font.open_sans_regular)
+
                 xAxis.position = XAxis.XAxisPosition.BOTTOM
                 xAxis.labelRotationAngle = -90f
 
                 axisLeft.isEnabled = true
                 axisLeft.granularity = 1.0f
                 axisLeft.axisMinimum = 0f
+                axisLeft.setDrawAxisLine(true)
+                axisLeft.setDrawGridLines(true)
                 axisLeft.axisMaximum = barChartData.yMax
                 axisRight.isEnabled = false
-
 
                 val categoryNames = categoryCount.keys.map {
                     context.getString(CategoryEnum.valueOf(it).categoryStringRes)

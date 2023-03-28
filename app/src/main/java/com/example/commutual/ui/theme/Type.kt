@@ -20,17 +20,17 @@ val OpenSans = FontFamily(
 
 // Set of Material typography styles to start with
 val Typography = Typography(
-    // Top bar title
+    // Top bar title, Username on profile page
     displayLarge = TextStyle(
         fontFamily = OpenSans,
         fontWeight = FontWeight.Bold,
         fontSize = 28.sp
     ),
-    // Username on profile page
+    // None in use
     displayMedium = TextStyle(
         fontFamily = OpenSans,
-        fontWeight = FontWeight.Bold,
-        fontSize = 28.sp
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 22.sp
     ),
     // Extended FAB text
     displaySmall = TextStyle(

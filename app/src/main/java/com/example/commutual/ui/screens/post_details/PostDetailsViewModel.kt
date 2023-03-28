@@ -2,7 +2,6 @@
 
 package com.example.commutual.ui.screens.post_details
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import com.example.commutual.*
 import com.example.commutual.common.ext.idFromParameter
@@ -68,13 +67,9 @@ class PostDetailsViewModel @Inject constructor(
     }
 
     fun updateStartChattingCard(openScreen: (String) -> Unit) {
-        Log.d("postdvm chat", "task user${post.value.userId}")
         launchCatching {
-//            val chatObject = storageService.getChatWithPostUserId(task.value.userId)
 
-            Log.d("postdvm chat", "chat object${chat.value.chatId}")
             if (chat.value.chatId != "") {
-//                chat.value.chatId = chatObject.chatId
                 setShowRequestMatchCard(false)
                 openScreen("$MESSAGES_SCREEN?$CHAT_ID=${chat.value.chatId}")
             } else {
@@ -91,7 +86,6 @@ class PostDetailsViewModel @Inject constructor(
         launchCatching {
             val chat = storageService.getChatWithPostUserId(post.value.userId) ?: Chat()
             val chatId = chat.chatId
-            Log.v("postdetailsvm", chatId)
             openScreen("$MESSAGES_SCREEN?$CHAT_ID=$chatId")
         }
     }
@@ -107,7 +101,6 @@ class PostDetailsViewModel @Inject constructor(
         launchCatching {
             val chatId = storageService.saveChat(chat.value)
             openScreen("$MESSAGES_SCREEN?$CHAT_ID=$chatId")
-            Log.v("Postdetails", "chatid: $chatId")
         }
 
 

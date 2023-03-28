@@ -15,14 +15,11 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
@@ -169,19 +166,13 @@ fun FullScreenDialog(
     val categories = enumValues<CategoryEnum>()
         .filter { it != CategoryEnum.NONE }
 
-
-    var textFieldSize by remember { mutableStateOf(Size.Zero) }
-
-    val icon = if (viewModel.expandedDropDownMenu)
-        Icons.Filled.KeyboardArrowUp
-    else
-        Icons.Filled.KeyboardArrowDown
-
     if (viewModel.showFiltersDialog) {
 
         AlertDialog(
             title = {
-                Text(stringResource(R.string.filters))
+                Text(stringResource(R.string.filters),
+                    style = MaterialTheme.typography.headlineMedium
+                )
             },
             text = {
                 Column(
@@ -202,7 +193,7 @@ fun FullScreenDialog(
                     ) {
                         Text(
                             text = stringResource(R.string.category),
-                            style = MaterialTheme.typography.titleSmall
+                            style = MaterialTheme.typography.headlineSmall
                         )
                         categories.forEach { category ->
                             Row(
@@ -231,6 +222,7 @@ fun FullScreenDialog(
                         }
 
                         Button(
+                            shape = RoundedCornerShape(6.dp),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(0.dp, 8.dp),
@@ -244,9 +236,11 @@ fun FullScreenDialog(
 
             },
             confirmButton = {
-                DialogConfirmButton(R.string.apply_filters) {
-                    viewModel.onApplyFilterClick(focusManager)
-                }
+                DialogConfirmButton(R.string.apply_filters,
+                    action = {
+                        viewModel.onApplyFilterClick(focusManager)
+                    }
+                )
             },
             onDismissRequest = { viewModel.setShowFiltersDialog(false) },
         )

@@ -1,5 +1,5 @@
 # Commutual
-Commutual is an Android Application that connects users with similar interests to complete tasks together in order to help users increase productivity. It was developed using Kotlin, Jetpack Compose, and Cloud Firestore.
+Commutual is an Android Application that connects users with similar interests to complete tasks together in order to help them increase productivity. It was developed using Kotlin, Jetpack Compose, and Cloud Firestore.
 
 Features of Commutual Include:
 ------------------------------

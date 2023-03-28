@@ -60,11 +60,11 @@ class HomeViewModel @Inject constructor(
             decimalFormatter.minimumFractionDigits = 0
 
 
-            val uncompletedTasksPercentage = tasksMissed.toDouble() / (tasksMissed + tasksCompleted).toDouble()
+            val missedTasksPercentage = tasksMissed.toDouble() / (tasksMissed + tasksCompleted).toDouble()
             val completedTasksPercentage = tasksCompleted.toFloat() / (tasksMissed + tasksCompleted).toFloat()
 
             uiState.value = uiState.value.copy(
-                uncompletedTasksPercentage = decimalFormatter.format(uncompletedTasksPercentage),
+                missedTasksPercentage = decimalFormatter.format(missedTasksPercentage),
                 completedTasksPercentage = decimalFormatter.format(completedTasksPercentage)
             )
             Log.d("uiState.value.completedTasksPercentage", uiState.value.completedTasksPercentage)

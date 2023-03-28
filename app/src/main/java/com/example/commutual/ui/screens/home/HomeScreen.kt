@@ -186,8 +186,8 @@ fun HomeScreen(
 
                                 user?.let {
                                     PieChart(
-                                        it.tasksMissed,
-                                        it.tasksCompleted
+                                        totalTasksMissed = it.tasksMissed,
+                                        totalTasksCompleted = it.tasksCompleted
                                     )
                                 }
 
@@ -217,8 +217,8 @@ fun HomeScreen(
                                         )
                                         Text(
                                             text = stringResource(
-                                                R.string.uncompleted_sessions,
-                                                uiState.uncompletedTasksPercentage
+                                                R.string.missed_sessions,
+                                                uiState.missedTasksPercentage
                                             ),
                                             style = MaterialTheme.typography.bodyMedium,
                                             modifier = Modifier
@@ -315,22 +315,22 @@ fun HomeScreen(
 
 @Composable
 fun PieChart(
-    totalTasksScheduled: Long,
+    totalTasksMissed: Long,
     totalTasksCompleted: Long
 ) {
-    val tasksUncompletedColor = MaterialTheme.colorScheme.primaryContainer
+    val tasksMissedColor = MaterialTheme.colorScheme.primaryContainer
     val tasksCompletedColor = MaterialTheme.colorScheme.primary
 
 
     val entries = listOf(
-        PieEntry(totalTasksScheduled.toFloat(), "Uncompleted Tasks"),
+        PieEntry(totalTasksMissed.toFloat(), "Missed Tasks"),
         PieEntry(totalTasksCompleted.toFloat(), "Completed Tasks")
     )
 
 
     val dataSet = PieDataSet(entries, "Tasks")
     dataSet.setDrawValues(false)
-    dataSet.colors = listOf(tasksCompletedColor.toArgb(), tasksUncompletedColor.toArgb())
+    dataSet.colors = listOf(tasksMissedColor.toArgb(), tasksCompletedColor.toArgb())
 
 
     val pieData = PieData(dataSet)

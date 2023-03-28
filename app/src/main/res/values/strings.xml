@@ -31,7 +31,7 @@
     <string name="completion_graph_title">Percentage of Task Completion</string>
     <string name="tasks_per_category_graph_title">Number of Categories Per Category</string>
 
-    <string name="uncompleted_sessions">Uncompleted Sessions: %1$s</string>
+    <string name="missed_sessions">Missed Sessions: %1$s</string>
     <string name="completed_sessions">Completed Sessions: %1$s</string>
 
     <!-- Explore Screen -->

@@ -23,8 +23,7 @@ class HomeViewModel @Inject constructor(
     private val accountService: AccountService,
 ) : CommutualViewModel(logService) {
 
-    val upcomingUserTasks = storageService.upcomingUserTasks
-//    val user = mutableStateOf(User())
+    val currentUserTasks = storageService.currentUserTasks
 
     var uiState = mutableStateOf(HomeUiState())
         private set

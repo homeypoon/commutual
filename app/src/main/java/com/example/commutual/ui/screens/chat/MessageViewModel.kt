@@ -1,5 +1,10 @@
 package com.example.commutual.ui.screens.chat
 
+import android.net.Uri
+import androidx.activity.compose.ManagedActivityResultLauncher
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.focus.FocusManager
 import com.example.commutual.*
@@ -29,6 +34,8 @@ class MessageViewModel @Inject constructor(
     val partnerObject = mutableStateOf(User())
     val chat = mutableStateOf(Chat())
     val currentUserId = accountService.currentUserId
+
+    var photoUri: MutableState<Uri?> = mutableStateOf(null)
 
     val messageTabs = enumValues<MessageTabEnum>()
 //    var tasks = storageService.tasks
@@ -83,6 +90,34 @@ class MessageViewModel @Inject constructor(
         uiState.value = uiState.value.copy(messageText = newValue)
     }
 
+    fun onAddImageClick(
+        launcher: ManagedActivityResultLauncher<PickVisualMediaRequest, Uri?>,
+        focusManager: FocusManager
+    ) {
+
+        // Close keyboard
+        focusManager.clearFocus()
+
+        launcher.launch(
+            PickVisualMediaRequest(
+                //Here we request only photos. Change this to .ImageAndVideo if
+                //you want videos too.
+                //Or use .VideoOnly if you only want videos.
+                mediaType = ActivityResultContracts.PickVisualMedia.ImageOnly
+            )
+        )
+
+    }
+
+    fun onCloseImageClick(
+        focusManager: FocusManager
+    ) {
+
+        // Close keyboard
+        focusManager.clearFocus()
+
+        photoUri.value = null
+    }
 
     suspend fun onSendClick(chatId: String, focusManager: FocusManager) {
 
@@ -96,7 +131,6 @@ class MessageViewModel @Inject constructor(
 
         storageService.saveMessage(message.value, chatId)
 
-        resetMessageText()
     }
 
     fun onCreatedTaskCLicked() {

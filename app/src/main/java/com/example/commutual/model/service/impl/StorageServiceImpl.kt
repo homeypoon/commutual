@@ -60,7 +60,7 @@ class StorageServiceImpl
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override val upcomingUserTasks: Flow<List<Task>>
+    override val currentUserTasks: Flow<List<Task>>
         get() = auth.currentUser.flatMapLatest {
             flow {
                 val tasksList = mutableListOf<Task>()
@@ -75,21 +75,19 @@ class StorageServiceImpl
             }
         }
 
-//    @OptIn(ExperimentalCoroutinesApi::class)
-//    override val upcomingUserTasks: Flow<List<Task>>
-//        get() = auth.currentUser.flatMapLatest {
-//            flow {
-//                val tasksList = mutableListOf<Task>()
-//                val currentUser = getUserById(auth.currentUserId)
-//                currentUser.tasksMap.forEach { (taskId, chatId) ->
-//                    val task = getTask(taskId, chatId)
-//                    if (task != null && !task.showCompletion) {
-//                        tasksList.add(task)
-//                    }
-//                }
-//                emit(tasksList)
-//            }
-//        }
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override val chatsWithUsers: Flow<List<Pair<Chat, User>>> // Return a flow of Chat-User pairs
+        get() = auth.currentUser.flatMapLatest {
+            currentChatCollection().whereArrayContains(MEMBERS_ID_FIELD, auth.currentUserId)
+                .snapshots().map { snapshot ->
+                    snapshot.toObjects<Chat>().map { chat ->
+                        val otherUserId =
+                            chat.membersId.first { it != auth.currentUserId } // Get the ID of the other user
+                        val otherUser = getUserById(otherUserId) // Get the User object using the ID
+                        chat to otherUser // Return a Pair of Chat and User objects
+                    }
+                }
+        }
 
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -109,19 +107,7 @@ class StorageServiceImpl
     override suspend fun getPartner(membersId: MutableList<String>): User? =
         getUser(membersId.first { it != auth.currentUserId })
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    override val chatsWithUsers: Flow<List<Pair<Chat, User>>> // Return a flow of Chat-User pairs
-        get() = auth.currentUser.flatMapLatest {
-            currentChatCollection().whereArrayContains(MEMBERS_ID_FIELD, auth.currentUserId)
-                .snapshots().map { snapshot ->
-                    snapshot.toObjects<Chat>().map { chat ->
-                        val otherUserId =
-                            chat.membersId.first { it != auth.currentUserId } // Get the ID of the other user
-                        val otherUser = getUserById(otherUserId) // Get the User object using the ID
-                        chat to otherUser // Return a Pair of Chat and User objects
-                    }
-                }
-        }
+
 
     private suspend fun getUserById(userId: String): User {
         val userDoc = currentUserCollection().document(userId).get().await()

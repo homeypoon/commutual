@@ -10,7 +10,7 @@ interface StorageService {
   fun getFlowCurrentUser(): Flow<User?>
   val posts: Flow<List<Post>>
   val chats: Flow<List<Chat>>
-  val upcomingUserTasks: Flow<List<Task>>
+  val currentUserTasks: Flow<List<Task>>
   val chatsWithUsers: Flow<List<Pair<Chat, User>>>
   fun getUserPosts(userId: String): Flow<List<Post>>
   fun getMessagesWithUsers(chatId: String): Flow<List<Pair<Message, User>>>

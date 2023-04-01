@@ -260,8 +260,6 @@ class EditTaskViewModel @Inject constructor(
                 uiState.value.endMin,
                 0
             )
-            Log.d("calendar", "${completionCalendar.time}")
-
 
             setAlarmManager(
                 context,
@@ -275,11 +273,6 @@ class EditTaskViewModel @Inject constructor(
             )
 
             popUpScreen()
-
-            Log.d(
-                "chat.value.membersId.toTypedArray()",
-                chat.value.membersId.toTypedArray().toString()
-            )
         }
     }
 

@@ -94,6 +94,7 @@ fun PostDetailsScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 8.dp)
+                    .defaultMinSize(minHeight = 280.dp)
             ) {
 
                 Column(
@@ -138,7 +139,7 @@ fun PostDetailsScreen(
                     Text(
                         text = post.description,
                         style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
 

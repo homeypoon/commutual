@@ -2,18 +2,26 @@ package com.example.commutual.ui.screens.chat
 
 import ConfirmationItem
 import ConfirmationResultItem
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -23,6 +31,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import com.example.commutual.FormatterClass
 import com.example.commutual.R
 import com.example.commutual.common.composable.MessageInputField
@@ -54,11 +64,18 @@ fun MessagesScreen(
     val focusManager = LocalFocusManager.current
     val uiState by viewModel.uiState
 
+    val launcher =
+        rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+            viewModel.photoUri.value = uri
+        }
+
 
     val tasks by viewModel.getTasks(chatId).collectAsStateWithLifecycle(emptyList())
-    val upcomingTasks = tasks.filter { !it.showAttendance && !it.showCompletion  }
-    val inProgressTasks = tasks.filter { it.showAttendance && !it.showCompletion && (it.attendance[viewModel.currentUserId] != ATTENDANCE_NO) }
-    val previousTasks = tasks.filter { (it.showCompletion) || (it.attendance[viewModel.currentUserId] == ATTENDANCE_NO) }
+    val upcomingTasks = tasks.filter { !it.showAttendance && !it.showCompletion }
+    val inProgressTasks =
+        tasks.filter { it.showAttendance && !it.showCompletion && (it.attendance[viewModel.currentUserId] != ATTENDANCE_NO) }
+    val previousTasks =
+        tasks.filter { (it.showCompletion) || (it.attendance[viewModel.currentUserId] == ATTENDANCE_NO) }
 
 
     val messagesWithTasks by viewModel.getMessagesAndTasksWithUsers(chatId)
@@ -96,7 +113,9 @@ fun MessagesScreen(
                             tint = MaterialTheme.colorScheme.onTertiary
                         )
                     },
-                    onClick = { viewModel.onAddTaskClick(openScreen) },
+                    onClick = {
+                        viewModel.onAddTaskClick(openScreen)
+                    },
                     modifier = modifier.padding(16.dp),
                     containerColor = MaterialTheme.colorScheme.tertiary,
                 )
@@ -287,37 +306,122 @@ fun MessagesScreen(
 
                     }
 
+
                 }
 
 
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    if (viewModel.photoUri.value != null) {
 
-                MessageInputField(
-                    R.string.message,
-                    uiState.messageText,
-                    viewModel::onMessageTextChange,
-                    {
-                        IconButton(
-                            onClick = {
-                                coroutineScope.launch {
-                                    viewModel.onSendClick(chatId, focusManager)
-                                    scrollToBottom()
+                        Divider(modifier = Modifier.padding(top = 2.dp, bottom = 10.dp))
 
+
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(150.dp)
+                                .padding(horizontal = 48.dp)
+                        ) {
+
+
+                            //Use Coil to display the selected image
+                            val painter = rememberAsyncImagePainter(
+                                ImageRequest
+                                    .Builder(LocalContext.current)
+                                    .data(data = viewModel.photoUri.value)
+                                    .build()
+                            )
+
+
+                            Image(
+                                painter = painter,
+                                contentDescription = null,
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier
+                                    .size(120.dp, 150.dp)
+                            )
+
+                            Box(
+                                contentAlignment = Alignment.TopEnd,
+//                                verticalAlignment = Alignment.Top,
+                                modifier = Modifier
+                                    .size(120.dp, 150.dp)
+                            ) {
+                                OutlinedButton(
+                                    onClick = { viewModel.onCloseImageClick(focusManager) },
+                                    modifier =
+                                    Modifier
+                                        .size(28.dp)
+                                        .padding(top = 4.dp, end = 4.dp),
+                                    shape = CircleShape,
+                                    contentPadding = PaddingValues(0.dp),
+                                    colors = ButtonDefaults.outlinedButtonColors(
+                                        contentColor = MaterialTheme.colorScheme.secondary,
+                                        containerColor = MaterialTheme.colorScheme.secondaryContainer
+                                    )
+                                ) {
+                                    Icon(
+                                        painterResource(R.drawable.ic_close),
+                                        contentDescription = "Close image",
+                                        tint = Color.Black,
+                                        modifier = Modifier.size(24.dp)
+                                    )
                                 }
-                            },
-                            content = {
-                                Icon(
-                                    painter = painterResource(R.drawable.ic_send),
-                                    contentDescription = stringResource(R.string.send)
+                            }
+                        }
+                    }
+
+
+
+                    MessageInputField(
+                        R.string.message,
+                        uiState.messageText,
+                        viewModel::onMessageTextChange,
+                        {
+                            if (viewModel.photoUri.value == null) {
+                                IconButton(
+                                    onClick = {
+                                        viewModel.onAddImageClick(launcher, focusManager)
+                                        coroutineScope.launch {
+                                            scrollToBottom()
+                                        }
+                                    },
+                                    content = {
+
+                                        Icon(
+                                            painter = painterResource(R.drawable.ic_add),
+                                            contentDescription = stringResource(R.string.send)
+                                        )
+                                    }
+
+
                                 )
                             }
-                        )
-                    },
-                    4,
-                    Modifier
-                        .padding(2.dp, 8.dp)
-                        .fillMaxWidth(),
-                    focusManager
-                )
+                        },
+                        {
+                            IconButton(
+                                onClick = {
+                                    coroutineScope.launch {
+                                        viewModel.onSendClick(chatId, focusManager)
+                                        scrollToBottom()
+                                    }
+                                },
+                                content = {
+                                    Icon(
+                                        painter = painterResource(R.drawable.ic_send),
+                                        contentDescription = stringResource(R.string.send)
+                                    )
+                                }
+                            )
+                        },
+                        4,
+                        Modifier
+                            .padding(2.dp, 8.dp)
+                            .fillMaxWidth(),
+                        focusManager
+                    )
+                }
+
 
             } else {
                 // Tasks Tab
@@ -428,6 +532,7 @@ fun MessagesScreen(
         }
 
     }
+
 }
 
 

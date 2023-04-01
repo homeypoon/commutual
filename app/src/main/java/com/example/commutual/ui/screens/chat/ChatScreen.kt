@@ -16,11 +16,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import com.example.commutual.R
 import com.example.commutual.common.composable.BasicToolbar
 import com.example.commutual.ui.screens.chat.ChatViewModel
 import com.example.commutual.ui.screens.item.ChatItem
 
+@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 @ExperimentalMaterialApi
 fun ChatScreen(
@@ -28,6 +30,8 @@ fun ChatScreen(
     modifier: Modifier = Modifier,
     viewModel: ChatViewModel = hiltViewModel()
 ) {
+
+
 
     val scrollState = rememberScrollState()
     val chatsWithUsers by viewModel.chatsWithUsers.collectAsState(emptyList())
@@ -49,10 +53,12 @@ fun ChatScreen(
                 .weight(1f, true)
         ) {
             items(chatsWithUsers) { (chat, partner) ->
+
+
                 Surface(modifier = Modifier.clickable {
                     viewModel.onChatClick(openScreen, chat)
                 }) {
-                    ChatItem(chat = chat, user = partner)
+                    ChatItem(user = partner)
                 }
             }
 

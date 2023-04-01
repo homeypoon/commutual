@@ -194,6 +194,7 @@ fun MessageInputField(
     @StringRes text: Int,
     value: String,
     onNewValue: (String) -> Unit,
+    leadingIcon: (@Composable () -> Unit),
     trailingIcon: (@Composable () -> Unit),
     maxLines: Int,
     modifier: Modifier = Modifier,
@@ -204,13 +205,16 @@ fun MessageInputField(
         textStyle = MaterialTheme.typography.bodyMedium,
         value = value,
         maxLines = maxLines,
-        onValueChange = { onNewValue(it) },
+        onValueChange = {
+            onNewValue(it)
+        },
         placeholder = {
             Text(
                 stringResource(text),
                 style = MaterialTheme.typography.bodyMedium
             )
         },
+        leadingIcon = leadingIcon,
         trailingIcon = trailingIcon,
         keyboardOptions = KeyboardOptions.Default.copy(
             keyboardType = KeyboardType.Text,

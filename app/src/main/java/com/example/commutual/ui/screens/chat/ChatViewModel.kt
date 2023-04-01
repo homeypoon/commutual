@@ -1,5 +1,3 @@
-
-
 package com.example.commutual.ui.screens.chat
 
 import com.example.commutual.CHAT_ID
@@ -23,9 +21,9 @@ sealed interface ChatUiState {
 class ChatViewModel @Inject constructor(
     logService: LogService,
     private val storageService: StorageService,
-) : CommutualViewModel(logService) {
 
-//    val chats: Flow<List<Chat>> = storageService.chats
+    ) : CommutualViewModel(logService) {
+
     val chatsWithUsers = storageService.chatsWithUsers
 
 

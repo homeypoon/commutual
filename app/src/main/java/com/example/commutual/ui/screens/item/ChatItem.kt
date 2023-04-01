@@ -11,14 +11,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.commutual.model.Chat
 import com.example.commutual.model.User
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatItem(
-    chat: Chat,
     user: User
 ) {
     Column {
@@ -34,6 +32,15 @@ fun ChatItem(
                     modifier = Modifier.padding(horizontal = 4.dp, vertical = 14.dp)
                 )
             },
+//            trailingContent = {
+//                Icon(
+//                    painter = painterResource(R.drawable.ic_circle),
+//                    tint = MaterialTheme.colorScheme.primaryContainer,
+//                    contentDescription = "Task in Progress Alert",
+//                )
+//
+//            }
+
         )
         Divider()
     }

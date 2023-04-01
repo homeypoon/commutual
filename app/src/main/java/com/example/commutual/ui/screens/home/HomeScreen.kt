@@ -44,7 +44,7 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel()
 ) {
 
-    val tasks by viewModel.upcomingUserTasks.collectAsStateWithLifecycle(emptyList())
+    val tasks by viewModel.currentUserTasks.collectAsStateWithLifecycle(emptyList())
     val upcomingTasks = tasks.filter { !it.showAttendance && !it.showCompletion }
     val inProgressTasks =
         tasks.filter { it.showAttendance && !it.showCompletion && (it.attendance[viewModel.currentUserId] != Task.ATTENDANCE_NO) }
@@ -91,9 +91,8 @@ fun HomeScreen(
                     title = stringResource(R.string.home)
                 )
 
-                if (inProgressTasks.isNotEmpty() || upcomingTasks.isNotEmpty()) {
-                    Spacer(modifier = Modifier.padding(vertical = 12.dp))
-                }
+                Spacer(modifier = Modifier.padding(bottom = 12.dp))
+
             }
 
             if (inProgressTasks.isNotEmpty()) {
@@ -118,7 +117,7 @@ fun HomeScreen(
                 item {
                     Divider(
                         modifier = Modifier
-                            .padding(top = 32.dp, bottom = 4.dp)
+                            .padding(top = 32.dp, bottom = 20.dp)
                     )
                 }
             }
@@ -150,7 +149,7 @@ fun HomeScreen(
                             textAlign = TextAlign.Center,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(vertical = 12.dp, horizontal = 18.dp),
+                                .padding(bottom = 10.dp)
                         )
 
                         Surface(

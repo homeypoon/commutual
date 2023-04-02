@@ -1,6 +1,5 @@
 package com.example.commutual.model
 
-import com.example.commutual.model.CategoryEnum
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentId
 

@@ -20,7 +20,7 @@ sealed interface ChatUiState {
 @HiltViewModel
 class ChatViewModel @Inject constructor(
     logService: LogService,
-    private val storageService: StorageService,
+    storageService: StorageService,
 
     ) : CommutualViewModel(logService) {
 

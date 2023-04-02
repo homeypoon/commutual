@@ -381,13 +381,11 @@ class StorageServiceImpl
 
         val membersId = mutableListOf(auth.currentUserId, postUserId)
 
-        val chat = currentChatCollection().whereIn(
+        return currentChatCollection().whereIn(
             MEMBERS_ID_FIELD,
             listOf(membersId, membersId.reversed())
         )
             .get().await().toObjects<Chat>().firstOrNull()
-
-        return chat
     }
 
     override suspend fun saveMessage(message: Message, chatId: String): String =

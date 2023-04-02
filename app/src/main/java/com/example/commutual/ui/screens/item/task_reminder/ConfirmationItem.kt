@@ -123,7 +123,7 @@ fun ConfirmationItem(
                         .padding(vertical = 4.dp, horizontal = 12.dp)
                         .fillMaxWidth()
                 ) {
-                    androidx.compose.material3.Button(
+                    Button(
                         onClick = onYesClick,
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -142,7 +142,7 @@ fun ConfirmationItem(
                         )
                     }
 
-                    androidx.compose.material3.Button(
+                    Button(
                         onClick = onNoClick,
                         shape = RoundedCornerShape(8.dp),
                         colors = ButtonDefaults.buttonColors(

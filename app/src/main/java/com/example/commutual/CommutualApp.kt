@@ -1,7 +1,7 @@
 package com.example.commutual
 
-import ChatScreen
-import SettingsScreen
+import com.example.commutual.ui.screens.chat.ChatScreen
+import com.example.commutual.ui.screens.settings.SettingsScreen
 import android.content.res.Resources
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*

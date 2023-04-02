@@ -13,7 +13,7 @@
     <!-- Login Screen -->
     <string name="log_in">Log In</string>
     <string name="register">Register</string>
-    <string name="dont_have_account">Don\'t have an account?</string>
+    <string name="don_t_have_account">Don\'t have an account?</string>
     <string name="forgot_password">Forgot password? Click to get recovery email</string>
     <string name="recovery_email_sent">Check your inbox for the recovery email!</string>
     <string name="empty_password_error">Please enter your password</string>
@@ -58,7 +58,7 @@
     <string name="category">Category</string>
     <string name="any">Any</string>
 
-    <string name="empty_string"></string>
+    <string name="empty_string" />
     <string name="empty_title_error">Please enter a title for your post!</string>
     <string name="empty_description_error">Please enter a description for your post!</string>
     <string name="empty_category_error">Please choose a category for your post!</string>
@@ -78,7 +78,6 @@
     <string name="message">Message</string>
     <string name="send">send</string>
     <string name="tasks">Tasks</string>
-    <string name="empty_message_error">Message is blank!</string>
 
 
     <string name="in_progress_tasks_sessions">Task Sessions In Progress</string>

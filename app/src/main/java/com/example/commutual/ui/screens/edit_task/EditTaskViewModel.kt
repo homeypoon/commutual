@@ -42,7 +42,6 @@ class EditTaskViewModel @Inject constructor(
 
 
     private var uiState = mutableStateOf(EditTaskUiState())
-        private set
 
     val startTime
         get() = uiState.value.startTime

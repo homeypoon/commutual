@@ -83,6 +83,5 @@ class AccountServiceImpl @Inject constructor(private val auth: FirebaseAuth, pri
   }
 
   companion object {
-    private const val LINK_ACCOUNT_TRACE = "linkAccount"
   }
 }

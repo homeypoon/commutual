@@ -24,9 +24,8 @@ class ExploreViewModel @Inject constructor(
     var posts = storageService.posts
 
     private var uiState = mutableStateOf(ExploreUiState())
-        private set
 
-     val searchText
+    val searchText
         get() = uiState.value.searchText
 
     val postsSearched

@@ -21,9 +21,7 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class AlarmReceiver(
-
-) : BroadcastReceiver() {
+class AlarmReceiver : BroadcastReceiver() {
 
     @Inject
     lateinit var storageService: StorageService
@@ -43,9 +41,8 @@ class AlarmReceiver(
         Log.d("before am task", "task:${intent?.getSerializableExtra("task")}")
 
         val task: Task = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent?.getSerializableExtra("task", Task::class.java) as? Task ?: Task()
+            intent?.getSerializableExtra("task", Task::class.java) ?: Task()
         } else {
-//            intent?.getSerializableExtra("task") as Task
             intent?.getSerializableExtra("task") as? Task ?: Task()
 
         }
@@ -110,7 +107,6 @@ class AlarmReceiver(
 
 
     companion object {
-        const val NONE = 0
         const val ATTENDANCE = 1
         const val COMPLETION = 2
     }

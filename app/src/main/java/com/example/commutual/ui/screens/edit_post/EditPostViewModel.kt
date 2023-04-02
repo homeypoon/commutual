@@ -25,7 +25,6 @@ class EditPostViewModel @Inject constructor(
     val post = mutableStateOf(Post())
 
     private var uiState = mutableStateOf(EditPostUiState())
-        private set
 
     private val title
         get() = uiState.value.postTitle

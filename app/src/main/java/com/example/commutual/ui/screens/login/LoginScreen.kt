@@ -68,7 +68,7 @@ fun LoginScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                stringResource(AppText.dont_have_account),
+                stringResource(AppText.don_t_have_account),
                 Modifier.accountText(), maxLines = 1,
                 fontSize = 16.sp)
             BasicTextButton(AppText.register, Modifier.textButton()) {

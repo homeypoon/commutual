@@ -1,4 +1,4 @@
-
+package com.example.commutual.ui.screens.settings
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,7 +17,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.commutual.R
 import com.example.commutual.common.composable.*
-import com.example.commutual.ui.screens.settings.SettingsViewModel
 import com.example.commutual.R.drawable as AppIcon
 import com.example.commutual.R.string as AppText
 

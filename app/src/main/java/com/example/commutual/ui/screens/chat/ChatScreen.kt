@@ -1,4 +1,4 @@
-
+package com.example.commutual.ui.screens.chat
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -8,7 +8,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -16,15 +15,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import com.example.commutual.R
 import com.example.commutual.common.composable.BasicToolbar
-import com.example.commutual.ui.screens.chat.ChatViewModel
 import com.example.commutual.ui.screens.item.ChatItem
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
-@ExperimentalMaterialApi
 fun ChatScreen(
     openScreen: (String) -> Unit,
     modifier: Modifier = Modifier,

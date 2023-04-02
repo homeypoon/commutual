@@ -4,7 +4,7 @@ package com.example.commutual
 
 const val HOME_SCREEN = "HomeScreen"
 const val EXPLORE_SCREEN = "ExploreScreen"
-const val CHAT_SCREEN = "ChatScreen"
+const val CHAT_SCREEN = "com.example.commutual.ui.screens.chat.ChatScreen"
 
 const val MESSAGES_SCREEN = "MessagesScreen"
 const val EDIT_TASK_SCREEN = "EditTaskScreen"
@@ -14,7 +14,7 @@ const val FILTERS_SCREEN = "FiltersScreen"
 
 const val EDIT_POST_SCREEN = "EditPostScreen"
 const val SPLASH_SCREEN = "SplashScreen"
-const val SETTINGS_SCREEN = "SettingsScreen"
+const val SETTINGS_SCREEN = "com.example.commutual.ui.screens.settings.SettingsScreen"
 const val EDIT_PROFILE_SCREEN = "EditProfileScreen"
 
 const val POST_DETAILS_SCREEN = "com.example.commutual.ui.screens.post_details.PostDetailsScreen"

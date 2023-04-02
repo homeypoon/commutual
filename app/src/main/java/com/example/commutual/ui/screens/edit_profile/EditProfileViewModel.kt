@@ -28,7 +28,6 @@ class EditProfileViewModel @Inject constructor(
     val user = mutableStateOf(User())
 
     private var uiState = mutableStateOf(EditProfileUiState())
-        private set
 
     private val username
         get() = uiState.value.username

@@ -17,47 +17,49 @@ import com.example.commutual.model.Post
 fun PostItem(
     post: Post,
 ) {
+    Column {
 
-    ListItem(
-        colors = ListItemDefaults.colors(
-            MaterialTheme.colorScheme.surface
-        ),
-        overlineText = {
-            Text(
-                stringResource(post.category.categoryStringRes),
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier
-                    .categoryChip(
-                        MaterialTheme.colorScheme.secondary
-                    )
-                    .padding(top = 2.dp)
-            )
-        },
-        headlineText = {
-            Text(
-                post.title,
-                style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier
-                    .padding(top = 4.dp, bottom = 2.dp)
-            )
-        },
-        supportingText = {
-            Column {
+        ListItem(
+            colors = ListItemDefaults.colors(
+                MaterialTheme.colorScheme.surface
+            ),
+            overlineText = {
                 Text(
-                    post.description,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
+                    stringResource(post.category.categoryStringRes),
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier
-                        .padding(bottom = 2.dp)
+                        .categoryChip(
+                            MaterialTheme.colorScheme.secondary
+                        )
+                        .padding(top = 2.dp)
                 )
+            },
+            headlineText = {
+                Text(
+                    post.title,
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier
+                        .padding(top = 4.dp, bottom = 2.dp)
+                )
+            },
+            supportingText = {
+                Column {
+                    Text(
+                        post.description,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier
+                            .padding(bottom = 2.dp)
+                    )
 
+                }
             }
-        }
-    )
-    Divider()
+        )
+        Divider()
+    }
 
 }

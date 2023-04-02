@@ -2,7 +2,6 @@ package com.example.commutual.ui.screens.item.message_type
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -42,36 +41,40 @@ fun MessageItem(
                     .fillMaxWidth()
             )
 
-            Surface(
+            androidx.compose.material3.Surface(
+                shadowElevation = 3.dp,
                 shape = MaterialTheme.shapes.small,
-                elevation = 1.dp,
-                color = MaterialTheme.colorScheme.surface,
-                modifier = Modifier
-                    .animateContentSize()
-                    .defaultMinSize(minWidth = 64.dp)
             ) {
-
-                Column(
+                androidx.compose.material3.Surface(
+                    shape = MaterialTheme.shapes.small,
+                    color = MaterialTheme.colorScheme.surface,
                     modifier = Modifier
-                    .padding(16.dp, 6.dp)
-
+                        .animateContentSize()
+                        .defaultMinSize(minWidth = 64.dp)
                 ) {
-                    Text(
-                        text = sender.username,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        style = MaterialTheme.typography.labelSmall
-                    )
+
+                    Column(
+                        modifier = Modifier
+                            .padding(16.dp, 6.dp)
+
+                    ) {
+                        Text(
+                            text = sender.username,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            style = MaterialTheme.typography.labelSmall
+                        )
 
 
-                    Text(
-                        text = message.text,
-                        modifier = Modifier.padding(all = 4.dp),
-                        maxLines = 10,
-                        overflow = TextOverflow.Ellipsis,
-                        style = MaterialTheme.typography.bodyMedium
-                    )
+                        Text(
+                            text = message.text,
+                            modifier = Modifier.padding(all = 4.dp),
+                            maxLines = 10,
+                            overflow = TextOverflow.Ellipsis,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+
                 }
-
             }
         }
     }

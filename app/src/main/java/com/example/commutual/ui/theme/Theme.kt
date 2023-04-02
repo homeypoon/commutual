@@ -1,11 +1,10 @@
-package com.example.compose
+package com.example.commutual.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import com.example.commutual.ui.theme.*
 
 
 private val LightColors = lightColorScheme(
@@ -91,3 +90,4 @@ fun CommutualTheme(
         shapes = Shapes
     )
 }
+

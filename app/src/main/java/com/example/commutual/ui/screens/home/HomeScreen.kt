@@ -14,6 +14,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -33,7 +34,6 @@ import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
-import com.github.mikephil.charting.utils.ColorTemplate
 
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
@@ -395,10 +395,16 @@ fun BarGraph(
         BarEntry(index.toFloat(), count.toFloat(), category)
     }
 
-
     val dataSet = BarDataSet(entries, "Task counts")
 
-    dataSet.setColors(ColorTemplate.VORDIPLOM_COLORS, 255)
+    val colorTemplate = intArrayOf(
+        Color(0xFFB8ECB4).toArgb(),
+        Color(0xFFA3E7D0).toArgb(),
+        Color(0xFF99C8E7).toArgb(),
+        Color(0xFFB1B1EE).toArgb(),
+    )
+
+    dataSet.setColors(colorTemplate, 255)
 
     val barChartData = BarData(dataSet)
 

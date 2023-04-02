@@ -3,10 +3,7 @@ package com.example.commutual.ui.screens.item.task_reminder
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,9 +45,10 @@ fun ConfirmationItem(
                 .fillMaxWidth()
         )
 
-        androidx.compose.material3.Surface(
+        Surface(
             onClick = onCLick,
-            shape = RoundedCornerShape(12.dp),
+            shape = RoundedCornerShape(8.dp),
+            shadowElevation = 4.dp,
             color = MaterialTheme.colorScheme.surfaceVariant,
             contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier

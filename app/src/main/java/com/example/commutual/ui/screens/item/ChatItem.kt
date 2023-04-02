@@ -31,15 +31,7 @@ fun ChatItem(
                     color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.padding(horizontal = 4.dp, vertical = 14.dp)
                 )
-            },
-//            trailingContent = {
-//                Icon(
-//                    painter = painterResource(R.drawable.ic_circle),
-//                    tint = MaterialTheme.colorScheme.primaryContainer,
-//                    contentDescription = "Task in Progress Alert",
-//                )
-//
-//            }
+            }
 
         )
         Divider()

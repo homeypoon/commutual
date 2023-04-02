@@ -270,7 +270,7 @@ fun MessagesScreen(
                                     )
                                 }
                                 // completion
-                                if (item.showCompletion && !(item.attendance[viewModel.currentUserId] == ATTENDANCE_NO) && (item.completion[viewModel.currentUserId] == COMPLETION_NOT_DONE)) {
+                                if (item.showCompletion && item.attendance[viewModel.currentUserId] != ATTENDANCE_NO && (item.completion[viewModel.currentUserId] == COMPLETION_NOT_DONE)) {
                                     ConfirmationItem(
                                         confirmationType = AlarmReceiver.COMPLETION,
                                         task = item,

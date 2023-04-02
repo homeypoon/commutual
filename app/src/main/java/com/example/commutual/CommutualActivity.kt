@@ -5,7 +5,7 @@ import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.compose.CommutualTheme
+import com.example.commutual.ui.theme.CommutualTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

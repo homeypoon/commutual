@@ -142,8 +142,10 @@ fun SearchField(
             keyboardType = KeyboardType.Text,
             autoCorrect = true,
             capitalization = capitalization,
-            imeAction = ImeAction.Search
-        )
+            imeAction = ImeAction.Search,
+        ),
+        keyboardActions = KeyboardActions(
+            onSearch = { onSearchClick(focusManager) }),
     )
 }
 

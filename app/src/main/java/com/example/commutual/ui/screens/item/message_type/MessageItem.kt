@@ -1,4 +1,4 @@
-package com.example.commutual.ui.screens.item
+package com.example.commutual.ui.screens.item.message_type
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.*

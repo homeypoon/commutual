@@ -1,5 +1,6 @@
 package com.example.commutual.model.service.impl
 
+import android.net.Uri
 import com.example.commutual.model.*
 import com.example.commutual.model.AlarmReceiver.Companion.ATTENDANCE
 import com.example.commutual.model.AlarmReceiver.Companion.COMPLETION
@@ -14,6 +15,7 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.snapshots
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.firestore.ktx.toObjects
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.*
@@ -22,7 +24,11 @@ import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class StorageServiceImpl
-@Inject constructor(private val firestore: FirebaseFirestore, private val auth: AccountService) :
+@Inject constructor(
+    private val firestore: FirebaseFirestore,
+    private val auth: AccountService,
+    private var storage: FirebaseStorage
+) :
     StorageService {
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -108,7 +114,6 @@ class StorageServiceImpl
         getUser(membersId.first { it != auth.currentUserId })
 
 
-
     private suspend fun getUserById(userId: String): User {
         val userDoc = currentUserCollection().document(userId).get().await()
         return userDoc.toObject<User>() ?: throw IllegalStateException("User $userId not found")
@@ -128,22 +133,6 @@ class StorageServiceImpl
         }
     }
 
-
-//    @OptIn(ExperimentalCoroutinesApi::class)
-//    override fun getTasks(chatId: String): Flow<Pair<List<Pair<Task, User>>, List<Pair<Task, User>>>> {
-//        return auth.currentUser.flatMapLatest {
-//            currentTaskCollection(chatId).orderBy(CREATE_TIMESTAMP_FIELD, Query.Direction.ASCENDING)
-//                .snapshots()
-//                .map { snapshot ->
-//                    val pairs = snapshot.toObjects<Task>().map { message ->
-//                        val sender = getUserById(message.creatorId)
-//                        message to sender
-//                    }
-//                    val (completedTasks, upcomingTasks) = pairs.partition { it.first.taskCompleted }
-//                    completedTasks to upcomingTasks
-//                }
-//        }
-//    }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun getAllTasksWithUsers(chatId: String): Flow<List<Pair<Task, User>>> {
@@ -396,7 +385,6 @@ class StorageServiceImpl
             MEMBERS_ID_FIELD,
             listOf(membersId, membersId.reversed())
         )
-//            .whereEqualTo(MEMBERS_ID_FIELD, mutableListOf(auth.currentUserId, postUserId))
             .get().await().toObjects<Chat>().firstOrNull()
 
         return chat
@@ -411,6 +399,27 @@ class StorageServiceImpl
             ).await().id
         }
 
+    override suspend fun saveImageMessage(message: Message, chatId: String, imageUri: Uri) {
+
+        val imageRef = storage.reference
+            .child("images/${chatId}/${message.messageId}/${imageUri.lastPathSegment}")
+
+        val uploadTask = imageRef.putFile(imageUri)
+        uploadTask.await()
+
+        val downloadUrl = imageRef.downloadUrl.await()
+
+        trace(SAVE_IMAGE_MESSAGE_TRACE) {
+
+            currentMessageCollection(chatId).add(
+                message.copy(
+                    photoUri = downloadUrl.toString(),
+                    timestamp = Timestamp.now(), senderId = auth.currentUserId
+                )
+            ).await().id
+        }
+
+    }
 
     override suspend fun updateMessage(message: Message, chatId: String): Unit =
         trace(UPDATE_MESSAGE_TRACE) {
@@ -423,21 +432,23 @@ class StorageServiceImpl
     }
 
 
-    // TODO: It's not recommended to delete on the client:
-    // https://firebase.google.com/docs/firestore/manage-data/delete-data#kotlin+ktx_2
     override suspend fun deleteAllForUser(userId: String) {
         val matchingPosts = currentPostCollection().get().await()
         matchingPosts.map { it.reference.delete().asDeferred() }.awaitAll()
     }
 
-    private fun currentUserCollection(): CollectionReference = firestore.collection(USER_COLLECTION)
 
-    private fun currentPostCollection(): CollectionReference = firestore.collection(POST_COLLECTION)
+    private fun currentUserCollection(): CollectionReference =
+        firestore.collection(USER_COLLECTION)
+
+    private fun currentPostCollection(): CollectionReference =
+        firestore.collection(POST_COLLECTION)
 
     private fun currentTaskCollection(chatId: String): CollectionReference =
         firestore.collection(CHAT_COLLECTION).document(chatId).collection(TASK_COLLECTION)
 
-    private fun currentChatCollection(): CollectionReference = firestore.collection(CHAT_COLLECTION)
+    private fun currentChatCollection(): CollectionReference =
+        firestore.collection(CHAT_COLLECTION)
 
     private fun currentMessageCollection(chatId: String): CollectionReference =
         firestore.collection(CHAT_COLLECTION).document(chatId).collection(MESSAGE_COLLECTION)
@@ -463,6 +474,8 @@ class StorageServiceImpl
         private const val SAVE_CHAT_TRACE = "saveChat"
         private const val UPDATE_CHAT_TRACE = "updateChat"
         private const val SAVE_MESSAGE_TRACE = "saveMessage"
+        private const val SAVE_IMAGE_MESSAGE_TRACE = "saveImageMessage"
+
         private const val UPDATE_MESSAGE_TRACE = "updateMessage"
 
         private const val HAS_PROFILE_TRACE = "hasProfile"

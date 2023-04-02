@@ -78,6 +78,8 @@
     <string name="message">Message</string>
     <string name="send">send</string>
     <string name="tasks">Tasks</string>
+    <string name="empty_message_error">Message is blank!</string>
+
 
     <string name="in_progress_tasks_sessions">Task Sessions In Progress</string>
 

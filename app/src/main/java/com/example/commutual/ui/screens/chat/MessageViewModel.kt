@@ -4,10 +4,10 @@ import android.net.Uri
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.focus.FocusManager
 import com.example.commutual.*
+import com.example.commutual.common.snackbar.SnackbarManager
 import com.example.commutual.model.*
 import com.example.commutual.model.Task.Companion.ATTENDANCE_NO
 import com.example.commutual.model.Task.Companion.ATTENDANCE_YES
@@ -35,7 +35,6 @@ class MessageViewModel @Inject constructor(
     val chat = mutableStateOf(Chat())
     val currentUserId = accountService.currentUserId
 
-    var photoUri: MutableState<Uri?> = mutableStateOf(null)
 
     val messageTabs = enumValues<MessageTabEnum>()
 //    var tasks = storageService.tasks
@@ -58,6 +57,9 @@ class MessageViewModel @Inject constructor(
     private val messageText
         get() = uiState.value.messageText
 
+    val photoUri
+        get() = uiState.value.photoUri
+
     private val partnerName
         get() = uiState.value.partner
 
@@ -77,12 +79,22 @@ class MessageViewModel @Inject constructor(
         }
     }
 
+    fun setPhotoUri(uri: Uri?) {
+        uiState.value = uiState.value.copy(photoUri = uri)
+    }
+
     fun setMessageTab(tabIndex: Int) {
         uiState.value = uiState.value.copy(tabIndex = tabIndex)
     }
 
-    fun resetMessageText() {
+    private fun resetMessageText() {
         uiState.value = uiState.value.copy(messageText = "")
+    }
+
+    fun resetImage() {
+        uiState.value = uiState.value.copy(
+            photoUri = null
+        )
     }
 
     fun onMessageTextChange(newValue: String) {
@@ -94,15 +106,11 @@ class MessageViewModel @Inject constructor(
         launcher: ManagedActivityResultLauncher<PickVisualMediaRequest, Uri?>,
         focusManager: FocusManager
     ) {
-
         // Close keyboard
         focusManager.clearFocus()
 
         launcher.launch(
             PickVisualMediaRequest(
-                //Here we request only photos. Change this to .ImageAndVideo if
-                //you want videos too.
-                //Or use .VideoOnly if you only want videos.
                 mediaType = ActivityResultContracts.PickVisualMedia.ImageOnly
             )
         )
@@ -116,7 +124,9 @@ class MessageViewModel @Inject constructor(
         // Close keyboard
         focusManager.clearFocus()
 
-        photoUri.value = null
+        uiState.value = uiState.value.copy(
+            photoUri = null
+        )
     }
 
     suspend fun onSendClick(chatId: String, focusManager: FocusManager) {
@@ -125,11 +135,39 @@ class MessageViewModel @Inject constructor(
         focusManager.clearFocus()
 
         // If the user didn't input text for the message, don't save or send the message
-        if (messageText.isBlank()) {
+        if (photoUri == null && messageText.isBlank()) {
+            SnackbarManager.showMessage(R.string.empty_description_error)
             return
         }
 
-        storageService.saveMessage(message.value, chatId)
+        if (photoUri == null) {
+            // message-only item
+            message.value = message.value.copy(
+                type = Message.TYPE_MESSAGE_ONLY,
+                photoUri = photoUri.toString()
+            )
+            resetMessageText()
+            storageService.saveMessage(message.value, chatId)
+        } else if (photoUri != null && messageText.isBlank()) {
+            // image-only item
+            message.value = message.value.copy(
+                type = Message.TYPE_IMAGE_ONLY,
+                photoUri = photoUri.toString()
+            )
+            storageService.saveImageMessage(message.value, chatId, photoUri!!)
+            resetImage()
+
+        } else if (photoUri != null && messageText.isNotBlank()) {
+            // image + message item
+            message.value = message.value.copy(
+                type = Message.TYPE_IMAGE_MESSAGE,
+                photoUri = photoUri.toString()
+            )
+            storageService.saveImageMessage(message.value, chatId, photoUri!!)
+            resetImage()
+            resetMessageText()
+        }
+
 
     }
 

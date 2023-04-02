@@ -1,7 +1,5 @@
 package com.example.commutual.ui.screens.chat
 
-import ConfirmationItem
-import ConfirmationResultItem
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -45,9 +43,13 @@ import com.example.commutual.model.Task.Companion.ATTENDANCE_YES
 import com.example.commutual.model.Task.Companion.COMPLETION_NO
 import com.example.commutual.model.Task.Companion.COMPLETION_NOT_DONE
 import com.example.commutual.model.Task.Companion.COMPLETION_YES
-import com.example.commutual.ui.screens.item.CreatedTaskItem
-import com.example.commutual.ui.screens.item.MessageItem
 import com.example.commutual.ui.screens.item.TaskItem
+import com.example.commutual.ui.screens.item.message_type.ImageItem
+import com.example.commutual.ui.screens.item.message_type.ImageMessageItem
+import com.example.commutual.ui.screens.item.message_type.MessageItem
+import com.example.commutual.ui.screens.item.task_reminder.ConfirmationItem
+import com.example.commutual.ui.screens.item.task_reminder.ConfirmationResultItem
+import com.example.commutual.ui.screens.item.task_reminder.CreatedTaskItem
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLifecycleComposeApi::class)
@@ -66,7 +68,7 @@ fun MessagesScreen(
 
     val launcher =
         rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-            viewModel.photoUri.value = uri
+            viewModel.setPhotoUri(uri)
         }
 
 
@@ -186,10 +188,27 @@ fun MessagesScreen(
 
                     if (messagesWithTasks.isNotEmpty()) {
                         items(messagesWithTasks) { (item, user) ->
+                            // if the item is a message, display message-only, image-only, and
+                            // message-image item accordingly
+
                             if (item is Message) {
-                                MessageItem(item, user)
-                                { timestamp -> FormatterClass.formatTimestamp(timestamp, true) }
+                                if (item.type == Message.TYPE_MESSAGE_ONLY) {
+                                    // message-only item
+                                    MessageItem(item, user)
+                                    { timestamp -> FormatterClass.formatTimestamp(timestamp, true) }
+                                } else if (item.type == Message.TYPE_IMAGE_ONLY) {
+                                    // image-only item
+                                    ImageItem(item, user)
+                                    { timestamp -> FormatterClass.formatTimestamp(timestamp, true) }
+                                } else if (item.type == Message.TYPE_IMAGE_MESSAGE) {
+                                    // image + message item
+                                    ImageMessageItem(item, user)
+                                    { timestamp -> FormatterClass.formatTimestamp(timestamp, true) }
+                                }
+
+
                             } else if (item is Task) {
+                                // if the item is a task, display the appropriate task-related item
 
                                 if (!item.showAttendance) {
                                     CreatedTaskItem(item, user, viewModel::onCreatedTaskCLicked)
@@ -311,7 +330,7 @@ fun MessagesScreen(
 
 
                 Column(modifier = Modifier.fillMaxWidth()) {
-                    if (viewModel.photoUri.value != null) {
+                    if (viewModel.photoUri != null) {
 
                         Divider(modifier = Modifier.padding(top = 2.dp, bottom = 10.dp))
 
@@ -328,7 +347,7 @@ fun MessagesScreen(
                             val painter = rememberAsyncImagePainter(
                                 ImageRequest
                                     .Builder(LocalContext.current)
-                                    .data(data = viewModel.photoUri.value)
+                                    .data(data = viewModel.photoUri)
                                     .build()
                             )
 
@@ -378,7 +397,7 @@ fun MessagesScreen(
                         uiState.messageText,
                         viewModel::onMessageTextChange,
                         {
-                            if (viewModel.photoUri.value == null) {
+                            if (viewModel.photoUri == null) {
                                 IconButton(
                                     onClick = {
                                         viewModel.onAddImageClick(launcher, focusManager)

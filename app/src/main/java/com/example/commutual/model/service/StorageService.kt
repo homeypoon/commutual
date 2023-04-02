@@ -2,6 +2,7 @@
 
 package com.example.commutual.model.service
 
+import android.net.Uri
 import com.example.commutual.model.*
 import kotlinx.coroutines.flow.Flow
 
@@ -63,10 +64,8 @@ interface StorageService {
 
   suspend fun saveMessage(message: Message, chatId: String): String
   suspend fun updateMessage(message: Message, chatId: String)
-
-  // return list of filtered posts based on interest
-
   suspend fun hasProfile(): Boolean
+  suspend fun saveImageMessage(message: Message, chatId: String, imageUri: Uri)
 
 
 }

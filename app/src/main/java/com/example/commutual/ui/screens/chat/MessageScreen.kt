@@ -161,7 +161,7 @@ fun MessagesScreen(
                         text = {
                             Text(
                                 text = stringResource(tab.tabStringRes),
-                                style = MaterialTheme.typography.headlineSmall,
+                                style = MaterialTheme.typography.headlineLarge,
                                 maxLines = 2,
                                 overflow = TextOverflow.Ellipsis
                             )
@@ -192,20 +192,23 @@ fun MessagesScreen(
                             // message-image item accordingly
 
                             if (item is Message) {
-                                if (item.type == Message.TYPE_MESSAGE_ONLY) {
-                                    // message-only item
-                                    MessageItem(item, user)
-                                    { timestamp -> FormatterClass.formatTimestamp(timestamp, true) }
-                                } else if (item.type == Message.TYPE_IMAGE_ONLY) {
-                                    // image-only item
-                                    ImageItem(item, user)
-                                    { timestamp -> FormatterClass.formatTimestamp(timestamp, true) }
-                                } else if (item.type == Message.TYPE_IMAGE_MESSAGE) {
-                                    // image + message item
-                                    ImageMessageItem(item, user)
-                                    { timestamp -> FormatterClass.formatTimestamp(timestamp, true) }
+                                when (item.type) {
+                                    Message.TYPE_MESSAGE_ONLY -> {
+                                        // message-only item
+                                        MessageItem(item, user)
+                                        { timestamp -> FormatterClass.formatTimestamp(timestamp, true) }
+                                    }
+                                    Message.TYPE_IMAGE_ONLY -> {
+                                        // image-only item
+                                        ImageItem(item, user)
+                                        { timestamp -> FormatterClass.formatTimestamp(timestamp, true) }
+                                    }
+                                    Message.TYPE_IMAGE_MESSAGE -> {
+                                        // image + message item
+                                        ImageMessageItem(item, user)
+                                        { timestamp -> FormatterClass.formatTimestamp(timestamp, true) }
+                                    }
                                 }
-
 
                             } else if (item is Task) {
                                 // if the item is a task, display the appropriate task-related item
@@ -362,7 +365,6 @@ fun MessagesScreen(
 
                             Box(
                                 contentAlignment = Alignment.TopEnd,
-//                                verticalAlignment = Alignment.Top,
                                 modifier = Modifier
                                     .size(120.dp, 150.dp)
                             ) {

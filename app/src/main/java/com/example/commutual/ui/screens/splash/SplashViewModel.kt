@@ -25,7 +25,11 @@ class SplashViewModel @Inject constructor(
         launchCatching { configurationService.fetchConfiguration() }
     }
 
-    fun onAppStart(openAndPopUp: (String, String) -> Unit, openScreen: (String) -> Unit, popUpScreen: () -> Unit,) {
+    fun onAppStart(
+        openAndPopUp: (String, String) -> Unit,
+        openScreen: (String) -> Unit,
+        popUpScreen: () -> Unit,
+    ) {
         showError.value = false
         if (accountService.hasUser) {
             launchCatching {

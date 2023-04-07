@@ -33,7 +33,7 @@ fun TaskItem(
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.categoryChip(
-                        MaterialTheme.colorScheme.secondary
+                        MaterialTheme.colorScheme.onSecondary
                     )
                 )
             }
@@ -50,7 +50,7 @@ fun TaskItem(
         },
         supportingText = {
             Column {
-                if (!task.details.isEmpty()) {
+                if (task.details.isNotEmpty()) {
                     Text(
                         task.details,
                         style = MaterialTheme.typography.bodyMedium,

@@ -4,7 +4,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.focus.FocusManager
 import com.example.commutual.R
 import com.example.commutual.common.snackbar.SnackbarManager
-import com.example.commutual.model.CategoryEnum
 import com.example.commutual.model.User
 import com.example.commutual.model.service.AccountService
 import com.example.commutual.model.service.LogService
@@ -21,9 +20,6 @@ class EditProfileViewModel @Inject constructor(
     private val accountService: AccountService
 
     ) : CommutualViewModel(logService = logService) {
-
-    val categoryList = enumValues<CategoryEnum>()
-
 
     val user = mutableStateOf(User())
 

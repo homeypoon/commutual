@@ -83,15 +83,16 @@ fun HomeScreen(
         LazyColumn(
             modifier = modifier
                 .padding(padding)
+                .background(MaterialTheme.colorScheme.background)
                 .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             item {
                 BasicToolbar(
                     title = stringResource(R.string.home)
                 )
 
-                Spacer(modifier = Modifier.padding(bottom = 12.dp))
+                Spacer(modifier = Modifier.padding(bottom = 16.dp))
 
             }
 

@@ -4,5 +4,6 @@
     <style name="Theme.Commutual" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorSecondary">@color/date_picker_header_color</item> <!-- date picker -->
         <item name="colorPrimary">@color/button_color</item> <!-- button text color -->
+        <item name="android:statusBarColor">@color/button_color</item>
     </style>
 </resources>

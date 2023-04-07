@@ -1,4 +1,6 @@
 package com.example.commutual.ui.screens.settings
+
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -34,14 +36,17 @@ fun SettingsScreen(
         modifier = modifier
             .fillMaxWidth()
             .fillMaxHeight()
-            .verticalScroll(rememberScrollState()),
+            .verticalScroll(rememberScrollState())
+            .background(MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         BasicToolbar(stringResource(R.string.settings))
 
-        Column(modifier = Modifier
-            .fillMaxWidth()
-            .padding(24.dp, 0.dp)) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(24.dp, 0.dp)
+        ) {
             SignOutCard { viewModel.onSignOutClick(restartApp) }
             DeleteMyAccountCard { viewModel.onDeleteMyAccountClick(restartApp) }
         }

@@ -1,7 +1,5 @@
 package com.example.commutual
 
-import com.example.commutual.ui.screens.chat.ChatScreen
-import com.example.commutual.ui.screens.settings.SettingsScreen
 import android.content.res.Resources
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
@@ -20,6 +18,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.commutual.common.composable.BottomNavigationComposable
 import com.example.commutual.common.snackbar.SnackbarManager
+import com.example.commutual.ui.screens.chat.ChatScreen
 import com.example.commutual.ui.screens.chat.MessagesScreen
 import com.example.commutual.ui.screens.edit_post.EditPostScreen
 import com.example.commutual.ui.screens.edit_profile.EditProfileScreen
@@ -30,6 +29,7 @@ import com.example.commutual.ui.screens.login.LoginScreen
 import com.example.commutual.ui.screens.post_details.PostDetailsScreen
 import com.example.commutual.ui.screens.profile.ProfileScreen
 import com.example.commutual.ui.screens.profile_post.ProfilePostScreen
+import com.example.commutual.ui.screens.settings.SettingsScreen
 import com.example.commutual.ui.screens.signup.SignUpScreen
 import com.example.commutual.ui.screens.splash.SplashScreen
 import kotlinx.coroutines.CoroutineScope
@@ -38,7 +38,10 @@ import kotlinx.coroutines.CoroutineScope
 fun CommutualApp() {
     val context = LocalContext.current
 
-    Surface(color = MaterialTheme.colors.background) {
+
+    Surface(
+        color = MaterialTheme.colors.background
+    ) {
         val appState = rememberAppState()
         val bottomNavState = rememberSaveable { (mutableStateOf(false)) }
 
@@ -47,6 +50,7 @@ fun CommutualApp() {
         LaunchedEffect(Unit) {
             appState.createNotificationChannel(context)
         }
+
 
         // Control bottomNav visibility
         when (navBackStackEntry?.destination?.route) {

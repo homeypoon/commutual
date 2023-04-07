@@ -5,7 +5,6 @@ import com.example.commutual.*
 import com.example.commutual.model.Post
 import com.example.commutual.model.User
 import com.example.commutual.model.service.AccountService
-import com.example.commutual.model.service.ConfigurationService
 import com.example.commutual.model.service.LogService
 import com.example.commutual.model.service.StorageService
 import com.example.commutual.ui.screens.CommutualViewModel
@@ -18,8 +17,7 @@ import javax.inject.Inject
 class ProfileViewModel @Inject constructor(
     logService: LogService,
     val storageService: StorageService,
-    val accountService: AccountService,
-    private val configurationService: ConfigurationService
+    val accountService: AccountService
 ) : CommutualViewModel(logService) {
 
     var uiState = mutableStateOf(ProfileUiState())

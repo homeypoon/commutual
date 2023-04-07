@@ -1,5 +1,6 @@
 package com.example.commutual.ui.screens.edit_profile
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -22,7 +24,6 @@ import com.example.commutual.common.composable.BasicField
 import com.example.commutual.common.composable.DescriptionField
 import com.example.commutual.common.ext.fieldModifier
 import com.example.commutual.common.ext.spacer
-import com.example.commutual.common.ext.toolbarActions
 import com.example.commutual.R.drawable as AppIcon
 import com.example.commutual.R.string as AppText
 
@@ -40,6 +41,7 @@ fun EditProfileScreen(
 
     Column(
         modifier = modifier
+            .background(MaterialTheme.colorScheme.background)
             .fillMaxWidth()
             .fillMaxHeight()
             .verticalScroll(rememberScrollState())
@@ -52,10 +54,8 @@ fun EditProfileScreen(
     ) {
         ActionToolbar(
             title = screenTitle,
-            modifier = Modifier.toolbarActions(),
-            endActionIcon = AppIcon.ic_check,
-            endAction = { viewModel.onDoneClick(popUpScreen, focusManager) }
-        )
+            endActionIcon = AppIcon.ic_check
+        ) { viewModel.onDoneClick(popUpScreen, focusManager) }
 
         Spacer(modifier = Modifier.spacer())
 

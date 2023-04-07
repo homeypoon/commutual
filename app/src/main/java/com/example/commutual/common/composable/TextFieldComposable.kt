@@ -2,8 +2,6 @@ package com.example.commutual.common.composable
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.focusable
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -222,59 +220,6 @@ fun MessageInputField(
             keyboardType = KeyboardType.Text,
             autoCorrect = true,
             capitalization = KeyboardCapitalization.Sentences,
-        )
-
-    )
-}
-
-@Composable
-fun RequestMessageField(
-    @StringRes text: Int,
-    value: String,
-    onNewValue: (String) -> Unit,
-    modifier: Modifier = Modifier,
-    capitalization: KeyboardCapitalization,
-    focusManager: FocusManager
-) {
-    OutlinedTextField(
-        modifier = modifier.height(180.dp),
-        value = value,
-        maxLines = 8,
-        onValueChange = { onNewValue(it) },
-        placeholder = { Text(stringResource(text)) },
-        keyboardOptions = KeyboardOptions.Default.copy(
-            keyboardType = KeyboardType.Text,
-            autoCorrect = true,
-            capitalization = capitalization,
-        )
-
-    )
-}
-
-@Composable
-fun EndField(
-    @StringRes text: Int,
-    value: String,
-    onNewValue: (String) -> Unit,
-    modifier: Modifier = Modifier,
-    capitalization: KeyboardCapitalization,
-    focusManager: FocusManager,
-    maxLines: Int = 1,
-) {
-    OutlinedTextField(
-        modifier = modifier.focusable(true),
-        value = value,
-        maxLines = maxLines,
-        onValueChange = { onNewValue(it) },
-        placeholder = { Text(stringResource(text)) },
-        keyboardOptions = KeyboardOptions.Default.copy(
-            keyboardType = KeyboardType.Text,
-            imeAction = ImeAction.Done,
-            autoCorrect = true,
-            capitalization = capitalization,
-        ),
-        keyboardActions = KeyboardActions(
-            onDone = { focusManager.clearFocus() }
         )
 
     )

@@ -8,7 +8,6 @@ import androidx.compose.runtime.mutableStateOf
 import com.example.commutual.*
 import com.example.commutual.common.ext.idFromParameter
 import com.example.commutual.model.Post
-import com.example.commutual.model.service.ConfigurationService
 import com.example.commutual.model.service.LogService
 import com.example.commutual.model.service.StorageService
 import com.example.commutual.ui.screens.CommutualViewModel
@@ -21,8 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfilePostViewModel @Inject constructor(
     logService: LogService,
-    private val storageService: StorageService,
-    private val configurationService: ConfigurationService
+    private val storageService: StorageService
 ) : CommutualViewModel(logService) {
 
     val post = mutableStateOf(Post())

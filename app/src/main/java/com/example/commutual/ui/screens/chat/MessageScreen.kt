@@ -3,6 +3,7 @@ package com.example.commutual.ui.screens.chat
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
@@ -130,6 +131,7 @@ fun MessagesScreen(
             modifier = Modifier
                 .padding(padding)
                 .fillMaxHeight()
+                .background(MaterialTheme.colorScheme.background)
                 .pointerInput(Unit) {
                     detectTapGestures(onTap = {
                         focusManager.clearFocus()
@@ -140,7 +142,7 @@ fun MessagesScreen(
                 title = {
                     Text(
                         uiState.partner.username,
-                        color = MaterialTheme.colorScheme.onSecondary,
+                        color = MaterialTheme.colorScheme.onSecondaryContainer,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         style = MaterialTheme.typography.displayLarge,
@@ -152,6 +154,9 @@ fun MessagesScreen(
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     MaterialTheme.colorScheme.secondary
                 ),
+            )
+            Divider(thickness = 2.dp,
+                color = MaterialTheme.colorScheme.onSecondary
             )
 
             TabRow(selectedTabIndex = viewModel.tabIndex) {

@@ -50,8 +50,8 @@
     <string name="start_chatting">Start Chatting</string>
     <string name="start_chatting_with">Start Chatting with %1$s!</string>
 
-    <!-- Create Post Screen -->
-<!--    <string name="create_post">Create New Post</string>-->
+    <string name="report_received">Report received! Thanks for letting us know!</string>
+
 
     <string name="post_title">Post Title</string>
     <string name="post_description">Post Description</string>
@@ -64,28 +64,25 @@
     <string name="empty_category_error">Please choose a category for your post!</string>
 
     <string name="task_empty_title_error">Please enter a title for your task!</string>
-    <string name="task_empty_description_error">Please enter a description for your task!</string>
     <string name="task_empty_category_error">Please choose a category for your task!</string>
 
     <string name="task_empty_date_error">Please choose a date for your task!</string>
     <string name="task_invalid_time">Invalid time! Please ensure the end time is after the start time!</string>
 
+
     <!-- Chat Screen -->
     <string name="chat">Chat</string>
-    <string name="chat_with">Chat with %1$s</string>
 
     <!-- Message Screen -->
     <string name="message">Message</string>
     <string name="send">send</string>
     <string name="tasks">Tasks</string>
 
-
     <string name="in_progress_tasks_sessions">Task Sessions In Progress</string>
-
     <string name="upcoming_tasks_sessions">Upcoming Task Sessions</string>
-    <string name="no_upcoming_tasks_sessions">No Upcoming Task Sessions</string>
-
     <string name="previous_tasks_sessions">Previous Task Sessions</string>
+
+    <string name="no_upcoming_tasks_sessions">No Upcoming Task Sessions</string>
 
     <string name="formatted_task">Task: %1$s</string>
     <string name="formatted_task_time">%1$s | %2$s -%3$s</string>
@@ -160,8 +157,6 @@
 
     <!-- Profile Post Screen -->
     <string name="my_post">My Post</string>
-    <string name="more">More</string>
-
 
     <!-- Settings Screen -->
     <string name="settings">Settings</string>

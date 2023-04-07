@@ -2,17 +2,24 @@
 
 package com.example.commutual.ui.screens.post_details
 
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.runtime.mutableStateOf
 import com.example.commutual.*
 import com.example.commutual.common.ext.idFromParameter
+import com.example.commutual.common.snackbar.SnackbarManager
 import com.example.commutual.model.Chat
 import com.example.commutual.model.Post
+import com.example.commutual.model.Report
 import com.example.commutual.model.User
 import com.example.commutual.model.service.AccountService
 import com.example.commutual.model.service.LogService
 import com.example.commutual.model.service.StorageService
 import com.example.commutual.ui.screens.CommutualViewModel
+import com.example.commutual.ui.screens.profile_post.ReportBottomSheetOption
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -29,11 +36,44 @@ class PostDetailsViewModel @Inject constructor(
     var uiState = mutableStateOf(PostDetailsUiState())
         private set
 
-    private val requestMessage
-        get() = uiState.value.requestMessage
-
     fun setShowRequestMatchCard(showRequestMatchCard: Boolean) {
         uiState.value = uiState.value.copy(showStartChattingCard = showRequestMatchCard)
+    }
+
+    @OptIn(ExperimentalMaterialApi::class)
+    fun onIconClick(coroutineScope: CoroutineScope, bottomSheetState: ModalBottomSheetState) {
+        coroutineScope.launch {
+            if (!bottomSheetState.isVisible)
+                bottomSheetState.show()
+        }
+    }
+
+    @OptIn(ExperimentalMaterialApi::class)
+    fun onReportPostClick(
+        coroutineScope: CoroutineScope,
+        bottomSheetState: ModalBottomSheetState,
+        reportSheetState: ModalBottomSheetState
+    ) {
+        coroutineScope.launch {
+            bottomSheetState.hide()
+            reportSheetState.show()
+        }
+    }
+
+    @OptIn(ExperimentalMaterialApi::class)
+    fun onReportItemPostClick(
+        coroutineScope: CoroutineScope,
+        reportBottomSheetOption: ReportBottomSheetOption,
+        reportSheetState: ModalBottomSheetState
+    ) {
+        coroutineScope.launch {
+            reportSheetState.hide()
+            storageService.saveReport(report = Report(
+                reportType = reportBottomSheetOption.title
+            ))
+        }
+
+        SnackbarManager.showMessage(R.string.report_received)
     }
 
     fun initialize(postId: String) {

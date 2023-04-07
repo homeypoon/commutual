@@ -2,6 +2,7 @@ package com.example.commutual.ui.screens.edit_task
 
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -34,7 +35,6 @@ import com.example.commutual.R
 import com.example.commutual.common.composable.*
 import com.example.commutual.common.ext.fieldModifier
 import com.example.commutual.common.ext.spacer
-import com.example.commutual.common.ext.toolbarActions
 import com.example.commutual.model.CategoryEnum
 import com.example.commutual.model.Task
 import java.util.*
@@ -78,6 +78,7 @@ fun EditTaskScreen(
         modifier = modifier
             .fillMaxWidth()
             .fillMaxHeight()
+            .background(MaterialTheme.colorScheme.background)
             .verticalScroll(scrollState)
             .pointerInput(Unit) {
                 detectTapGestures(onTap = {
@@ -89,19 +90,17 @@ fun EditTaskScreen(
         ) {
         ActionToolbar(
             title = screenTitle,
-            modifier = Modifier.toolbarActions(),
-            endActionIcon = AppIcon.ic_check,
-            endAction = {
-                viewModel.onDoneClick(
-                    chatId,
-                    popUpScreen,
-                    focusManager,
-                    context,
-                    showReminderNotification,
-                    setAlarmManager
-                )
-            }
-        )
+            endActionIcon = AppIcon.ic_check
+        ) {
+            viewModel.onDoneClick(
+                chatId,
+                popUpScreen,
+                focusManager,
+                context,
+                showReminderNotification,
+                setAlarmManager
+            )
+        }
 
         Spacer(modifier = Modifier.spacer())
 
@@ -164,16 +163,13 @@ fun EditTaskScreen(
             }
 
             CardEditors(
-                task = task,
                 startTime = viewModel.startTime,
                 endTime = viewModel.endTime,
                 year = viewModel.year,
                 month = viewModel.month,
                 day = viewModel.day,
-                context = context,
                 viewModel::showDatePicker,
                 viewModel::showTimePicker,
-                viewModel::onDateChange,
                 viewModel::onStartTimeChange,
                 viewModel::onEndTimeChange
             )
@@ -188,16 +184,13 @@ fun EditTaskScreen(
 @ExperimentalMaterialApi
 @Composable
 fun CardEditors(
-    task: Task,
     startTime: String,
     endTime: String,
     year: Int,
     month: Int,
     day: Int,
-    context: Context,
     showDatePicker: KFunction1<Context, Unit>,
     showTimePicker: (AppCompatActivity?, (Int, Int) -> Unit) -> Unit,
-    onDateChange: (Long) -> Unit,
     onStartTimeChange: (Int, Int) -> Unit,
     onEndTimeChange: (Int, Int) -> Unit
 ) {

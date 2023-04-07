@@ -58,18 +58,6 @@ class EditTaskViewModel @Inject constructor(
     val day
         get() = uiState.value.selectedDay
 
-    val startHour
-        get() = uiState.value.startHour
-
-    val startMin
-        get() = uiState.value.startMin
-
-    val endHour
-        get() = uiState.value.startHour
-
-    val endMin
-        get() = uiState.value.startMin
-
     val expandedDropDownMenu
         get() = uiState.value.expandedDropDownMenu
 
@@ -227,7 +215,6 @@ class EditTaskViewModel @Inject constructor(
             val editedTask = task.value
             if (editedTask.taskId.isBlank()) {
                 val taskId: String = storageService.saveTask(editedTask, chatId)
-                Log.d("taskId", "taskId$taskId")
 
                 storageService.updateCurrentUser(chatId, taskId)
                 task.value = task.value.copy(
@@ -247,8 +234,6 @@ class EditTaskViewModel @Inject constructor(
                 uiState.value.startMin,
                 0
             )
-
-            Log.d("calendar", "${attendanceCalendar.time}")
 
             val completionCalendar: Calendar = Calendar.getInstance()
             completionCalendar.set(
@@ -273,12 +258,6 @@ class EditTaskViewModel @Inject constructor(
 
             popUpScreen()
         }
-    }
-
-    companion object {
-        private const val DATE_FORMAT = "EEE, d MMM yyyy"
-        private const val REMINDER_NOTIFICATION_ID = 0
-
     }
 
 }

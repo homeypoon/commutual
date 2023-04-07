@@ -209,7 +209,6 @@ class StorageServiceImpl
                 )
             })
         }
-
     }
 
 
@@ -344,7 +343,7 @@ class StorageServiceImpl
     /**
      * Update task fields based on update type from the Alarm Manager
      */
-    override suspend fun updateTaskAM(task: Task, chatId: String, updateType: Int): Unit {
+    override suspend fun updateTaskAM(task: Task, chatId: String, updateType: Int) {
         trace(UPDATE_TASK_TRACE_AM) {
             when (updateType) {
                 ATTENDANCE -> {
@@ -424,6 +423,13 @@ class StorageServiceImpl
             currentMessageCollection(chatId).document(message.messageId).set(message).await()
         }
 
+    override suspend fun saveReport(report: Report): String =
+        trace(SAVE_POST_TRACE) {
+            currentReportCollection()
+                .add(report.copy(reportUserId = auth.currentUserId))
+                .await().id
+        }
+
     override suspend fun hasProfile(): Boolean = trace(HAS_PROFILE_TRACE) {
         val userRef = currentUserCollection().document(auth.currentUserId).get().await()
         return userRef.exists()
@@ -442,6 +448,9 @@ class StorageServiceImpl
     private fun currentPostCollection(): CollectionReference =
         firestore.collection(POST_COLLECTION)
 
+    private fun currentReportCollection(): CollectionReference =
+        firestore.collection(REPORT_COLLECTION)
+
     private fun currentTaskCollection(chatId: String): CollectionReference =
         firestore.collection(CHAT_COLLECTION).document(chatId).collection(TASK_COLLECTION)
 
@@ -455,6 +464,7 @@ class StorageServiceImpl
         private const val USER_COLLECTION = "users"
         private const val POST_COLLECTION = "posts"
         private const val TASK_COLLECTION = "tasks"
+        private const val REPORT_COLLECTION = "report"
 
         private const val SAVE_POST_TRACE = "savePost"
         private const val UPDATE_POST_TRACE = "updatePost"
@@ -463,27 +473,21 @@ class StorageServiceImpl
         private const val UPDATE_TASK_TRACE = "updateTaskType"
         private const val UPDATE_TASK_TRACE_AM = "updateTaskAM"
 
-
         private const val SAVE_USER_TRACE = "saveUser"
         private const val UPDATE_USER_TRACE = "updateUser"
         private const val UPDATE_CURRENT_USER_TRACE = "updateCurrentUser"
 
 
         private const val SAVE_CHAT_TRACE = "saveChat"
-        private const val UPDATE_CHAT_TRACE = "updateChat"
         private const val SAVE_MESSAGE_TRACE = "saveMessage"
         private const val SAVE_IMAGE_MESSAGE_TRACE = "saveImageMessage"
 
         private const val UPDATE_MESSAGE_TRACE = "updateMessage"
 
         private const val HAS_PROFILE_TRACE = "hasProfile"
-        private const val HAS_CHAT_TRACE = "hasChat"
 
         private const val USER_ID = "userId"
-        private const val MESSAGE_ID = "messageId"
-        private const val USERNAME = "username"
 
-        private const val INTERESTS_FIELD = "interests"
         private const val MEMBERS_ID_FIELD = "membersId"
         private const val TIMESTAMP_FIELD = "timestamp"
         private const val CREATE_TIMESTAMP_FIELD = "createTimestamp"

@@ -145,7 +145,7 @@ class CommutualAppState(
         attendanceIntent.putExtra("membersId", membersId)
         attendanceIntent.putExtra("chatId", chatId)
         attendanceIntent.putExtra("task", task as Serializable)
-        attendanceIntent.setAction((System.currentTimeMillis().toString()))
+        attendanceIntent.action = (System.currentTimeMillis().toString())
 
         val attendancePendingIntent =
             PendingIntent.getBroadcast(
@@ -168,7 +168,7 @@ class CommutualAppState(
         completionIntent.putExtra("membersId", membersId)
         completionIntent.putExtra("chatId", chatId)
         completionIntent.putExtra("task", task as Serializable)
-        completionIntent.setAction((System.currentTimeMillis().toString()))
+        completionIntent.action = (System.currentTimeMillis().toString())
 
         val completionPendingIntent =
             PendingIntent.getBroadcast(
@@ -181,20 +181,6 @@ class CommutualAppState(
             completionCalendar.timeInMillis,
             completionPendingIntent
         )
-
-        Log.d("com app state before am task", "task:$task")
-
-        val amRequestId = Random().nextInt(543254)
-        Log.d("com app state", "am requestid:$amRequestId")
-
-
-        Log.d(
-            "alarm attendanceCalendar",
-            "attendanceCalendar:${FormatterClass.formatDate(attendanceCalendar.timeInMillis)}"
-        )
-
-        Log.d("", "alarm set")
-
     }
 
 

@@ -28,7 +28,7 @@ class ExploreViewModel @Inject constructor(
     val searchText
         get() = uiState.value.searchText
 
-    val postsSearched
+    private val postsSearched
         get() = uiState.value.postsSearched
 
     val showFiltersDialog
@@ -39,9 +39,6 @@ class ExploreViewModel @Inject constructor(
 
     val filterChipCategory
         get() = uiState.value.filterChipCategory
-
-    val expandedDropDownMenu
-        get() = uiState.value.expandedDropDownMenu
 
     val showProgressIndicator
         get() = uiState.value.showProgressIndicator

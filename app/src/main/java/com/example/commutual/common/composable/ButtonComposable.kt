@@ -2,19 +2,37 @@ package com.example.commutual.common.composable
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
 fun BasicTextButton(@StringRes text: Int, modifier: Modifier, action: () -> Unit) {
-    TextButton(onClick = action, modifier = modifier) { Text(text = stringResource(text)) }
+    TextButton(onClick = action, modifier = modifier) {
+        Text(
+
+        text = AnnotatedString(
+            text = stringResource(text),
+            SpanStyle(
+                textDecoration = TextDecoration.Underline,
+                color = MaterialTheme.colorScheme.inversePrimary
+            )
+        ),
+        color = MaterialTheme.colorScheme.primary,
+        style = MaterialTheme.typography.labelMedium,
+
+        )
+    }
 }
 
 @Composable
@@ -33,24 +51,6 @@ fun BasicButton(@StringRes text: Int, modifier: Modifier, onClick: () -> Unit) {
             fontSize = 16.sp,
             letterSpacing = 1.5.sp,
             style = MaterialTheme.typography.displaySmall
-        )
-    }
-}
-
-@Composable
-fun BasicIconButton(
-    imageVector: ImageVector,
-    modifier: Modifier,
-    onIconClick: () -> Unit,
-    @StringRes contentDescription: Int
-) {
-    IconButton(
-        modifier = Modifier.size(24.dp),
-        onClick = onIconClick
-    ) {
-        Icon(
-            imageVector = imageVector,
-            contentDescription = stringResource(contentDescription)
         )
     }
 }

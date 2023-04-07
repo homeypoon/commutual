@@ -30,7 +30,7 @@ fun PostItem(
                     color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier
                         .categoryChip(
-                            MaterialTheme.colorScheme.secondary
+                            MaterialTheme.colorScheme.onSecondary
                         )
                         .padding(top = 2.dp)
                 )

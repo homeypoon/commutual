@@ -1,5 +1,6 @@
 package com.example.commutual.ui.screens.explore
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
@@ -32,6 +33,7 @@ import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.commutual.R
 import com.example.commutual.common.composable.BasicToolbar
+import com.example.commutual.common.composable.DialogCancelButton
 import com.example.commutual.common.composable.DialogConfirmButton
 import com.example.commutual.common.composable.SearchField
 import com.example.commutual.model.CategoryEnum
@@ -41,7 +43,6 @@ import com.example.commutual.ui.screens.item.PostItem
 @Composable
 fun ExploreScreen(
     openScreen: (String) -> Unit,
-    modifier: Modifier = Modifier,
     viewModel: ExploreViewModel = hiltViewModel()
 ) {
 
@@ -59,6 +60,7 @@ fun ExploreScreen(
 
     Column(
         modifier = Modifier
+            .background(MaterialTheme.colorScheme.background)
             .fillMaxWidth()
             .fillMaxHeight()
             .verticalScroll(scrollState)
@@ -203,7 +205,7 @@ fun FullScreenDialog(
                             ) {
                                 RadioButton(
                                     selected = (category == viewModel.selectedCategory),
-                                    onClick = null // null recommended for accessibility with screenreaders
+                                    onClick = null
                                 )
                                 Text(
                                     text = stringResource(category.categoryStringRes),
@@ -228,6 +230,13 @@ fun FullScreenDialog(
                 }
 
             },
+            dismissButton = {
+                DialogCancelButton(R.string.cancel,
+                    action = {
+                        viewModel.setShowFiltersDialog(false)
+                    }
+                )
+            },
             confirmButton = {
                 DialogConfirmButton(R.string.apply_filters,
                     action = {
@@ -236,6 +245,7 @@ fun FullScreenDialog(
                 )
             },
             onDismissRequest = { viewModel.setShowFiltersDialog(false) },
+            containerColor = MaterialTheme.colorScheme.background
         )
 
     }

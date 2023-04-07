@@ -61,22 +61,12 @@ class AlarmReceiver : BroadcastReceiver() {
                         storageService.incrementTasksScheduled(membersId)
                         storageService.incrementCategoryCount(membersId, task.category)
                     }
-
-                    Log.d("attendance alarm r task", "chatid: $chatId")
-
-                    Log.d("attendance alarm r task", "task sent")
                 }
             }
         } else if (alarmType == COMPLETION) {
-            Log.d("comple. alarm r task", "type:$alarmType")
-
             if (chatId != null) {
                 CoroutineScope(Dispatchers.Default).launch {
                     storageService.updateTaskAM(task, chatId, COMPLETION)
-
-                    Log.d("comple. alarm r task", "chatid: $chatId")
-
-                    Log.d("comple. alarm r task", "task sent")
                 }
 
             }

@@ -6,12 +6,11 @@ val md_theme_light_onPrimary = Color(0xFFFFFFFF)
 val md_theme_light_primaryContainer = Color(0xFFB5EBFF)
 val md_theme_light_onPrimaryContainer = Color(0xFF001F28)
 
-//val md_theme_light_secondary = Color(0xFF6F9982)
-val md_theme_light_secondary = Color(0xFF4C626A)
+val md_theme_light_secondary = Color(0xFFF7FBFF)
 
-val md_theme_light_onSecondary = Color(0xFFFFFFFF)
+val md_theme_light_onSecondary = Color(0xFF5B707C)
 val md_theme_light_secondaryContainer = Color(0xFFCFE6F0)
-val md_theme_light_onSecondaryContainer = Color(0xFF071E26)
+val md_theme_light_onSecondaryContainer = Color(0xFF40535A)
 
 val md_theme_light_tertiary = Color(0xFF63668D)
 //val md_theme_light_tertiary = Color(0xFF597E5B)
@@ -23,12 +22,13 @@ val md_theme_light_error = Color(0xFFBA1A1A)
 val md_theme_light_errorContainer = Color(0xFFF7E3E1)
 val md_theme_light_onError = Color(0xFFF2F2F7)
 val md_theme_light_onErrorContainer = Color(0xFF410002)
-val md_theme_light_background = Color(0xFFF7F9FC)
+
+val md_theme_light_background = Color(0xFFF7FAFC)
 val md_theme_light_onBackground = Color(0xFF191C1D)
 
 
 // message & task item surface
-val md_theme_light_surface = Color(0xFFFBFCFF)
+val md_theme_light_surface = Color(0xFFF2F8FF)
 val md_theme_light_onSurface = Color(0xFF191C1D)
 
 // graph surface

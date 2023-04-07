@@ -1,5 +1,6 @@
 package com.example.commutual.ui.screens.profile_post
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -33,18 +34,15 @@ fun ProfilePostScreen(
 ) {
 
     val post by viewModel.post
-//    val posts = viewModel.posts.collectAsStateWithLifecycle(emptyList())
-//    val user by posts
 
     val bottomSheetState =
         rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
 
     val bottomSheetOptions = listOf(
-        PostBottomSheetOption.Edit,
-        PostBottomSheetOption.Delete
+        ProfilePostBottomSheetOption.Edit,
+        ProfilePostBottomSheetOption.Delete
     )
-
     ModalBottomSheetLayout(
         sheetState = bottomSheetState,
         sheetContent = {
@@ -52,10 +50,10 @@ fun ProfilePostScreen(
                 items(bottomSheetOptions) {
                     Surface(modifier = Modifier.clickable {
                         when (it) {
-                            PostBottomSheetOption.Edit -> viewModel.onEditPostClick(
+                            ProfilePostBottomSheetOption.Edit -> viewModel.onEditPostClick(
                                 openScreen, post, coroutineScope, bottomSheetState
                             )
-                            PostBottomSheetOption.Delete -> viewModel.onDeletePostClick(
+                            ProfilePostBottomSheetOption.Delete -> viewModel.onDeletePostClick(
                                 popUpScreen, post, coroutineScope, bottomSheetState
                             )
                         }
@@ -72,12 +70,12 @@ fun ProfilePostScreen(
             modifier = modifier
                 .fillMaxWidth()
                 .fillMaxHeight()
+                .background(MaterialTheme.colorScheme.background)
         ) {
             ActionToolbar(
                 stringResource(R.string.my_post),
-                endActionIcon = R.drawable.ic_vertical_dots,
-                endAction = { viewModel.onIconClick(coroutineScope, bottomSheetState) }
-            )
+                endActionIcon = R.drawable.ic_vertical_dots
+            ) { viewModel.onIconClick(coroutineScope, bottomSheetState) }
             Column(
                 modifier = Modifier
                     .fillMaxWidth()

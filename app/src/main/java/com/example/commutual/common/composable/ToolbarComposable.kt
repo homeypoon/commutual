@@ -4,14 +4,11 @@ import androidx.annotation.DrawableRes
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
-import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -20,7 +17,7 @@ fun BasicToolbar(title: String) {
         title = {
             Text(
                 title,
-                color = MaterialTheme.colorScheme.onSecondary,
+                color = MaterialTheme.colorScheme.onSecondaryContainer,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.displayLarge
@@ -30,6 +27,8 @@ fun BasicToolbar(title: String) {
             MaterialTheme.colorScheme.secondary
         ),
     )
+    Divider(thickness = 2.dp,
+        color = MaterialTheme.colorScheme.onSecondary)
 }
 
 
@@ -38,14 +37,13 @@ fun BasicToolbar(title: String) {
 fun ActionToolbar(
     title: String,
     @DrawableRes endActionIcon: Int,
-    modifier: Modifier = Modifier,
     endAction: () -> Unit
 ) {
     CenterAlignedTopAppBar(
         title = {
             Text(
                 title,
-                color = MaterialTheme.colorScheme.onSecondary,
+                color = MaterialTheme.colorScheme.onSecondaryContainer,
                 style = MaterialTheme.typography.displayLarge,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
@@ -63,5 +61,9 @@ fun ActionToolbar(
                 )
             }
         }
+    )
+
+    Divider(thickness = 2.dp,
+        color = MaterialTheme.colorScheme.onSecondary
     )
 }

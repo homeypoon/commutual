@@ -1,5 +1,6 @@
 package com.example.commutual.ui.screens.edit_post
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -32,7 +33,6 @@ import com.example.commutual.common.composable.DescriptionField
 import com.example.commutual.common.composable.DropDownField
 import com.example.commutual.common.ext.fieldModifier
 import com.example.commutual.common.ext.spacer
-import com.example.commutual.common.ext.toolbarActions
 import com.example.commutual.model.CategoryEnum
 import com.example.commutual.R.drawable as AppIcon
 import com.example.commutual.R.string as AppText
@@ -66,6 +66,7 @@ fun EditPostScreen(
         modifier = modifier
             .fillMaxWidth()
             .fillMaxHeight()
+            .background(MaterialTheme.colorScheme.background)
             .verticalScroll(scrollState)
             .pointerInput(Unit) {
                 detectTapGestures(onTap = {
@@ -77,10 +78,8 @@ fun EditPostScreen(
         ) {
         ActionToolbar(
             title = screenTitle,
-            modifier = Modifier.toolbarActions(),
-            endActionIcon = AppIcon.ic_check,
-            endAction = { viewModel.onDoneClick(popUpScreen, focusManager) }
-        )
+            endActionIcon = AppIcon.ic_check
+        ) { viewModel.onDoneClick(popUpScreen, focusManager) }
 
         Spacer(modifier = Modifier.spacer())
 

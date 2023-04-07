@@ -1,5 +1,6 @@
 package com.example.commutual.ui.screens.profile
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -57,6 +58,7 @@ fun ProfileScreen(
         modifier = Modifier
             .fillMaxHeight()
             .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.background)
     ) {
         if (userId != TASK_DEFAULT_ID) {
             BasicToolbar(
@@ -65,10 +67,8 @@ fun ProfileScreen(
         } else {
             ActionToolbar(
                 title = stringResource(AppText.profile),
-                endActionIcon = R.drawable.ic_settings,
-                endAction = { viewModel.onSettingsClick(openScreen) },
-                modifier = modifier
-            )
+                endActionIcon = R.drawable.ic_settings
+            ) { viewModel.onSettingsClick(openScreen) }
         }
 
         LazyColumn(
@@ -86,7 +86,7 @@ fun ProfileScreen(
 
                     Text(
                         text = user.username,
-                        style = MaterialTheme.typography.displayLarge,
+                        style = MaterialTheme.typography.displayMedium,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth()
                     )

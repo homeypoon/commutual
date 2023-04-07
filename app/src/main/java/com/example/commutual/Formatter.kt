@@ -24,19 +24,6 @@ class FormatterClass {
             return timeFormatter.format(timestamp.toDate())
         }
 
-
-        fun formatDate(timestamp: Long): String {
-
-            val timeFormatter = SimpleDateFormat(
-                "MMM d yyyy",
-                Locale.getDefault()
-            ).apply {
-                timeZone = TimeZone.getTimeZone("UTC")
-            }
-
-            return timeFormatter.format(timestamp)
-        }
-
         fun formatDate(
             selectedYear: Int, selectedMonth: Int, selectedDay: Int,
         ): String {

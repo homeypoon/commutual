@@ -49,15 +49,6 @@ class AccountServiceImpl @Inject constructor(private val auth: FirebaseAuth, pri
       awaitClose { auth.removeAuthStateListener(listener) }
     }
 
-//    get() = callbackFlow {
-//      val listener =
-//        FirebaseAuth.AuthStateListener { auth ->
-//          this.trySend(auth.currentUser?.let { User(it.uid) } ?: User())
-//        }
-//      auth.addAuthStateListener(listener)
-//      awaitClose { auth.removeAuthStateListener(listener) }
-//    }
-
   override suspend fun sendRecoveryEmail(email: String) {
     auth.sendPasswordResetEmail(email).await()
   }
@@ -82,6 +73,4 @@ class AccountServiceImpl @Inject constructor(private val auth: FirebaseAuth, pri
     auth.signOut()
   }
 
-  companion object {
-  }
 }

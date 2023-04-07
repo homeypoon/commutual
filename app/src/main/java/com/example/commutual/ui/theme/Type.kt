@@ -20,17 +20,17 @@ val OpenSans = FontFamily(
 
 // Set of Material typography styles to start with
 val Typography = Typography(
-    // Top bar title, Username on profile page
+    // Top bar title,
     displayLarge = TextStyle(
         fontFamily = OpenSans,
         fontWeight = FontWeight.Bold,
         fontSize = 28.sp
     ),
-    // None in use
+    // Username on profile page + Post details
     displayMedium = TextStyle(
         fontFamily = OpenSans,
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 22.sp
+        fontWeight = FontWeight.Bold,
+        fontSize = 26.sp
     ),
     // Extended FAB text, basic buttons
     displaySmall = TextStyle(
@@ -106,19 +106,4 @@ val Typography = Typography(
         fontWeight = FontWeight.Light,
         fontSize = 14.sp
     ),
-    // Buttons
-//    displayMedium = TextStyle(
-//        fontFamily = OpenSans,
-//        fontWeight = FontWeight.Bold,
-//        fontSize = 16.sp
-//    ),
-
-    /* Other default text styles to override
-
-    caption = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 12.sp
-    )
-    */
 )

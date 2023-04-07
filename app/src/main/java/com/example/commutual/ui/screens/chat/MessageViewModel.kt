@@ -60,10 +60,6 @@ class MessageViewModel @Inject constructor(
     val photoUri
         get() = uiState.value.photoUri
 
-    private val partnerName
-        get() = uiState.value.partner
-
-
     fun getSender(chatId: String) {
         launchCatching {
 
@@ -91,7 +87,7 @@ class MessageViewModel @Inject constructor(
         uiState.value = uiState.value.copy(messageText = "")
     }
 
-    fun resetImage() {
+    private fun resetImage() {
         uiState.value = uiState.value.copy(
             photoUri = null
         )

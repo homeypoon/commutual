@@ -9,12 +9,14 @@ import com.example.commutual.ui.theme.CommutualTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-    class CommutualActivity : AppCompatActivity() {
+class CommutualActivity : AppCompatActivity() {
 
-        override fun onCreate(savedInstanceState: Bundle?) {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
-            CommutualTheme{
+            CommutualTheme {
                 CommutualApp()
             }
 

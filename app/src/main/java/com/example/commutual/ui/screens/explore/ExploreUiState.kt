@@ -1,3 +1,8 @@
+/**
+ * This file contains the ExploreUiState data class.
+ * It is used to represent the state of the ExploreScreen in the UI.
+ */
+
 package com.example.commutual.ui.screens.explore
 
 import com.example.commutual.model.CategoryEnum

@@ -1,3 +1,8 @@
+/**
+ * This file contains the ProfileUiState data class.
+ * It is used to represent the state of the ProfileScreen in the UI.
+ */
+
 package com.example.commutual.ui.screens.profile
 
 data class ProfileUiState(

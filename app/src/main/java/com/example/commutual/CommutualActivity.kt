@@ -3,8 +3,7 @@ package com.example.commutual
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.commutual.ui.theme.CommutualTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -13,6 +12,7 @@ class CommutualActivity : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
 
         setContent {
@@ -21,13 +21,5 @@ class CommutualActivity : AppCompatActivity() {
             }
 
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    CommutualTheme {
-//        CommutualApp()
     }
 }

@@ -1,3 +1,8 @@
+/**
+ * This file contains the PostDetailsUiState data class.
+ * It is used to represent the state of the PostDetailsScreen in the UI.
+ */
+
 package com.example.commutual.ui.screens.post_details
 
 import androidx.annotation.StringRes

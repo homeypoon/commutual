@@ -1,3 +1,8 @@
+/**
+ * This file contains the MessageUiState data class.
+ * It is used to represent the state of the MessageScreen in the UI.
+ */
+
 package com.example.commutual.ui.screens.chat
 
 import android.net.Uri

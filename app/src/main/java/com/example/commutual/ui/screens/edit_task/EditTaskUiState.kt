@@ -1,3 +1,8 @@
+/**
+ * This file contains the EditTaskUiState data class.
+ * It is used to represent the state of the EditTaskScreen in the UI.
+ */
+
 package com.example.commutual.ui.screens.edit_task
 
 import com.example.commutual.model.Task

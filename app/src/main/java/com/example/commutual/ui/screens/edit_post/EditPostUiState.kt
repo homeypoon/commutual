@@ -1,3 +1,8 @@
+/**
+ * This file contains the EditPostUiState data class.
+ * It is used to represent the state of the EditPostScreen in the UI.
+ */
+
 package com.example.commutual.ui.screens.edit_post
 
 import com.example.commutual.model.CategoryEnum

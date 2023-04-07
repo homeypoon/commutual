@@ -95,19 +95,19 @@ fun PostDetailsScreen(
                         androidx.compose.material.Surface(modifier = Modifier.clickable {
                             when (it) {
                                 ReportBottomSheetOption.Spam -> viewModel.onReportItemPostClick(
-                                    coroutineScope, it, reportBottomSheetState
+                                    coroutineScope, it, reportBottomSheetState, user
                                 )
                                 ReportBottomSheetOption.Nudity -> viewModel.onReportItemPostClick(
-                                    coroutineScope, it, reportBottomSheetState
+                                    coroutineScope, it, reportBottomSheetState, user
                                 )
                                 ReportBottomSheetOption.Hate -> viewModel.onReportItemPostClick(
-                                    coroutineScope, it, reportBottomSheetState
+                                    coroutineScope, it, reportBottomSheetState, user
                                 )
                                 ReportBottomSheetOption.FalseInformation -> viewModel.onReportItemPostClick(
-                                    coroutineScope, it, reportBottomSheetState
+                                    coroutineScope, it, reportBottomSheetState, user
                                 )
                                 ReportBottomSheetOption.Scam -> viewModel.onReportItemPostClick(
-                                    coroutineScope, it, reportBottomSheetState
+                                    coroutineScope, it, reportBottomSheetState, user
                                 )
                             }
                         }) {
@@ -126,7 +126,7 @@ fun PostDetailsScreen(
                     .verticalScroll(scrollState)
             ) {
                 ActionToolbar(
-                    stringResource(R.string.my_post),
+                    stringResource(R.string.post_details),
                     endActionIcon = R.drawable.ic_vertical_dots
                 ) { viewModel.onIconClick(coroutineScope, postBottomSheetState) }
 

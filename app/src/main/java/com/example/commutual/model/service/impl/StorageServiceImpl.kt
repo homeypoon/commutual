@@ -426,7 +426,7 @@ class StorageServiceImpl
     override suspend fun saveReport(report: Report): String =
         trace(SAVE_POST_TRACE) {
             currentReportCollection()
-                .add(report.copy(reportUserId = auth.currentUserId))
+                .add(report.copy(reporterUserId = auth.currentUserId))
                 .await().id
         }
 
@@ -463,8 +463,10 @@ class StorageServiceImpl
     companion object {
         private const val USER_COLLECTION = "users"
         private const val POST_COLLECTION = "posts"
+        private const val REPORT_COLLECTION = "reports"
         private const val TASK_COLLECTION = "tasks"
-        private const val REPORT_COLLECTION = "report"
+        private const val CHAT_COLLECTION = "chats"
+        private const val MESSAGE_COLLECTION = "messages"
 
         private const val SAVE_POST_TRACE = "savePost"
         private const val UPDATE_POST_TRACE = "updatePost"
@@ -492,11 +494,6 @@ class StorageServiceImpl
         private const val TIMESTAMP_FIELD = "timestamp"
         private const val CREATE_TIMESTAMP_FIELD = "createTimestamp"
         private const val COMPLETED_FIELD = "taskCompleted"
-
-
-        private const val CHAT_COLLECTION = "chats"
-
-        private const val MESSAGE_COLLECTION = "messages"
     }
 
 }

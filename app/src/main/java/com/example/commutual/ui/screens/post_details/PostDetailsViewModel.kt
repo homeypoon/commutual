@@ -64,12 +64,14 @@ class PostDetailsViewModel @Inject constructor(
     fun onReportItemPostClick(
         coroutineScope: CoroutineScope,
         reportBottomSheetOption: ReportBottomSheetOption,
-        reportSheetState: ModalBottomSheetState
+        reportSheetState: ModalBottomSheetState,
+        reportedUser: User
     ) {
         coroutineScope.launch {
             reportSheetState.hide()
             storageService.saveReport(report = Report(
-                reportType = reportBottomSheetOption.title
+                reportType = reportBottomSheetOption.title,
+                reportedUserId = reportedUser.userId
             ))
         }
 
@@ -142,7 +144,6 @@ class PostDetailsViewModel @Inject constructor(
             val chatId = storageService.saveChat(chat.value)
             openScreen("$MESSAGES_SCREEN?$CHAT_ID=$chatId")
         }
-
 
     }
 }

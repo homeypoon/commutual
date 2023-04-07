@@ -160,8 +160,6 @@ fun PostDetailsScreen(
 
                     }
 
-
-
                     Surface(
                         shape = RoundedCornerShape(10.dp),
                         color = MaterialTheme.colorScheme.surfaceVariant,

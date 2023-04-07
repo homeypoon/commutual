@@ -4,6 +4,8 @@ import android.net.Uri
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.focus.FocusManager
 import com.example.commutual.*
@@ -17,8 +19,11 @@ import com.example.commutual.model.service.AccountService
 import com.example.commutual.model.service.LogService
 import com.example.commutual.model.service.StorageService
 import com.example.commutual.ui.screens.CommutualViewModel
+import com.example.commutual.ui.screens.profile_post.ReportBottomSheetOption
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -37,16 +42,6 @@ class MessageViewModel @Inject constructor(
 
 
     val messageTabs = enumValues<MessageTabEnum>()
-//    var tasks = storageService.tasks
-
-
-    fun getMessagesAndTasksWithUsers(chatId: String): Flow<List<Pair<Any, User>>> {
-        return storageService.getMessagesAndTasksWithUsers(chatId)
-    }
-
-    fun getTasks(chatId: String): Flow<List<Task>> {
-        return storageService.getTasks(chatId)
-    }
 
     var uiState = mutableStateOf(MessageUiState())
         private set
@@ -59,6 +54,18 @@ class MessageViewModel @Inject constructor(
 
     val photoUri
         get() = uiState.value.photoUri
+
+    val partner
+        get() = uiState.value.partner
+
+
+    fun getMessagesAndTasksWithUsers(chatId: String): Flow<List<Pair<Any, User>>> {
+        return storageService.getMessagesAndTasksWithUsers(chatId)
+    }
+
+    fun getTasks(chatId: String): Flow<List<Task>> {
+        return storageService.getTasks(chatId)
+    }
 
     fun getSender(chatId: String) {
         launchCatching {
@@ -77,6 +84,43 @@ class MessageViewModel @Inject constructor(
 
     fun setPhotoUri(uri: Uri?) {
         uiState.value = uiState.value.copy(photoUri = uri)
+    }
+
+    @OptIn(ExperimentalMaterialApi::class)
+    fun onIconClick(coroutineScope: CoroutineScope, bottomSheetState: ModalBottomSheetState) {
+        coroutineScope.launch {
+            if (!bottomSheetState.isVisible)
+                bottomSheetState.show()
+        }
+    }
+
+    @OptIn(ExperimentalMaterialApi::class)
+    fun onReportPostClick(
+        coroutineScope: CoroutineScope,
+        bottomSheetState: ModalBottomSheetState,
+        reportSheetState: ModalBottomSheetState
+    ) {
+        coroutineScope.launch {
+            bottomSheetState.hide()
+            reportSheetState.show()
+        }
+    }
+
+    @OptIn(ExperimentalMaterialApi::class)
+    fun onReportItemPostClick(
+        coroutineScope: CoroutineScope,
+        reportBottomSheetOption: ReportBottomSheetOption,
+        reportSheetState: ModalBottomSheetState,
+    ) {
+        coroutineScope.launch {
+            reportSheetState.hide()
+            storageService.saveReport(report = Report(
+                reportType = reportBottomSheetOption.title,
+                reportedUserId = partner.userId
+            ))
+        }
+
+        SnackbarManager.showMessage(R.string.report_received)
     }
 
     fun setMessageTab(tabIndex: Int) {

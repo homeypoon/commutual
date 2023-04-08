@@ -49,11 +49,9 @@ fun SplashScreen(
         Icon(
             modifier = Modifier.size(300.dp),
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_launcher_foreground),
-            contentDescription = "Some icon",
+            contentDescription = "Commutual Logo",
             tint = Color.Unspecified
         )
-
-        Spacer(modifier = Modifier.height(24.dp))
 
         if (viewModel.showError.value) {
             Text(text = stringResource(AppText.generic_error))

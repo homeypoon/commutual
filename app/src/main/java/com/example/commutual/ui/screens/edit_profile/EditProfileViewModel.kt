@@ -46,9 +46,6 @@ class EditProfileViewModel @Inject constructor(
 
     fun onDoneClick(popUpScreen: () -> Unit, focusManager: FocusManager) {
 
-//        user.value = user.value.copy(
-//            sender = accountService.currentUserId)
-
         // Close keyboard
         focusManager.clearFocus()
 

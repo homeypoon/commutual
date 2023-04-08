@@ -56,7 +56,10 @@ class LoginViewModel @Inject constructor(
   }
 
   fun onForgotPasswordClick() {
-    if (!email.isValidEmail()) {
+    if (email.isBlank()) {
+      SnackbarManager.showMessage(AppText.enter_email)
+      return
+    } else if (!email.isValidEmail()) {
       SnackbarManager.showMessage(AppText.email_error)
       return
     }

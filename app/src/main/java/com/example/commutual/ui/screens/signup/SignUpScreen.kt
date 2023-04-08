@@ -1,22 +1,26 @@
+/**
+ *
+ */
 package com.example.commutual.ui.screens.signup
-
-
-
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -42,7 +46,6 @@ fun SignUpScreen(
 
     Column {
 
-
         BasicToolbar(stringResource(R.string.create_account))
 
         Column(
@@ -60,6 +63,14 @@ fun SignUpScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+
+            Icon(
+                modifier = Modifier.size(200.dp),
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_launcher_foreground),
+                contentDescription = "Commutual Logo",
+                tint = Color.Unspecified
+            )
+
             EmailField(
                 uiState.email,
                 viewModel::onEmailChange,

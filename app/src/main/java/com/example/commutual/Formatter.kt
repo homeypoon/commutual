@@ -38,17 +38,12 @@ class FormatterClass {
                 val timeFormatter = SimpleDateFormat(
                     "MMM d yyyy",
                     Locale.getDefault()
-                ).apply {
-                    timeZone = TimeZone.getTimeZone("UTC")
-                }
+                )
 
                 return timeFormatter.format(calendar.time)
             }
-
             return ""
-
         }
-
 
         fun formatTime(hour: Int, minute: Int, timeStyle24: Boolean): String {
 

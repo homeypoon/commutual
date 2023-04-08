@@ -21,16 +21,14 @@ fun BasicTextButton(@StringRes text: Int, modifier: Modifier, action: () -> Unit
     TextButton(onClick = action, modifier = modifier) {
         Text(
 
-        text = AnnotatedString(
-            text = stringResource(text),
-            SpanStyle(
-                textDecoration = TextDecoration.Underline,
-                color = MaterialTheme.colorScheme.inversePrimary
-            )
-        ),
-        color = MaterialTheme.colorScheme.primary,
-        style = MaterialTheme.typography.labelMedium,
-
+            text = AnnotatedString(
+                text = stringResource(text),
+                SpanStyle(
+                    textDecoration = TextDecoration.Underline,
+                )
+            ),
+            color = MaterialTheme.colorScheme.primary,
+            style = MaterialTheme.typography.bodyMedium,
         )
     }
 }

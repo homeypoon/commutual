@@ -43,6 +43,7 @@ fun ProfilePostScreen(
         ProfilePostBottomSheetOption.Edit,
         ProfilePostBottomSheetOption.Delete
     )
+
     ModalBottomSheetLayout(
         sheetState = bottomSheetState,
         sheetContent = {

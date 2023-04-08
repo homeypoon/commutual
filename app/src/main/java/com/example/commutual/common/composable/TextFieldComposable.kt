@@ -5,10 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
@@ -57,7 +54,11 @@ fun BasicField(
         ),
         keyboardActions = KeyboardActions(
             onNext = { focusManager.moveFocus(FocusDirection.Down) }
-        )
+        ),
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = MaterialTheme.colorScheme.primary,
+            cursorColor = MaterialTheme.colorScheme.onSecondaryContainer,
+        ),
     )
 }
 
@@ -86,7 +87,11 @@ fun DescriptionField(
             keyboardType = KeyboardType.Text,
             autoCorrect = true,
             capitalization = capitalization,
-        )
+        ),
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = MaterialTheme.colorScheme.primary,
+            cursorColor = MaterialTheme.colorScheme.onSecondaryContainer,
+        ),
 
     )
 }
@@ -104,8 +109,12 @@ fun SearchField(
     capitalization: KeyboardCapitalization,
     focusManager: FocusManager
 ) {
-    androidx.compose.material3.OutlinedTextField(
+    OutlinedTextField(
         modifier = modifier,
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = MaterialTheme.colorScheme.primary,
+            cursorColor = MaterialTheme.colorScheme.onSecondaryContainer,
+        ),
         textStyle = MaterialTheme.typography.bodyMedium,
         value = value,
         maxLines = 1,
@@ -144,7 +153,8 @@ fun SearchField(
         ),
         keyboardActions = KeyboardActions(
             onSearch = { onSearchClick(focusManager) }),
-    )
+
+        )
 }
 
 @Composable
@@ -171,20 +181,19 @@ fun DropDownField(
         placeholder = {
             Text(
                 stringResource(AppText.category),
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
             )
         },
         trailingIcon = {
-//            TrailingIcon(
-//                expanded = viewModel.expandedDropDownMenu,
-//                viewModel.setExpandedDropDownMenu()
-//            )
             Icon(
                 icon, "contentDescription",
                 Modifier.clickable { setExpandedDropDownMenu(!expanded) })
         },
-        readOnly = true
-
+        readOnly = true,
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = MaterialTheme.colorScheme.primary,
+            cursorColor = MaterialTheme.colorScheme.onSecondaryContainer,
+        )
     )
 }
 
@@ -198,7 +207,6 @@ fun MessageInputField(
     trailingIcon: (@Composable () -> Unit),
     maxLines: Int,
     modifier: Modifier = Modifier,
-    focusManager: FocusManager
 ) {
     OutlinedTextField(
         modifier = modifier.padding(horizontal = 12.dp),
@@ -220,8 +228,11 @@ fun MessageInputField(
             keyboardType = KeyboardType.Text,
             autoCorrect = true,
             capitalization = KeyboardCapitalization.Sentences,
+        ),
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = MaterialTheme.colorScheme.primary,
+            cursorColor = MaterialTheme.colorScheme.onSecondaryContainer,
         )
-
     )
 }
 
@@ -248,8 +259,11 @@ fun EmailField(
         keyboardActions = KeyboardActions(
             onNext = { focusManager.moveFocus(FocusDirection.Down) }
         ),
-
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = MaterialTheme.colorScheme.primary,
+            cursorColor = MaterialTheme.colorScheme.onSecondaryContainer,
         )
+    )
 }
 
 @Composable
@@ -311,6 +325,10 @@ private fun PasswordField(
         keyboardActions = KeyboardActions(
             onDone = { focusManager.clearFocus() }
         ),
-        visualTransformation = visualTransformation
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = MaterialTheme.colorScheme.primary,
+            cursorColor = MaterialTheme.colorScheme.onSecondaryContainer,
+        ),
+        visualTransformation = visualTransformation,
     )
 }

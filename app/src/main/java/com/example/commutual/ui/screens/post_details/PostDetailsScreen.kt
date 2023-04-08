@@ -48,8 +48,6 @@ fun PostDetailsScreen(
     val user by viewModel.user
     val scrollState = rememberScrollState()
 
-    LaunchedEffect(Unit) { viewModel.initialize(postId) }
-
     val coroutineScope = rememberCoroutineScope()
 
     val postBottomSheetState =
@@ -68,6 +66,10 @@ fun PostDetailsScreen(
         ReportBottomSheetOption.FalseInformation,
         ReportBottomSheetOption.Scam,
     )
+
+    LaunchedEffect(Unit) {
+        viewModel.initialize(postId)
+    }
 
     ModalBottomSheetLayout(
         sheetState = postBottomSheetState,

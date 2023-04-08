@@ -7,6 +7,7 @@
     <string name="password">Password</string>
     <string name="repeat_password">Repeat Password</string>
     <string name="email_error">Email is invalid!</string>
+    <string name="enter_email">Enter your email!</string>
     <string name="generic_error">Something went wrong. Please try again!</string>
     <string name="try_again">Try again!</string>
 

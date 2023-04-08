@@ -510,8 +510,7 @@ fun MessagesScreen(
                                 4,
                                 Modifier
                                     .padding(2.dp, 8.dp)
-                                    .fillMaxWidth(),
-                                focusManager
+                                    .fillMaxWidth()
                             )
                         }
 

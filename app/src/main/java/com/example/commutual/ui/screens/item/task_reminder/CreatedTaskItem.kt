@@ -1,6 +1,5 @@
 package com.example.commutual.ui.screens.item.task_reminder
 
-import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
@@ -50,8 +49,6 @@ fun CreatedTaskItem(
             shadowElevation = 4.dp,
             color = MaterialTheme.colorScheme.surfaceVariant,
             contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier
-                .animateContentSize()
         ) {
             Column(
                 Modifier

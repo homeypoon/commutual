@@ -51,8 +51,6 @@ fun ConfirmationItem(
             shadowElevation = 4.dp,
             color = MaterialTheme.colorScheme.surfaceVariant,
             contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier
-
         ) {
             Column(
                 Modifier

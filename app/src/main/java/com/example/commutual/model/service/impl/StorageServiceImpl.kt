@@ -1,3 +1,7 @@
+/**
+ * This file manages the usage of Firebase Firestore, Storage
+ */
+
 package com.example.commutual.model.service.impl
 
 import android.net.Uri
@@ -237,15 +241,8 @@ class StorageServiceImpl
     }
 
     override suspend fun incrementCommitCount(incrementCommitCount: Long) {
-        val user: User = getUser(auth.currentUserId) ?: User()
         val userRef = currentUserCollection().document(auth.currentUserId)
-
-
-        if (user.commitCount + incrementCommitCount >= 0) {
-            userRef.update("commitCount", FieldValue.increment(incrementCommitCount))
-        } else {
-            userRef.update("commitCount", 0)
-        }
+        userRef.update("commitCount", FieldValue.increment(incrementCommitCount))
     }
 
     override suspend fun incrementTasksScheduled(membersId: Array<String>) {
@@ -434,7 +431,6 @@ class StorageServiceImpl
         val userRef = currentUserCollection().document(auth.currentUserId).get().await()
         return userRef.exists()
     }
-
 
     override suspend fun deleteAllForUser(userId: String) {
         val matchingPosts = currentPostCollection().get().await()

@@ -1,3 +1,8 @@
+/**
+ * Layout that displays when the user is prompted to confirm their attendance to or
+ * completion of a task session
+ */
+
 package com.example.commutual.ui.screens.item.task_reminder
 
 import androidx.compose.foundation.layout.*
@@ -32,10 +37,13 @@ fun ConfirmationItem(
             .fillMaxWidth()
             .padding(20.dp, 8.dp)
     ) {
+        // Show timestamp accordingly
         Text(
             text = if (confirmationType == ATTENDANCE) {
+                // Attendance timestamp
                 formatTimestamp(task.showAttendanceTimestamp, true)
             } else {
+                // Completion timestamp
                 formatTimestamp(task.showCompletionTimestamp, true)
             },
             textAlign = TextAlign.Center,
@@ -58,10 +66,13 @@ fun ConfirmationItem(
                     .fillMaxWidth()
             ) {
 
+                // Show item title accordingly
                 Text(
                     if (confirmationType == ATTENDANCE) {
+                        // Attendance title
                         stringResource(R.string.task_starting)
                     } else {
+                        // Completion title
                         stringResource(R.string.task_over)
                     },
                     style = MaterialTheme.typography.headlineMedium,
@@ -74,6 +85,7 @@ fun ConfirmationItem(
 
                 Divider()
 
+                // Task title
                 Text(
                     stringResource(
                         R.string.formatted_task_title, task.title
@@ -86,6 +98,7 @@ fun ConfirmationItem(
                         .fillMaxWidth()
                 )
 
+                // Task session duration
                 Text(
                     stringResource(
                         R.string.formatted_task_time_nd,
@@ -99,12 +112,15 @@ fun ConfirmationItem(
                         .fillMaxWidth()
                 )
 
+                // Prompt confirmation question
                 Text(
                     text = if (confirmationType == ATTENDANCE) {
+                        // Attendance question
                         stringResource(
                             R.string.are_you_here
                         )
                     } else {
+                        // Confirmation question
                         stringResource(
                             R.string.did_you_complete
                         )
@@ -121,6 +137,8 @@ fun ConfirmationItem(
                         .padding(vertical = 4.dp, horizontal = 12.dp)
                         .fillMaxWidth()
                 ) {
+
+                    // Yes Button
                     Button(
                         onClick = onYesClick,
                         colors = ButtonDefaults.buttonColors(
@@ -140,6 +158,7 @@ fun ConfirmationItem(
                         )
                     }
 
+                    // No Button
                     Button(
                         onClick = onNoClick,
                         shape = RoundedCornerShape(8.dp),

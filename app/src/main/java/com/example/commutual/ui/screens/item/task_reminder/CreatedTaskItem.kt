@@ -1,3 +1,7 @@
+/**
+ * Layout that displays when the user creates a task session
+ */
+
 package com.example.commutual.ui.screens.item.task_reminder
 
 import androidx.compose.foundation.layout.*
@@ -34,6 +38,7 @@ fun CreatedTaskItem(
             .padding(20.dp, 8.dp)
     ) {
 
+        // Timestamp of when the item was sent
         Text(
             text = formatTimestamp(task.createTimestamp, true),
             textAlign = TextAlign.Center,
@@ -56,6 +61,7 @@ fun CreatedTaskItem(
                     .fillMaxWidth()
             ) {
 
+                // Task creation item title
                 Text(
                     text = stringResource(
                         R.string.task_creation
@@ -68,6 +74,7 @@ fun CreatedTaskItem(
                         .fillMaxWidth()
                 )
 
+                // Task creator username
                 Text(
                     stringResource(R.string.task_created, creator.username),
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -80,6 +87,7 @@ fun CreatedTaskItem(
 
                 Divider()
 
+                // Task title
                 Text(
                     stringResource(
                         R.string.formatted_task_title, task.title
@@ -92,10 +100,12 @@ fun CreatedTaskItem(
                         .fillMaxWidth()
                 )
 
+                // Task session duration
                 Text(
                     stringResource(
                         R.string.formatted_task_time,
-                        FormatterClass.formatDate(selectedYear = task.year,
+                        FormatterClass.formatDate(
+                            selectedYear = task.year,
                             selectedMonth = task.month,
                             selectedDay = task.day
                         ),

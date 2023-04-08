@@ -1,3 +1,8 @@
+/**
+ * Layout that displays the user's response to their attendance to or
+ * completion of a task session
+ */
+
 package com.example.commutual.ui.screens.item.task_reminder
 
 import androidx.compose.foundation.layout.*
@@ -36,12 +41,15 @@ fun ConfirmationResultItem(
             .padding(20.dp, 8.dp)
     ) {
 
+        // Show timestamp accordingly
         Text(
             text = when (resultType) {
                 ATTENDANCE_YES, ATTENDANCE_NO -> {
+                    // Attendance timestamp
                     FormatterClass.formatTimestamp(task.showAttendanceTimestamp, true)
                 }
                 else -> {
+                    // Completion timestamp
                     FormatterClass.formatTimestamp(task.showCompletionTimestamp, true)
                 }
             },
@@ -65,14 +73,17 @@ fun ConfirmationResultItem(
                     .padding(12.dp, 12.dp)
                     .fillMaxWidth()
             ) {
+                // Show item title accordingly
                 Text(
                     text = when (resultType) {
                         ATTENDANCE_YES, ATTENDANCE_NO -> {
+                            // Attendance title
                             stringResource(
                                 R.string.task_attendance
                             )
                         }
                         else -> {
+                            // Completion title
                             stringResource(
                                 R.string.task_completion
                             )
@@ -86,25 +97,30 @@ fun ConfirmationResultItem(
                         .fillMaxWidth()
                 )
 
+                // Show user's confirmation result accordingly
                 Text(
                     text = when (resultType) {
                         ATTENDANCE_YES -> {
+                            // Text for confirmed attendance
                             stringResource(
                                 R.string.confirmed_attendance, user.username
                             )
                         }
                         ATTENDANCE_NO -> {
+                            // Text for no attendance
                             stringResource(
                                 R.string.no_attendance, user.username
                             )
                         }
                         COMPLETION_YES -> {
+                            // Text for confirmed completion
                             stringResource(
                                 R.string.confirmed_completion, user.username
                             )
                         }
                         else -> {
                             // COMPLETION_NO
+                            // Text for no completion
                             stringResource(
                                 R.string.no_completion, user.username
                             )
@@ -120,6 +136,7 @@ fun ConfirmationResultItem(
 
                 Divider()
 
+                // Task title
                 Text(
                     stringResource(
                         R.string.formatted_task_title, task.title
@@ -131,6 +148,8 @@ fun ConfirmationResultItem(
                         .padding(vertical = 4.dp)
                         .fillMaxWidth()
                 )
+
+                // Task session duration
                 Text(
                     stringResource(
                         R.string.formatted_task_time_nd,
@@ -144,21 +163,25 @@ fun ConfirmationResultItem(
                         .fillMaxWidth()
                 )
 
+                // Show commit counters addition or deduction based on attendance or completion
                 Text(
                     text = when (resultType) {
                         ATTENDANCE_YES -> {
+                            // Add commit counters for attending session
                             stringResource(
                                 R.string.earned_attendance_points,
                                 ATTENDANCE_YES_POINTS.toString()
                             )
                         }
                         ATTENDANCE_NO -> {
+                            // Deduct commit counters for not attending session
                             stringResource(
                                 R.string.lost_attendance_points,
                                 ATTENDANCE_NO_POINTS.toString()
                             )
                         }
                         COMPLETION_YES -> {
+                            // Add commit counters for completing session
                             stringResource(
                                 R.string.earned_completion_points,
                                 COMPLETION_YES_POINTS.toString()
@@ -166,6 +189,7 @@ fun ConfirmationResultItem(
                         }
                         else -> {
                             // COMPLETION_NO
+                            // Deduct commit counters for not completing session
                             stringResource(
                                 R.string.lost_completion_points,
                                 COMPLETION_NO_POINTS.toString()
@@ -186,10 +210,7 @@ fun ConfirmationResultItem(
                         .padding(vertical = 6.dp)
                         .fillMaxWidth()
                 )
-
-
             }
-
         }
     }
 }

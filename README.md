@@ -18,7 +18,7 @@ Explore Screen
 - Contains a search system that allows users to filter and search for posts
 - Users can click on posts to view more details about the post and click the "Start Chatting" button to start a chat with a matched user
 
-<img width="254" alt="Explore Screen" src="https://user-images.githubusercontent.com/98489847/228137459-15df8ea8-27da-4fc9-8c88-0047991bbc9c.png"> <img width="254" alt="Screen Shot 2023-03-28 at 1 29 19 AM" src="https://user-images.githubusercontent.com/98489847/228137285-c78f5855-9c6f-4b74-af1b-d3567c31d6f0.png">
+<img width="254" alt="Explore Screen" src="https://user-images.githubusercontent.com/98489847/230750375-56f96d48-0c14-4fe4-a1d3-a310c99a3b05.png"> <img width="254" alt="Screen Shot 2023-03-28 at 1 29 19 AM" src="https://user-images.githubusercontent.com/98489847/228137285-c78f5855-9c6f-4b74-af1b-d3567c31d6f0.png">
 
 Chat Screen
 ------------------------------

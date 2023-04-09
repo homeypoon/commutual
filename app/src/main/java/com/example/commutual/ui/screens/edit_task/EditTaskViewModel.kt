@@ -216,7 +216,7 @@ class EditTaskViewModel @Inject constructor(
             if (editedTask.taskId.isBlank()) {
                 val taskId: String = storageService.saveTask(editedTask, chatId)
 
-                storageService.updateCurrentUser(chatId, taskId)
+                storageService.updateCurrentUserTaskMap(chatId, taskId)
                 task.value = task.value.copy(
                     taskId = taskId
                 )

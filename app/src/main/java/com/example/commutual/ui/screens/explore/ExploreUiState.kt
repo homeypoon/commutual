@@ -14,7 +14,6 @@ data class ExploreUiState(
     val showFiltersDialog: Boolean = false,
     val filterChipCategory: CategoryEnum = CategoryEnum.ANY,
     val selectedCategory: CategoryEnum = CategoryEnum.ANY,
-
     val expandedDropDownMenu: Boolean = false,
     val showProgressIndicator: Boolean = false
 

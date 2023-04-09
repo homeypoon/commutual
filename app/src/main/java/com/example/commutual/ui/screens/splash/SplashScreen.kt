@@ -59,8 +59,7 @@ fun SplashScreen(
             BasicButton(AppText.try_again, Modifier.basicButton()) {
                 viewModel.onAppStart(
                     openAndPopUp,
-                    openScreen,
-                    popUpScreen
+                    openScreen
                 )
             }
         } else {
@@ -70,6 +69,6 @@ fun SplashScreen(
 
     LaunchedEffect(true) {
         delay(SPLASH_TIMEOUT)
-        viewModel.onAppStart(openAndPopUp, openScreen, popUpScreen)
+        viewModel.onAppStart(openAndPopUp, openScreen)
     }
 }

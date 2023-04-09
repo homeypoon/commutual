@@ -1,5 +1,5 @@
 /**
- * This file manages the usage of Firebase Firestore, Storage
+ * This file manages the app's interaction with Firebase Firestore, Storage, and Authentication
  */
 
 package com.example.commutual.model.service.impl
@@ -27,6 +27,7 @@ import kotlinx.coroutines.tasks.asDeferred
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class StorageServiceImpl
 @Inject constructor(
     private val firestore: FirebaseFirestore,
@@ -35,7 +36,10 @@ class StorageServiceImpl
 ) :
     StorageService {
 
-    @OptIn(ExperimentalCoroutinesApi::class)
+    /**
+     * Returns a Flow of posts that is not created by the current user
+     * @return a Flow of list of Post objects not created by the current user
+     */
     override val posts: Flow<List<Post>>
         get() = auth.currentUser.flatMapLatest {
             currentPostCollection().snapshots().map { snapshot ->
@@ -43,7 +47,10 @@ class StorageServiceImpl
             }
         }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
+    /**
+     * Returns a Flow of all posts
+     * @return a Flow of list of all Post objects
+     */
     override fun getUserPosts(userId: String): Flow<List<Post>> {
         return auth.currentUser.flatMapLatest {
             currentPostCollection().whereEqualTo(USER_ID, userId).snapshots()
@@ -51,25 +58,36 @@ class StorageServiceImpl
         }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
+    /**
+     * Returns a Flow of all chats that has the current user
+     * @return a Flow of list of all Chat objects that has the current user
+     */
     override val chats: Flow<List<Chat>>
         get() = auth.currentUser.flatMapLatest {
             currentChatCollection().whereArrayContains(MEMBERS_ID_FIELD, auth.currentUserId)
                 .snapshots().map { snapshot -> snapshot.toObjects() }
         }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
+    /**
+     * Returns a Flow of all tasks in the chat indicated by the chatId, ordered
+     * from newest to oldest
+     * @param chatId The chatId of the chat the tasks are in
+     * @return a Flow of list of all Tasks objects in the chat collection indicated by the chatId
+     */
     override fun getTasks(chatId: String): Flow<List<Task>> {
         return auth.currentUser.flatMapLatest {
-            currentTaskCollection(chatId).orderBy(CREATE_TIMESTAMP_FIELD, Query.Direction.ASCENDING)
+            currentTaskCollection(chatId)
+                .orderBy(CREATE_TIMESTAMP_FIELD, Query.Direction.ASCENDING)
                 .snapshots().map { snapshot ->
                     snapshot.toObjects()
-
                 }
         }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
+    /**
+     * Returns a Flow of tasks that involve the current user
+     * @return a Flow of list of Task objects that involve the current user
+     */
     override val currentUserTasks: Flow<List<Task>>
         get() = auth.currentUser.flatMapLatest {
             flow {
@@ -85,8 +103,12 @@ class StorageServiceImpl
             }
         }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    override val chatsWithUsers: Flow<List<Pair<Chat, User>>> // Return a flow of Chat-User pairs
+    /**
+     * Returns a flow of Chat-User pairs of chats involving the current user with the User objects
+     * of the other users.
+     * @return a Flow of list of Pair objects, where each contains a Chat object and a User object.
+     */
+    override val chatsWithUsers: Flow<List<Pair<Chat, User>>>
         get() = auth.currentUser.flatMapLatest {
             currentChatCollection().whereArrayContains(MEMBERS_ID_FIELD, auth.currentUserId)
                 .snapshots().map { snapshot ->
@@ -100,7 +122,10 @@ class StorageServiceImpl
         }
 
 
-    @OptIn(ExperimentalCoroutinesApi::class)
+    /**
+     * Returns a Flow of current User
+     * @return a Flow of the nullable User object of the current User
+     */
     override fun getFlowCurrentUser(): Flow<User?> {
         return auth.currentUser.flatMapLatest {
             currentUserCollection().document(auth.currentUserId)
@@ -111,18 +136,39 @@ class StorageServiceImpl
     }
 
 
+    /**
+     * Returns the chat based on the chatId
+     * @param chatId The chatId of the chat
+     * @return a Chat object with the chatId
+     */
     override suspend fun getChatWithChatId(chatId: String): Chat? =
         currentChatCollection().document(chatId).get().await().toObject()
 
+    /**
+     * Returns the user's partner in a chat based on the chatId
+     * @param membersId A MutableList containing the userId of the members in a chat
+     * @return The User object that is not the current user in membersId
+     */
     override suspend fun getPartner(membersId: MutableList<String>): User? =
         getUser(membersId.first { it != auth.currentUserId })
 
 
+    /**
+     * Returns the user based on the userId
+     * @param userId The userId of the User
+     * @return a User object with the userId
+     */
     private suspend fun getUserById(userId: String): User {
         val userDoc = currentUserCollection().document(userId).get().await()
         return userDoc.toObject<User>() ?: throw IllegalStateException("User $userId not found")
     }
 
+    /**
+     * Returns a flow of Message-User pairs of messages in the chat based on the chatId
+     * with the User objects of the user who sent the message
+     * @param chatId The chatId of the Chat object
+     * @return a Flow of list of Pair objects, where each contains a Message object and a User object.
+     */
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun getMessagesWithUsers(chatId: String): Flow<List<Pair<Message, User>>> {
         return auth.currentUser.flatMapLatest {
@@ -137,7 +183,12 @@ class StorageServiceImpl
         }
     }
 
-
+    /**
+     * Returns a flow of Task-User pairs of tasks in the chat based on the chatId, ordered
+     * from newest to oldest, with the User objects of the user who created the task
+     * @param chatId The chatId of the Chat object
+     * @return a Flow of list of Pair objects, where each contains a Task object and a User object.
+     */
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun getAllTasksWithUsers(chatId: String): Flow<List<Pair<Task, User>>> {
         return auth.currentUser.flatMapLatest {
@@ -153,7 +204,13 @@ class StorageServiceImpl
         }
     }
 
-
+    /**
+     * Returns a flow of Task-User pairs of completed tasks in the chat based on the chatId, ordered
+     * from newest to oldest, with the User objects of the user who created the task
+     * @param chatId The chatId of the Chat object
+     * @return a Flow of list of Pair objects, where each contains a Task object with its
+     * completed field that is true and a User object.
+     */
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun getCompletedTasksWithUsers(chatId: String): Flow<List<Pair<Task, User>>> {
         return auth.currentUser.flatMapLatest {
@@ -167,6 +224,14 @@ class StorageServiceImpl
         }
     }
 
+    /**
+     * Returns a flow of pairs that are either Message-User or Task-User, ordered
+     * from newest to oldest, with the Message or Task object and User objects of the user who
+     * created the task in the chat
+     * @param chatId The chatId of the Chat object
+     * @return a Flow of list of Pair objects, where each contains either a Message object
+     * and a User object or a Task object and a User object.
+     */
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun getMessagesAndTasksWithUsers(chatId: String): Flow<List<Pair<Any, User>>> {
         val messagesFlow = getMessagesWithUsers(chatId)
@@ -188,25 +253,38 @@ class StorageServiceImpl
             }
     }
 
+    /**
+     * Returns a flow of posts based on the user's filtered category and search
+     * @param search The user's search
+     * @param category The user's chosen category to be filtered for
+     * @return a Flow of list of Post objects based on the user's filtered category and search
+     */
     @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun filteredPosts(search: String, category: CategoryEnum): Flow<List<Post>> {
 
         return posts.transformLatest { posts ->
             emit(posts.filter { post ->
-                post.category == category && (post.title.contains(
-                    search,
-                    ignoreCase = true
-                ) || post.description.contains(search, ignoreCase = true))
+                // Filtered category matches the category of the post
+                post.category == category
+                        // Post title or post description matches the search
+                        && (post.title.contains(search, ignoreCase = true)
+                        || post.description.contains(search, ignoreCase = true))
             })
         }
 
     }
 
+    /**
+     * Returns a flow of posts based on the user's search
+     * @param search The user's search
+     * @return a Flow of list of Post objects based on the user's search
+     */
     @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun searchedPosts(search: String): Flow<List<Post>> {
 
         return posts.transformLatest { posts ->
             emit(posts.filter { post ->
+                // Post title or post description matches the search
                 post.title.contains(search, ignoreCase = true) || post.description.contains(
                     search,
                     ignoreCase = true
@@ -215,29 +293,51 @@ class StorageServiceImpl
         }
     }
 
-
+    /**
+     * Returns the user based on the userId
+     * @param userId The userId of the user
+     * @return a User object with the userId
+     */
     override suspend fun getUser(userId: String): User? =
         currentUserCollection().document(userId).get().await().toObject()
 
 
-    // save user and generate an sender for the user document
+    /**
+     * Saves the user to the user collection based on the userId
+     * @param userId The userId of the user
+     * @param user The User object representing the user
+     */
     override suspend fun saveUser(userId: String, user: User): Unit =
         trace(SAVE_USER_TRACE) { currentUserCollection().document(userId).set(user).await() }
 
+    /**
+     * Updates the User object in the user collection based on the userId
+     * @param user The User object representing the updated user
+     */
     override suspend fun updateUser(user: User): Unit = trace(UPDATE_USER_TRACE) {
         currentUserCollection().document(auth.currentUserId).set(user).await()
     }
 
-
-    override suspend fun updateCurrentUser(chatId: String, taskId: String): Unit =
+    /**
+     * Updates the tasksMap field of the current user object in the user collection
+     * @param chatId The chatId of the Chat object
+     * @param taskId The taskId of the task object
+     */
+    override suspend fun updateCurrentUserTaskMap(chatId: String, taskId: String): Unit =
         trace(UPDATE_CURRENT_USER_TRACE) {
             val tasksMap = mapOf("tasksMap.${taskId}" to chatId)
             currentUserCollection().document(auth.currentUserId).update(tasksMap).await()
         }
 
+    /**
+     * Increments the categoryCount field of both users in the chat based on the membersId array
+     * @param membersId The User object representing the membersId
+     */
     override suspend fun incrementCategoryCount(membersId: Array<String>, category: CategoryEnum) {
-        val userRef = currentUserCollection().document(auth.currentUserId)
-        userRef.update("categoryCount.${category.name}", FieldValue.increment(1))
+        for (memberId in membersId) {
+            val userRef = currentUserCollection().document(auth.currentUserId)
+            userRef.update("categoryCount.${category.name}", FieldValue.increment(1))
+        }
     }
 
     override suspend fun incrementCommitCount(incrementCommitCount: Long) {
@@ -466,25 +566,21 @@ class StorageServiceImpl
 
         private const val SAVE_POST_TRACE = "savePost"
         private const val UPDATE_POST_TRACE = "updatePost"
-        private const val SAVE_TASK_TRACE = "saveTask"
         private const val UPDATE_TASK = "updateTask"
         private const val UPDATE_TASK_TRACE = "updateTaskType"
         private const val UPDATE_TASK_TRACE_AM = "updateTaskAM"
 
         private const val SAVE_USER_TRACE = "saveUser"
         private const val UPDATE_USER_TRACE = "updateUser"
-        private const val UPDATE_CURRENT_USER_TRACE = "updateCurrentUser"
-
+        private const val UPDATE_CURRENT_USER_TRACE = "updateCurrentUserTaskMap"
 
         private const val SAVE_CHAT_TRACE = "saveChat"
         private const val SAVE_MESSAGE_TRACE = "saveMessage"
         private const val SAVE_IMAGE_MESSAGE_TRACE = "saveImageMessage"
-
         private const val UPDATE_MESSAGE_TRACE = "updateMessage"
 
-        private const val HAS_PROFILE_TRACE = "hasProfile"
-
         private const val USER_ID = "userId"
+        private const val HAS_PROFILE_TRACE = "hasProfile"
 
         private const val MEMBERS_ID_FIELD = "membersId"
         private const val TIMESTAMP_FIELD = "timestamp"

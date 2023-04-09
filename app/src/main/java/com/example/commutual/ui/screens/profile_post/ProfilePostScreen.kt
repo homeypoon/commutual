@@ -122,7 +122,7 @@ fun ProfilePostScreen(
                                 modifier = Modifier
                                     .border(
                                         width = 1.dp,
-                                        color = MaterialTheme.colorScheme.secondary,
+                                        color = MaterialTheme.colorScheme.onSecondary,
                                         shape = RoundedCornerShape(5.dp)
                                     )
                                     .padding(horizontal = 8.dp, vertical = 4.dp),

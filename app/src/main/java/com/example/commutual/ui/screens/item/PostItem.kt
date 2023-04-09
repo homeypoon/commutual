@@ -1,6 +1,7 @@
 package com.example.commutual.ui.screens.item
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.material3.*
@@ -42,10 +43,10 @@ fun PostItem(
                     color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier
                         .padding(top = 4.dp, bottom = 2.dp)
+                        .fillMaxWidth()
                 )
             },
             supportingText = {
-                Column {
                     Text(
                         post.description,
                         maxLines = 1,
@@ -54,10 +55,10 @@ fun PostItem(
                         color = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier
                             .padding(bottom = 2.dp)
+                            .fillMaxWidth()
                     )
-
-                }
-            }
+            },
+            modifier = Modifier.fillMaxWidth()
         )
         Divider()
     }

@@ -12,14 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
-fun Modifier.textButton(): Modifier {
-  return this
-}
-
-fun Modifier.accountText(): Modifier {
-  return this
-}
-
 fun Modifier.categoryChip(color: Color): Modifier {
   return this
     .border(

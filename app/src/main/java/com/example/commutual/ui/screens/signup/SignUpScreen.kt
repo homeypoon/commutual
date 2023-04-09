@@ -27,10 +27,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.commutual.R
 import com.example.commutual.common.composable.*
-import com.example.commutual.common.ext.accountText
 import com.example.commutual.common.ext.basicButton
 import com.example.commutual.common.ext.fieldModifier
-import com.example.commutual.common.ext.textButton
 import com.example.commutual.R.string as AppText
 
 @Composable
@@ -102,11 +100,12 @@ fun SignUpScreen(
             ) {
                 Text(
                     stringResource(AppText.already_have_account),
-                    Modifier.accountText(), maxLines = 1,
+                    Modifier.padding(start = 8.dp),
+                    maxLines = 1,
                     fontSize = 16.sp,
                     style = MaterialTheme.typography.labelMedium,
                 )
-                BasicTextButton(AppText.log_in, Modifier.textButton()) {
+                BasicTextButton(AppText.log_in, Modifier.padding(end = 8.dp)) {
                     viewModel.onLoginClick(openAndPopUp)
                 }
             }

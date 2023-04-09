@@ -37,8 +37,6 @@ class AlarmReceiver : BroadcastReceiver() {
 
         val alarmType = intent?.getIntExtra("alarmType", COMPLETION)
 
-        Log.d("alarm receiver", "alarm type:$alarmType")
-        Log.d("before am task", "task:${intent?.getSerializableExtra("task")}")
 
         val task: Task = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent?.getSerializableExtra("task", Task::class.java) ?: Task()
@@ -46,10 +44,6 @@ class AlarmReceiver : BroadcastReceiver() {
             intent?.getSerializableExtra("task") as? Task ?: Task()
 
         }
-
-        Log.d("alarm r", "title:$title content: $content")
-        Log.d("alarm r task", "task:$task")
-
 
         if (alarmType == ATTENDANCE) {
 
@@ -75,8 +69,7 @@ class AlarmReceiver : BroadcastReceiver() {
 
         val builder =
             NotificationCompat.Builder(context, CommutualAppState.CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_home)
-                //            .setSmallIcon(R.drawable.ic_commutual)
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentTitle(title)
                 .setContentText(content)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)

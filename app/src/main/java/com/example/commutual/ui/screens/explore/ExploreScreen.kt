@@ -45,8 +45,6 @@ fun ExploreScreen(
     openScreen: (String) -> Unit,
     viewModel: ExploreViewModel = hiltViewModel()
 ) {
-
-
     val posts = viewModel.posts.collectAsStateWithLifecycle(emptyList())
 
 

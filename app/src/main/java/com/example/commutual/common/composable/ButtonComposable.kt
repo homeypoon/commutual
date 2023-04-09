@@ -18,13 +18,12 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun BasicTextButton(@StringRes text: Int, modifier: Modifier, action: () -> Unit) {
-    TextButton(onClick = action, modifier = modifier) {
+    TextButton(onClick = action ,modifier = modifier) {
         Text(
-
             text = AnnotatedString(
                 text = stringResource(text),
                 SpanStyle(
-                    textDecoration = TextDecoration.Underline,
+                    textDecoration = TextDecoration.Underline
                 )
             ),
             color = MaterialTheme.colorScheme.primary,

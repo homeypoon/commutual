@@ -24,10 +24,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.commutual.R
 import com.example.commutual.common.composable.*
-import com.example.commutual.common.ext.accountText
 import com.example.commutual.common.ext.basicButton
 import com.example.commutual.common.ext.fieldModifier
-import com.example.commutual.common.ext.textButton
 import com.example.commutual.R.string as AppText
 
 @Composable
@@ -43,20 +41,20 @@ fun LoginScreen(
         BasicToolbar(title = stringResource(R.string.log_in))
 
         Column(
-        modifier = modifier
-            .background(MaterialTheme.colorScheme.background)
-            .fillMaxWidth()
-            .fillMaxHeight()
-            .padding(horizontal = 12.dp)
-            .verticalScroll(rememberScrollState())
-            .pointerInput(Unit) {
-                detectTapGestures(onTap = {
-                    focusManager.clearFocus()
-                })
-            },
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
+            modifier = modifier
+                .background(MaterialTheme.colorScheme.background)
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .padding(horizontal = 12.dp)
+                .verticalScroll(rememberScrollState())
+                .pointerInput(Unit) {
+                    detectTapGestures(onTap = {
+                        focusManager.clearFocus()
+                    })
+                },
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Icon(
                 modifier = Modifier.size(200.dp),
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_launcher_foreground),
@@ -68,9 +66,11 @@ fun LoginScreen(
                 uiState.email,
                 viewModel::onEmailChange, Modifier.fieldModifier(), focusManager, ImeAction.Next
             )
-            PasswordField(uiState.password,
+            PasswordField(
+                uiState.password,
                 viewModel::onPasswordChange,
-                Modifier.fieldModifier(), focusManager, ImeAction.Done)
+                Modifier.fieldModifier(), focusManager, ImeAction.Done
+            )
 
             BasicButton(
                 AppText.log_in,
@@ -80,25 +80,32 @@ fun LoginScreen(
                 focusManager.clearFocus()
             }
 
-            BasicTextButton(AppText.forgot_password,
-                Modifier.textButton()) {
+            BasicTextButton(
+                AppText.forgot_password,
+                Modifier.padding(horizontal = 8.dp)
+            ) {
                 viewModel.onForgotPasswordClick()
             }
+
 
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     stringResource(AppText.don_t_have_account),
-                    Modifier.accountText(), maxLines = 1,
+                    Modifier.padding(start = 8.dp),
+                    maxLines = 1,
                     style = MaterialTheme.typography.labelSmall,
-                    fontSize = 16.sp)
-                BasicTextButton(AppText.register, Modifier.textButton()) {
+                    fontSize = 16.sp
+                )
+                BasicTextButton(
+                    AppText.register,
+                    Modifier.padding(end = 8.dp)
+                ) {
                     viewModel.onRegisterClick(openAndPopUp)
                 }
             }
         }
-
 
 
     }

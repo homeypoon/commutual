@@ -335,7 +335,7 @@ class StorageServiceImpl
      */
     override suspend fun incrementCategoryCount(membersId: Array<String>, category: CategoryEnum) {
         for (memberId in membersId) {
-            val userRef = currentUserCollection().document(auth.currentUserId)
+            val userRef = currentUserCollection().document(memberId)
             userRef.update("categoryCount.${category.name}", FieldValue.increment(1))
         }
     }

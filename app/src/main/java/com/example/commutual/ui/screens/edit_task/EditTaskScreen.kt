@@ -39,8 +39,7 @@ import com.example.commutual.model.CategoryEnum
 import com.example.commutual.model.Task
 import java.util.*
 import kotlin.reflect.KFunction1
-import kotlin.reflect.KFunction5
-import kotlin.reflect.KFunction8
+import kotlin.reflect.KFunction9
 import com.example.commutual.R.drawable as AppIcon
 
 @ExperimentalMaterialApi
@@ -52,8 +51,7 @@ fun EditTaskScreen(
     screenTitle: String,
     modifier: Modifier = Modifier,
     viewModel: EditTaskViewModel = hiltViewModel(),
-    showReminderNotification: KFunction5<Context, Int, String, String, Int, Unit>,
-    setAlarmManager: KFunction8<Context, String, String, Calendar, Calendar, Array<String>, Task, String, Unit>,
+    setAlarmManager: KFunction9<Context, String, String, String, Calendar, Calendar, Array<String>, Task, String, Unit>
 ) {
     val task by viewModel.task
 
@@ -97,7 +95,6 @@ fun EditTaskScreen(
                 popUpScreen,
                 focusManager,
                 context,
-                showReminderNotification,
                 setAlarmManager
             )
         }

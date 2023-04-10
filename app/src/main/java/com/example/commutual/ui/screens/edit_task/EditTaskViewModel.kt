@@ -26,8 +26,6 @@ import com.google.android.material.timepicker.TimeFormat
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.*
 import javax.inject.Inject
-import kotlin.reflect.KFunction5
-import kotlin.reflect.KFunction8
 
 
 @HiltViewModel
@@ -164,8 +162,7 @@ class EditTaskViewModel @Inject constructor(
         chatId: String, popUpScreen: () -> Unit,
         focusManager: FocusManager,
         context: Context,
-        showReminderNotification: KFunction5<Context, Int, String, String, Int, Unit>,
-        setAlarmManager: KFunction8<Context, String, String, Calendar, Calendar, Array<String>, Task, String, Unit>
+        setAlarmManager: (Context, String, String, String, Calendar, Calendar, Array<String>, Task, String) -> Unit
     ) {
 
         focusManager.clearFocus()
@@ -248,6 +245,7 @@ class EditTaskViewModel @Inject constructor(
             setAlarmManager(
                 context,
                 "${task.value.title} is starting: Are you ready to work?",
+                "${task.value.title} is over: Did you complete the session?",
                 "${task.value.startTime} - ${task.value.endTime}",
                 attendanceCalendar,
                 completionCalendar,

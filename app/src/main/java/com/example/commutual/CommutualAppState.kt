@@ -12,7 +12,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.os.Build
-import android.util.Log
 import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Stable
 import androidx.core.app.ActivityCompat
@@ -123,7 +122,8 @@ class CommutualAppState(
 
     fun setAlarmManager(
         context: Context,
-        titleText: String,
+        attendanceTitleText: String,
+        completionTitleText: String,
         contentText: String,
         attendanceCalendar: Calendar,
         completionCalendar: Calendar,
@@ -131,14 +131,13 @@ class CommutualAppState(
         task: Task,
         chatId: String,
     ) {
-        Log.d("before am task", "task:$task")
 
         val alarmManager =
             context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         val attendanceIntent = Intent(context, AlarmReceiver::class.java)
 
-        attendanceIntent.putExtra("title", titleText)
+        attendanceIntent.putExtra("title", attendanceTitleText)
         attendanceIntent.putExtra("content", contentText)
         attendanceIntent.putExtra("content", contentText)
         attendanceIntent.putExtra("alarmType", ATTENDANCE)
@@ -161,7 +160,7 @@ class CommutualAppState(
 
         val completionIntent = Intent(context, AlarmReceiver::class.java)
 
-        completionIntent.putExtra("title", titleText)
+        completionIntent.putExtra("title", completionTitleText)
         completionIntent.putExtra("content", contentText)
         completionIntent.putExtra("content", contentText)
         completionIntent.putExtra("alarmType", COMPLETION)

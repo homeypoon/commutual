@@ -236,7 +236,6 @@ fun NavGraphBuilder.commutualGraph(appState: CommutualAppState) {
             taskId = it.arguments?.getString(TASK_ID) ?: TASK_DEFAULT_ID,
             chatId = it.arguments?.getString(CHAT_ID) ?: CHAT_DEFAULT_ID,
             screenTitle = it.arguments?.getString(SCREEN_TITLE) ?: ST_CREATE_TASK,
-            showReminderNotification = appState::showReminderNotification,
             setAlarmManager = appState::setAlarmManager
         )
     }

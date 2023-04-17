@@ -296,6 +296,7 @@ fun HomeScreen(
 
             item {
 
+                // Category Graph Box
                 Box(
                     modifier =
                     Modifier.fillMaxWidth(),
@@ -309,6 +310,8 @@ fun HomeScreen(
                             .padding(start = 24.dp, end = 24.dp, top = 32.dp)
                             .fillMaxWidth()
                     ) {
+
+                        // Category Graph Column
                         Column(
                             modifier = Modifier
                                 .padding(horizontal = 8.dp)
@@ -316,6 +319,7 @@ fun HomeScreen(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
 
+                            // Category graph title
                             Text(
                                 text = stringResource(R.string.tasks_per_category_graph_title),
                                 style = MaterialTheme.typography.headlineSmall,
@@ -325,8 +329,9 @@ fun HomeScreen(
                                     .fillMaxWidth()
                             )
 
+                            // Display category bar graph
                             user?.let {
-                                BarGraph(
+                                CategoryGraph(
                                     it.categoryCount
                                 )
                             }
@@ -336,8 +341,7 @@ fun HomeScreen(
                     }
                 }
 
-
-
+                // Buffer space
                 Spacer(modifier = Modifier.height(84.dp))
             }
 
@@ -384,20 +388,29 @@ fun PieChart(
 
         }
     )
-
 }
 
+
+/**
+ * Composable function that creates a bar graph indicating the distribution of categories. It
+ * uses the MPAndroidChart library to create the graph.
+ *
+ * @param categoryCount A map of each category name and their corresponding counts
+ */
 @Composable
-fun BarGraph(
+fun CategoryGraph(
     categoryCount: Map<String, Int>
 ) {
 
+    // Entries for the graph based on the categoryCount map
     val entries = categoryCount.entries.mapIndexed { index, (category, count) ->
         BarEntry(index.toFloat(), count.toFloat(), category)
     }
 
-    val dataSet = BarDataSet(entries, "Task counts")
+    // A data set composing of entries and a chart label of "Task counts"
+    val dataSet = BarDataSet(entries, stringResource(R.string.task_counts))
 
+    // Color template of the graph
     val colorTemplate = intArrayOf(
         Color(0xFFB8ECB4).toArgb(),
         Color(0xFFA3E7D0).toArgb(),
@@ -405,19 +418,23 @@ fun BarGraph(
         Color(0xFFB1B1EE).toArgb(),
     )
 
-    dataSet.setColors(colorTemplate, 255)
+    dataSet.setColors(colorTemplate, 255) // Set the color of the data set
 
-    val barChartData = BarData(dataSet)
+    val categoryGraphData = BarData(dataSet) // Create a BarData object using the data set
 
+    // AndroidView composable that creates a customized category bar graph
     AndroidView(
         modifier = Modifier
             .padding(top = 18.dp, start = 18.dp, end = 18.dp, bottom = 24.dp)
             .size(300.dp),
         factory = { context ->
             BarChart(context).apply {
-                data = barChartData
+                data = categoryGraphData // Set data of the bar chart
+
+                // Customize category graph
                 description.isEnabled = false
                 legend.isEnabled = false
+
                 dataSet.setDrawValues(false)
                 setDrawValueAboveBar(false)
                 setDrawBarShadow(false)
@@ -429,28 +446,27 @@ fun BarGraph(
                 xAxis.setDrawAxisLine(true)
                 xAxis.textSize = 14f
                 xAxis.typeface = ResourcesCompat.getFont(context, R.font.open_sans_regular)
-
                 xAxis.position = XAxis.XAxisPosition.BOTTOM
                 xAxis.labelRotationAngle = -90f
 
                 axisLeft.isEnabled = true
-                axisLeft.granularity = 1.0f
-                axisLeft.axisMinimum = 0f
                 axisLeft.setDrawAxisLine(true)
                 axisLeft.setDrawGridLines(true)
-                axisLeft.axisMaximum = barChartData.yMax
+                axisLeft.granularity = 1.0f
+                axisLeft.axisMinimum = 0f
+                axisLeft.axisMaximum = categoryGraphData.yMax
+                axisLeft.labelCount = categoryGraphData.yMax.toInt()
                 axisRight.isEnabled = false
 
+                // Get category names from the categoryCount map
                 val categoryNames = categoryCount.keys.map {
                     context.getString(CategoryEnum.valueOf(it).categoryStringRes)
                 }
 
+                // Set the category names as the x-axis values
                 xAxis.valueFormatter = IndexAxisValueFormatter(
                     categoryNames.toList()
                 )
-
-                axisLeft.labelCount = barChartData.yMax.toInt()
-
 
             }
         }

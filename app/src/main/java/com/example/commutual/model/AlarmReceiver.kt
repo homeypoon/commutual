@@ -1,3 +1,8 @@
+/**
+ * A BroadcastReceiver that handles the alarms for attendance and completion of tasks to prompt
+ * timely notifications to the user
+ */
+
 package com.example.commutual.model
 
 import android.Manifest
@@ -6,7 +11,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
-import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -28,25 +32,21 @@ class AlarmReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent?) {
 
-        Log.d("AM receiver", "onReceive called")
+        // Retrieve data from intent
         val title = intent?.getStringExtra("title")
         val content = intent?.getStringExtra("content")
         val chatId = intent?.getStringExtra("chatId")
         val membersId = intent?.getStringArrayExtra("membersId")
-
-
         val alarmType = intent?.getIntExtra("alarmType", COMPLETION)
-
 
         val task: Task = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent?.getSerializableExtra("task", Task::class.java) ?: Task()
         } else {
             intent?.getSerializableExtra("task") as? Task ?: Task()
-
         }
 
         if (alarmType == ATTENDANCE) {
-
+            // Update Firebase accordingly if it's an attendance alarm
             if (chatId != null) {
                 CoroutineScope(Dispatchers.Default).launch {
                     storageService.updateTaskAM(task, chatId, ATTENDANCE)
@@ -58,15 +58,15 @@ class AlarmReceiver : BroadcastReceiver() {
                 }
             }
         } else if (alarmType == COMPLETION) {
+            // Update Firebase accordingly if it's a completion alarm
             if (chatId != null) {
                 CoroutineScope(Dispatchers.Default).launch {
                     storageService.updateTaskAM(task, chatId, COMPLETION)
                 }
-
             }
         }
 
-
+        // Create notification builder to create a notification with relevant properties
         val builder =
             NotificationCompat.Builder(context, CommutualAppState.CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
@@ -75,7 +75,7 @@ class AlarmReceiver : BroadcastReceiver() {
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setAutoCancel(true)
 
-
+        // Prompt notification if Commutual has permission
         with(NotificationManagerCompat.from(context)) {
             if (ActivityCompat.checkSelfPermission(
                     context,
@@ -87,7 +87,6 @@ class AlarmReceiver : BroadcastReceiver() {
             notify(0, builder.build())
         }
     }
-
 
     companion object {
         const val ATTENDANCE = 1

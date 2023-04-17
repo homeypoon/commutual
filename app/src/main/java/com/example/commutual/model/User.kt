@@ -1,3 +1,7 @@
+/**
+ * This data class representing a user model
+ */
+
 package com.example.commutual.model
 
 import com.google.firebase.Timestamp
@@ -23,5 +27,6 @@ data class User(
         CategoryEnum.ATHLETICS.name to 0,
         CategoryEnum.WORK.name to 0,
     ),
-    val tasksMap: Map<String, String> = emptyMap() // Map<task id, chat id>
+
+    val tasksMap: Map<String, String> = emptyMap()
 )

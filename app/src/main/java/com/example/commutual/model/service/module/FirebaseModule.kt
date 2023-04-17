@@ -1,4 +1,6 @@
-
+/**
+ * Dagger module for providing Firebase services
+ */
 
 package com.example.commutual.model.service.module
 

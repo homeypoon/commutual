@@ -1,4 +1,6 @@
-
+/**
+ * This file logs non-fatal crashes to Firebase Crashlytics
+ */
 
 package com.example.commutual.model.service.impl
 

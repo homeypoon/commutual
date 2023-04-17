@@ -1,3 +1,7 @@
+/**
+ * This data class representing a task model
+ */
+
 package com.example.commutual.model
 
 import android.os.Parcelable
@@ -27,7 +31,6 @@ data class Task(
     val showCompletion: Boolean = false,
     val showCompletionTimestamp: Timestamp = Timestamp.now(),
 
-    // created task timestamp
     val createTimestamp: Timestamp = Timestamp.now(),
 
     val attendance: Map<String, Int> = emptyMap(),

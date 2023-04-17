@@ -1,3 +1,7 @@
+/**
+ * This data class representing a model for a user or task report
+ */
+
 package com.example.commutual.model
 
 import com.google.firebase.firestore.DocumentId

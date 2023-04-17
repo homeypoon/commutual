@@ -1,3 +1,9 @@
+/**
+ * This file contains two enum classes
+ * CategoryEnum defines enums for task and post categories
+ * MessageTabEnum defines enums for the tabs for the MessageScreen
+ */
+
 package com.example.commutual.model
 
 import androidx.annotation.StringRes

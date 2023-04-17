@@ -330,8 +330,17 @@ class StorageServiceImpl
         }
 
     /**
+     * Increments the commitCount field of the current user based on the incrementCommitCount
+     * @param incrementCommitCount The number of commit counts incremented
+     */
+    override suspend fun incrementCommitCount(incrementCommitCount: Long) {
+        val userRef = currentUserCollection().document(auth.currentUserId)
+        userRef.update(COMMIT_COUNT_FIELD, FieldValue.increment(incrementCommitCount))
+    }
+
+    /**
      * Increments the categoryCount field of both users in the chat based on the membersId array
-     * @param membersId The User object representing the membersId
+     * @param membersId The map containing the userIds of all users in the chat
      */
     override suspend fun incrementCategoryCount(membersId: Array<String>, category: CategoryEnum) {
         for (memberId in membersId) {
@@ -340,27 +349,31 @@ class StorageServiceImpl
         }
     }
 
-    override suspend fun incrementCommitCount(incrementCommitCount: Long) {
-        val userRef = currentUserCollection().document(auth.currentUserId)
-        userRef.update("commitCount", FieldValue.increment(incrementCommitCount))
-    }
-
+    /**
+     * Increments the tasksScheduled field of the current user by 1
+     * @param membersId The map containing the userIds of all users in the chat
+     */
     override suspend fun incrementTasksScheduled(membersId: Array<String>) {
-
         for (memberId in membersId) {
             val userRef = currentUserCollection().document(memberId)
-            userRef.update("tasksScheduled", FieldValue.increment(1))
+            userRef.update(TASKS_SCHEDULED_FIELD, FieldValue.increment(1))
         }
     }
 
+    /**
+     * Increments the tasksCompleted field of the current user by 1
+     */
     override suspend fun incrementTasksCompleted() {
         val userRef = currentUserCollection().document(auth.currentUserId)
-        userRef.update("tasksCompleted", FieldValue.increment(1))
+        userRef.update(TASKS_COMPLETED_FIELD, FieldValue.increment(1))
     }
 
+    /**
+     * Increments the tasksMissed field of the current user by 1
+     */
     override suspend fun incrementTasksMissed() {
         val userRef = currentUserCollection().document(auth.currentUserId)
-        userRef.update("tasksMissed", FieldValue.increment(1))
+        userRef.update(TASKS_MISSED_FIELD, FieldValue.increment(1))
     }
 
     override suspend fun getPost(postId: String): Post? =
@@ -586,6 +599,10 @@ class StorageServiceImpl
         private const val TIMESTAMP_FIELD = "timestamp"
         private const val CREATE_TIMESTAMP_FIELD = "createTimestamp"
         private const val COMPLETED_FIELD = "taskCompleted"
+        private const val COMMIT_COUNT_FIELD = "commitCount"
+        private const val TASKS_SCHEDULED_FIELD = "tasksScheduled"
+        private const val TASKS_COMPLETED_FIELD = "tasksCompleted"
+        private const val TASKS_MISSED_FIELD = "tasksMissed"
     }
 
 }

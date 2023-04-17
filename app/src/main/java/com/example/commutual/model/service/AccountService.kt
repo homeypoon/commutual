@@ -1,4 +1,6 @@
-
+/**
+ * This interface defines methods for managing the user's account
+ */
 
 package com.example.commutual.model.service
 

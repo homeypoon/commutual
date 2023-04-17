@@ -1,3 +1,7 @@
+/**
+ * This data class representing a post model
+ */
+
 package com.example.commutual.model
 
 import com.google.firebase.firestore.DocumentId

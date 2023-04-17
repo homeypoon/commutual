@@ -35,6 +35,10 @@
     <string name="missed_sessions">Missed Sessions: %1$s</string>
     <string name="completed_sessions">Completed Sessions: %1$s</string>
 
+    <string name="task_counts">Task counts</string>
+
+    "Task counts"
+
     <!-- Explore Screen -->
     <string name="explore">Explore</string>
     <string name="search">Search</string>
@@ -127,9 +131,6 @@
     <string name="lost_completion_points">%1$s commit counters</string>
 
 
-
-
-
     <!-- Edit Task Screen -->
     <string name="add_task">ADD TASK</string>
 
@@ -146,7 +147,6 @@
     <string name="commit_count">Commit\nCount</string>
     <string name="tasks_scheduled">Tasks\nScheduled</string>
     <string name="completion_rate">Completion\nRate</string>
-
 
 
     <!-- Edit Profile Screen -->

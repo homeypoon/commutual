@@ -1,4 +1,7 @@
-
+/**
+ * Dagger module for providing implementation classes of services, including the
+ * AccountService, LogService, StorageService, and ConfigurationService.
+ */
 
 package com.example.commutual.model.service.module
 

@@ -1,22 +1,20 @@
-
+/**
+ * This file manages the state of the Commutual app, including
+ * snackbar messages, navigation, notifications, and alarms.
+ */
 
 package com.example.commutual
 
-import android.Manifest
 import android.app.AlarmManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.os.Build
 import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Stable
-import androidx.core.app.ActivityCompat
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import androidx.navigation.NavHostController
 import com.example.commutual.common.snackbar.SnackbarManager
 import com.example.commutual.common.snackbar.SnackbarMessage.Companion.toMessage
@@ -72,6 +70,9 @@ class CommutualAppState(
         }
     }
 
+    /**
+     * Create a notification channel
+     */
     fun createNotificationChannel(context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
@@ -88,38 +89,9 @@ class CommutualAppState(
         }
     }
 
-    fun showReminderNotification(
-        context: Context,
-        notificationId: Int,
-        titleText: String,
-        contentText: String,
-        priority: Int = NotificationCompat.PRIORITY_DEFAULT
-    ) {
-
-        val builder = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_home)
-//            .setSmallIcon(R.drawable.ic_commutual)
-            .setContentTitle(titleText)
-            .setContentText(contentText)
-            .setPriority(priority)
-            .setAutoCancel(true)
-
-        with(NotificationManagerCompat.from(context)) {
-            if (ActivityCompat.checkSelfPermission(
-                    context,
-                    Manifest.permission.POST_NOTIFICATIONS
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                ActivityCompat.requestPermissions(
-                    CommutualActivity(),
-                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1
-                )
-                return
-            }
-            notify(notificationId, builder.build())
-        }
-    }
-
+    /**
+     * Set alarm using an alarm manager
+     */
     fun setAlarmManager(
         context: Context,
         attendanceTitleText: String,
@@ -187,7 +159,5 @@ class CommutualAppState(
         const val CHANNEL_ID = "notificationChannel"
         private const val CHANNEL_NAME = "Commutual Notifications"
         private const val CHANNEL_DESCRIPTION = "Receive notifications from Commutual"
-
-
     }
 }

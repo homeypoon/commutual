@@ -21,8 +21,6 @@ class SettingsViewModel @Inject constructor(
 
     fun onSignOutClick(restartApp: (String) -> Unit) {
         launchCatching {
-            Log.d("accountService.hasUser", accountService.hasUser.toString())
-            Log.d("accountService.currentUser", accountService.currentUser.toString())
             try {
                 accountService.signOut()
             } catch (e: Exception) {

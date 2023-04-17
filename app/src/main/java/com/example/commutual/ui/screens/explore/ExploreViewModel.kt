@@ -2,7 +2,6 @@
 
 package com.example.commutual.ui.screens.explore
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.focus.FocusManager
 import com.example.commutual.POST_DETAILS_SCREEN
@@ -59,8 +58,6 @@ class ExploreViewModel @Inject constructor(
     fun onSearchTextChange(searchText: String) {
         uiState.value = uiState.value.copy(searchText = searchText)
 
-        Log.d("", postsSearched.toString())
-
         if (searchText.isEmpty()) {
             uiState.value = uiState.value.copy(postsSearched = false)
         }
@@ -86,7 +83,6 @@ class ExploreViewModel @Inject constructor(
         }
 
         clearFocus(focusManager)
-        Log.d("", postsSearched.toString())
     }
 
     fun onFilterClick(focusManager: FocusManager) {

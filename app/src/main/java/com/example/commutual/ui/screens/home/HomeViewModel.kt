@@ -68,7 +68,6 @@ class HomeViewModel @Inject constructor(
                 missedTasksPercentage = decimalFormatter.format(missedTasksPercentage),
                 completedTasksPercentage = decimalFormatter.format(completedTasksPercentage)
             )
-            Log.d("uiState.value.completedTasksPercentage", uiState.value.completedTasksPercentage)
         }
     }
 

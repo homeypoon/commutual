@@ -2,7 +2,6 @@ package com.example.commutual.ui.screens.edit_task
 
 import android.app.DatePickerDialog
 import android.content.Context
-import android.util.Log
 import android.widget.DatePicker
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.mutableStateOf
@@ -101,10 +100,8 @@ class EditTaskViewModel @Inject constructor(
             startMin = minute,
             startHour = hour
         )
-        Log.d("start hour", "${uiState.value.startHour}")
         task.value = task.value.copy(startTime = formatTime(hour, minute, true))
 
-        Log.d("24 time", formatTime(hour, minute, true))
     }
 
     fun onEndTimeChange(hour: Int, minute: Int) {
@@ -153,7 +150,6 @@ class EditTaskViewModel @Inject constructor(
 
         activity?.let {
             picker.show(it.supportFragmentManager, picker.toString())
-            Log.d("picker", picker.toString())
             picker.addOnPositiveButtonClickListener { onTimeChange(picker.hour, picker.minute) }
         }
     }

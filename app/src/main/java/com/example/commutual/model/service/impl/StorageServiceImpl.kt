@@ -33,8 +33,7 @@ class StorageServiceImpl
     private val firestore: FirebaseFirestore,
     private val auth: AccountService,
     private var storage: FirebaseStorage
-) :
-    StorageService {
+) : StorageService {
 
     /**
      * Returns a Flow of posts that is not created by the current user

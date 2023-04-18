@@ -1,6 +1,5 @@
 package com.example.commutual.ui.screens.home
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.example.commutual.*
